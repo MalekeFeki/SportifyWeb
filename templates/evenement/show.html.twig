@@ -1,0 +1,133 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+	{{ evenement.nomev }}
+{% endblock %}
+
+{% block body %}
+
+	<!-- Blog Details Hero Section Begin -->
+	<section class="blog-details-hero set-bg" data-setbg="{{ asset('image.jpg') }}">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-8 p-0 m-auto">
+					<div class="bh-text">
+						<h3>{{ evenement.nomev }}</h3>
+						<ul>
+							<li>by
+								{{ evenement.role }}</li>
+							<li>{{ evenement.dateddebutev|date('M d, Y') }}</li>
+							<!-- You may need to adjust this based on your actual data -->
+							<li>20 Comment</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	<!-- Blog Details Hero Section End -->
+
+	<!-- Blog Details Section Begin -->
+	<section
+		class="blog-details-section spad">
+		<!-- Add buttons wherever you want them to appear -->
+		<a href="{{ path('increase_interest', {'idevent': evenement.idevent}) }}" class="btn btn-primary" id="interestButton">Increase Interest</a>
+		<a href="{{ path('app_eventreservation_new', {'idevent': evenement.idevent}) }}" class="btn btn-primary">Make Reservation</a>
+
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-8 p-0 m-auto">
+					<div class="blog-details-text">
+						<div class="blog-details-title">
+							<p>{{ evenement.descrptionev }}</p>
+						</div>
+						<!-- Add more content sections here as needed -->
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	<!-- Blog Details Section End -->
+
+	<!-- Get In Touch Section Begin -->
+	<div class="gettouch-section">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-6">
+					<div class="gt-text">
+						<i class="fa fa-envelope"></i>
+						<p>Email:
+							{{ evenement.email }}</p>
+					</div>
+				</div>
+				<div class="col-lg-6">
+					<div class="gt-text">
+						<i class="fa fa-instagram"></i>
+						<p>Instagram:
+							<a href="{{ evenement.igLink }}">{{ evenement.igLink }}</a>
+						</p>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-lg-6">
+					<div class="gt-text">
+						<i class="fa fa-facebook"></i>
+						<p>Facebook:
+							<a href="{{ evenement.fbLink }}">{{ evenement.fbLink }}</a>
+						</p>
+					</div>
+				</div>
+				<div class="col-lg-6">
+					<div class="gt-text">
+						<i class="fa fa-phone"></i>
+						<p>Phone:
+							{{ evenement.tele }}</p>
+					</div>
+				</div>
+				<!-- Add more contact information or social media links as needed -->
+			</div>
+		</div>
+	</div>
+	<!-- Get In Touch Section End -->
+    <script>
+document.getElementById("interestButton").addEventListener("click", function(event) {
+    event.preventDefault(); // Prevent the default action of the link (i.e., following the href)
+
+    var button = this;
+
+    // Send an AJAX request to the server to toggle interest
+    fetch(button.getAttribute("href"), {
+        method: "POST",
+        headers: {
+            "X-Requested-With": "XMLHttpRequest", // Add this header to identify the request as AJAX
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({})
+    })
+    .then(function(response) {
+        if (response.ok) {
+            // Parse the JSON response
+            return response.json();
+        } else {
+            // Handle error response
+            console.error("Failed to toggle interest");
+        }
+    })
+    .then(function(data) {
+        // Toggle button text based on the 'interested' value in the response
+        if (data && data.interested) {
+            // If the event is marked as interested, change button text to "Remove Interest"
+            button.textContent = "Remove Interest";
+        } else {
+            // If the event is not marked as interested, change button text to "Increase Interest"
+            button.textContent = "Increase Interest";
+        }
+    })
+    .catch(function(error) {
+        console.error("Error:", error);
+    });
+});
+
+</script>
+{% endblock %}

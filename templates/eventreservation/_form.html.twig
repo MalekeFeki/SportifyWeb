@@ -1,0 +1,13 @@
+{# {{ form_start(form) }}
+    {{ form_row(form.nom) }}
+    {{ form_row(form.prenom) }}
+    {{ form_row(form.cin) }}
+{{ form_end(form) }}
+
+
+{{ form_start(form) }}
+    {{ form_row(form.email) }}
+    {{ form_row(form.numTele) }}
+     {{ form_row(form.eventid) }} 
+    <button class="btn" href="{{ path('app_evenement_index') }}">{{ button_label|default('Save') }}</button>
+{{ form_end(form) }} #}

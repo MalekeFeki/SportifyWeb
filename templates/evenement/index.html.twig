@@ -1,0 +1,75 @@
+{% extends 'admin_base.html.twig' %}
+
+{% block title %}Evenement index{% endblock %}
+
+{% block body %}
+    <h1>gestion Evenement </h1>
+
+    <table class="table" style="width: 30%; max-width: 70px; overflow: hidden; text-overflow: ellipsis;
+        white-space: nowrap;" >
+        <thead>
+            <tr>
+                <th>Idevent</th>
+                <th>Nomev</th>
+                <th>Dateddebutev</th>
+                <th>Datedfinev</th>
+                {# <th>Heureev</th> #}
+                {# <th>Descrptionev</th>
+                <th>Photo</th> #}
+                {# <th>Lieu</th> #}
+                <th>City</th>
+                <th>Tele</th>
+                <th>Email</th>
+                {# <th>FbLink</th>
+                <th>IgLink</th> #}
+                <th>Genreevenement</th>
+                <th>Typeev</th>
+                <th style="width: 30%;">Nbpersonneinteresse</th>
+                <th>Capacite</th>
+                {# <th>Lat</th>
+                <th>Lon</th> #}
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for evenement in evenements %}
+            <tr>
+                <td>{{ evenement.idevent }}</td>
+                <td>{{ evenement.nomev }}</td>
+                <td>{{ evenement.dateddebutev ? evenement.dateddebutev|date('Y-m-d') : '' }}</td>
+                <td>{{ evenement.datedfinev ? evenement.datedfinev|date('Y-m-d') : '' }}</td>
+                {# <td>{{ evenement.heureev }}</td> #}
+                {# <td>{{ evenement.descrptionev }}</td>
+                <td>{{ evenement.photo }}</td> #}
+                {# <td>{{ evenement.lieu }}</td> #}
+                <td>{{ evenement.city }}</td>
+                <td>{{ evenement.tele }}</td>
+                <td>{{ evenement.email }}</td>
+                {# <td>{{ evenement.fbLink }}</td>
+                <td>{{ evenement.igLink }}</td> #}
+                <td>{{ evenement.genreevenement }}</td>
+                <td>{{ evenement.typeev }}</td>
+                <td>{{ evenement.nombrepersonneinteresse }}</td>
+                <td>{{ evenement.capacite }}</td>
+                {# <td>{{ evenement.lat }}</td>
+                <td>{{ evenement.lon }}</td> #}
+                <td>
+                <form method="post" action="{{ path('app_evenement_edit', {'idevent': evenement.idevent}) }}" onsubmit="return confirm('Are you sure you want to edit this event?');">
+    <input type="hidden" name="_token" value="{{ csrf_token('edit' ~ evenement.idevent) }}">
+    <button class="btn">edit</button>
+</form>
+                    {# <a href="{{ path('app_evenement_show', {'idevent': evenement.idevent}) }}">show</a> #}
+                    {# <button href="{{ path('app_evenement_edit', {'idevent': evenement.idevent}) }}">edit</button> #}
+                {{ include('evenement/_delete_form.html.twig') }}
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="20">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_evenement_new') }}">Create new</a>
+{% endblock %}

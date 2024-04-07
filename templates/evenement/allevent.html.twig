@@ -1,0 +1,131 @@
+{# templates/show_events.html.twig #}
+
+{% extends 'base.html.twig' %}
+
+{% block title %} Liste des événements
+{% endblock %}
+
+{% block body %}
+
+{% set controllerName = app.request.attributes.get('_controller') %}
+
+{% if controllerName == 'App\\Controller\\EvenementController::allevent' %}
+    {% set routeName = 'allevent' %}
+    {% set routeParams = {} %}
+{% elseif controllerName == 'App\\Controller\\EvenementController::alleventbycategory' %}
+    {% set routeName = 'allevent_by_category' %}
+    {% set routeParams = { 'category': category } %}
+{% endif %}
+<!-- Search form -->
+<!-- Search form -->
+    
+	<!-- Blog Section Begin -->
+	
+	<section class="blog-section spad" style="padding: 220px 60px;">
+	<h1 Styles="  color: orange;">Events</h1>
+	<form  action="{{ path('allevent') }}" method="get">
+        <input type="text" name="query" placeholder="Search by event name" value="{{ searchQuery }}">
+        <button type="submit">Search</button>
+    </form>
+		<div class="container">
+		
+			<div class="row">
+				<div class="col-lg-8 p-0">
+					{% for evenement in pagination %}
+						<div class="blog-item">
+							<div class="bi-pic">
+								<img src="{{ asset('image.jpg') }}" alt="La Traversée des Dunes 2">
+							</div>
+							<div class="bi-text">
+								<h5>
+									<a href="{{ path('app_evenement_show', {'idevent': evenement.idevent}) }}">{{ evenement.nomev }}</a>
+								</h5>
+								<ul>
+									<li>by
+										{{evenement.role}}</li>
+									<li>{{ evenement.dateddebutev|date('M d, Y') }}</li>
+									<li>20 Comment</li>
+								</ul>
+								<p>{{ evenement.descrptionev }}</p>
+							</div>
+						</div>
+					{% endfor %}
+
+
+
+<!-- Pagination -->
+<div class="blog-pagination" id="pagination">
+    {% set pagesToShow = 4 %}
+    {% set startPage = (currentPage > pagesToShow) ? (currentPage - pagesToShow) : 1 %}
+    {% set endPage = (currentPage + pagesToShow < totalPages) ? (currentPage + pagesToShow) : totalPages %}
+
+    {% if currentPage > 1 %}
+        <a href="{{ path(routeName, routeParams|merge({'page': currentPage - 1})) }}">Previous</a>
+    {% endif %}
+
+    {% for page in startPage..endPage %}
+        {% if currentPage == page %}
+            <a class="active-page" style="background-color: #f36100;
+                                            color: white;
+                                            font-size: 18px;
+                                            padding: 10px 20px;
+                                            border-radius: 5px;
+                                            margin: 0 5px;
+                                            font-family: 'oswald', sans-serif;
+                                            font-weight: 500;
+                                            margin-right: 15px;
+                                            text-transform: uppercase;">{{ page }}</a>
+        {% else %}
+            <a href="{{ path(routeName, routeParams|merge({'page': page})) }}">{{ page }}</a>
+        {% endif %}
+    {% endfor %}
+
+    {% if currentPage < totalPages %}
+        <a href="{{ path(routeName, routeParams|merge({'page': currentPage + 1})) }}">Next</a>
+    {% endif %}
+</div>
+<!-- End Pagination -->
+
+
+
+
+				</div>
+				<div class="col-lg-4 col-md-8 p-0">
+					<div
+						class="sidebar-option">
+						<!-- Sidebar content goes here -->
+						<div class="so-categories">
+							<h5 class="title">Categories</h5>
+							<ul>
+								{% set categories = ['competition', 'cahrite', 'spectacle'] %}
+								{% set counts = {} %}
+								{% for item in categoryCounts %}
+									{% set counts = counts|merge({(item.genreevenement): item.count}) %}
+								{% endfor %}
+								{# {{ dump(counts) }} #}
+								{# Debug output #}
+								{% for category in categories %}
+									<li style="color: white;"> <a href="{{ path('allevent_by_category', {'category': category}) }}">{{ category }}
+										({{ counts[category] ?? 0 }})</a></li>
+								{% endfor %}
+							</ul>
+						</div>
+
+
+						<div class="so-latest">
+							<h5 class="title">Feature posts</h5>
+							<!-- Featured posts list goes here -->
+						</div>
+						<div class="so-tags">
+							<h5 class="title">Popular tags</h5>
+							<!-- Popular tags list goes here -->
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	<!-- Blog Section End -->
+
+
+{% endblock %}

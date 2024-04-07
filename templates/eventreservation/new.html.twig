@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Eventreservation
+{% endblock %}
+
+{% block body %}
+	<h1>Create new Eventreservation</h1>
+
+	{{ form_start(form) }}
+    {{ form_row(form.nom) }}
+    {{ form_row(form.prenom) }}
+    {{ form_row(form.cin) }}
+
+    {{ form_row(form.email) }}
+    {{ form_row(form.numTele) }}
+	<button type="submit" class="btn btn-primary">Save</button>
+	<a href="{{ path('app_evenement_show', {'idevent': eventreservation.eventid.idevent}) }}" class="btn btn-secondary">Back to event</a>
+
+{% endblock %}

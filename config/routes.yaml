@@ -1,0 +1,10 @@
+#index:
+#    path: /
+#    controller: App\Controller\DefaultController::index
+increase_interest:
+    path: '/event/{idevent}/increase-interest'
+    controller: 'App\Controller\EvenementController::increaseInterest'
+    
+make_reservation:
+    path: '/event/{idevent}/make-reservation'
+    controller: 'App\Controller\EvenementController::makeReservation'
