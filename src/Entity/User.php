@@ -6,7 +6,7 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use App\Repository\UserRepository;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Constraints as assert;
 use Scheb\TwoFactorBundle\Model\Email\TwoFactorInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
@@ -20,11 +20,11 @@ class User implements UserInterface,PasswordAuthenticatedUserInterface, TwoFacto
     private ?int $id = null;
 
     #[ORM\Column(length: 20)]
-    #[Assert\NotBlank]
+    #[Assert\NotBlank(message:"champ obligatoire")]
     private ?string $cin = null;
 
     #[ORM\Column(length: 15)]
-    #[Assert\NotBlank]
+    #[Assert\NotBlank(message:"champ obligatoire")]
     #[Assert\Length(
         min : 8,
        max :8,
@@ -34,20 +34,20 @@ class User implements UserInterface,PasswordAuthenticatedUserInterface, TwoFacto
     private ?string $num_tel = null;
 
     #[ORM\Column(length: 255)]
-    #[Assert\NotBlank]
+    #[Assert\NotBlank(message:"champ obligatoire")]
     private ?string $nom = null;
 
     #[ORM\Column(length: 255)]
-    #[Assert\NotBlank]
+    #[Assert\NotBlank(message:"champ obligatoire")]
     private ?string $prenom = null;
 
     #[ORM\Column(length: 255)]
-    #[Assert\NotBlank]
+    #[Assert\NotBlank(message:"champ obligatoire")]
     #[Assert\Email]
     private ?string $email = null;
 
     #[ORM\Column(length: 255)]
-    #[Assert\NotBlank]
+    #[Assert\NotBlank(message:"champ obligatoire")]
     #[Assert\Length(
         min : 8,
        max :255,
@@ -57,7 +57,7 @@ class User implements UserInterface,PasswordAuthenticatedUserInterface, TwoFacto
     private ?string $mdp = null;
 private $roles=[];
     #[ORM\Column(length: 255)]
-    #[Assert\NotBlank]
+    #[Assert\NotBlank(message:"champ obligatoire")]
     private ?string $role = null;
 
     public function getId(): ?int

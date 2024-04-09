@@ -48,6 +48,19 @@
             $('#search-input').val('');
         });
     });
+// Gestion de la soumission du formulaire de recherche
+$('.search-model-form').on('submit', function (event) {
+    event.preventDefault(); // Empêche la soumission du formulaire par défaut
+
+    // Récupérer la valeur de recherche
+    var searchValue = $('#search-input').val().trim();
+
+    // Vérifier si la valeur de recherche n'est pas vide
+    if (searchValue !== '') {
+        // Effectuer votre logique de recherche ici, par exemple, redirection vers une page de résultats de recherche
+        window.location.href = 'votre_page_de_resultats_de_recherche.html?search=' + encodeURIComponent(searchValue);
+    }
+});
 
     //Masonary
     $('.gallery').masonry({

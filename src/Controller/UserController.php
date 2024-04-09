@@ -17,6 +17,7 @@ use Symfony\Component\Mime\Email;
 
 
 
+
 #[Route('/user')]
 class UserController extends AbstractController
 {   #[Route('/backend', name: 'backend', methods: ['GET'])]
@@ -36,6 +37,30 @@ class UserController extends AbstractController
             'users' => $userRepository->findAll(),
         ]);
     }
+    #[Route('/count', name: 'api_user_count', methods: ['GET'])]
+    public function countUsers(UserRepository $userRepository): JsonResponse
+    {
+        // Récupérer le nombre total d'utilisateurs
+        $userCount = $userRepository->count([]);
+
+        // Retourner le nombre d'utilisateurs sous forme de réponse JSON
+        return $this->json(['userCount' => $userCount]);
+    }
+    #[Route('/countbyrole', name: 'api_user_count_by_role', methods: ['GET'])]
+    public function countUsersByRole(UserRepository $userRepository): Response
+    {
+        // Compter le nombre d'utilisateurs pour chaque rôle
+        $adminCount = $userRepository->countUsersByRole('ADMIN');
+        $proprietaireCount = $userRepository->countUsersByRole('PROPRIETAIRE');
+        $membreCount = $userRepository->countUsersByRole('MEMBRE');
+
+        // Retourner les nombres d'utilisateurs pour chaque rôle à la vue
+        return $this->render('your_template.html.twig', [
+            'adminCount' => $adminCount,
+            'proprietaireCount' => $proprietaireCount,
+            'membreCount' => $membreCount,
+        ]);
+    }
     #[Route('/profil', name: 'app_user_profil', methods: ['GET'])]
     public function afficherProfil(): Response
     {
@@ -49,7 +74,7 @@ class UserController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-// Hasher le mot de passe avec l'algorithme MD5
+// Hasher le mot de passe
 $hashedPassword = password_hash($user->getPassword(),PASSWORD_DEFAULT);
 $user->setMdp($hashedPassword);
             $entityManager->persist($user);
@@ -105,12 +130,16 @@ $user->setMdp($hashedPassword);
     private function sendWelcomeEmail(User $user, MailerInterface $mailer): void
 {
     $email = (new Email())
-        ->from('your@example.com') // Set your email address here
+        ->from('malekfeki18@gmail.com') // Set your email address here
         ->to($user->getEmail()) // Send email to the user
         ->subject('Welcome to Our Website')
         ->html('<p>Hello ' . $user->getUsername() . ',<br>Welcome to our website!</p>');
 
     $mailer->send($email);
 }
-  
+
+
+
+
+
 }

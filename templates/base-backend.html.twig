@@ -99,6 +99,7 @@
                 </a>
                 <form class="d-none d-md-flex ms-4">
                     <input class="form-control bg-dark border-0" type="search" placeholder="Search">
+                     <button type="submit">Search</button>
                 </form>
                 <div class="navbar-nav align-items-center ms-auto">
                     <div class="nav-item dropdown">
@@ -187,7 +188,7 @@
                             <i class="fa fa-chart-line fa-3x text-primary"></i>
                             <div class="ms-3">
                                 <p class="mb-2">Nombre d'utilisateurs</p>
-                                <h6 class="mb-0">$1234</h6>
+                                <h6 id="userCount" class="mb-0"></h6>
                             </div>
                         </div>
                     </div>
@@ -229,7 +230,7 @@
                     <div class="col-sm-12 col-xl-6">
                         <div class="bg-secondary text-center rounded p-4">
                             <div class="d-flex align-items-center justify-content-between mb-4">
-                                <h6 class="mb-0">Worldwide Sales</h6>
+                                <h6 class="mb-0">Utilisateurs</h6>
                                 <a href="">Show All</a>
                             </div>
                             <canvas id="worldwide-sales"></canvas>
@@ -478,6 +479,32 @@
 
     <!-- Template Javascript -->
     <script src="{{asset('js/main-back.js')}}"></script>
+    <script>
+    // When the page is loaded
+    document.addEventListener('DOMContentLoaded', function () {
+        // Fetch the user count from your backend (replace this URL with your actual endpoint)
+        fetch('/user/count')
+            .then(response => response.json())
+            .then(data => {
+                // Update the HTML element with the user count
+                document.getElementById('userCount').innerText = data.userCount;
+            })
+            .catch(error => console.error('Error fetching user count:', error));
+    });
+     document.getElementById('searchForm').addEventListener('submit', function(event) {
+        // Empêcher le comportement par défaut du formulaire (rechargement de la page)
+        event.preventDefault();
+        
+        // Récupérer la valeur de la recherche
+        var searchTerm = document.getElementById('searchInput').value;
+        
+        // Vous pouvez utiliser searchTerm pour effectuer une action, comme l'affichage dans la console
+        console.log('Recherche en cours avec le terme :', searchTerm);
+        
+        // Vous pouvez également rediriger l'utilisateur vers une page de résultats de recherche avec la valeur de la recherche
+        // window.location.href = '/search-results?query=' + encodeURIComponent(searchTerm);
+    });
+</script>
 </body>
 
 </html>
