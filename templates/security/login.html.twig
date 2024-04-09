@@ -19,7 +19,7 @@
     <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" autocomplete="email"  autofocus>
     <label for="inputPassword">Password</label>
     <input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" >
-
+    <input type="checkbox" id="showPasswordCheckbox"> Afficher le mot de passe <br>
     <input type="hidden" name="_csrf_token"
            value="{{ csrf_token('authenticate') }}"
     >
@@ -125,6 +125,20 @@
 
     <!-- Template Javascript -->
     <script src="js/main-back.js"></script>
+   <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                var showPasswordCheckbox = document.getElementById('showPasswordCheckbox');
+                var passwordField = document.getElementById('inputPassword');
+
+                showPasswordCheckbox.addEventListener('change', function () {
+                    if (this.checked) {
+                        passwordField.type = 'text';
+                    } else {
+                        passwordField.type = 'password';
+                    }
+                });
+            });
+        </script>
 </body>
 
 </html>

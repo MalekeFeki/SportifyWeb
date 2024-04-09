@@ -187,6 +187,19 @@ public function setRoles(array $roles): static
     $this->roles = $roles;
     return $this;
 } 
+   private $showPassword;
+
+    public function getShowPassword(): ?bool
+    {
+        return $this->showPassword;
+    }
+
+    public function setShowPassword(bool $showPassword): self
+    {
+        $this->showPassword = $showPassword;
+
+        return $this;
+    }
 private $authCode;
 
 // [...]
