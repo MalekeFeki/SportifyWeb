@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Challenge index{% endblock %}
+
+{% block body %}
+    <h1>Challenge index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Idc</th>
+                <th>Nom</th>
+                <th>Difficulty</th>
+                <th>Description</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for challenge in challenges %}
+            <tr>
+                <td>{{ challenge.idc }}</td>
+                <td>{{ challenge.nom }}</td>
+                <td>{{ challenge.difficulty }}</td>
+                <td>{{ challenge.description }}</td>
+                <td>
+                    <a href="{{ path('app_challenge_show', {'idc': challenge.idc}) }}">show</a>
+                    <a href="{{ path('app_challenge_edit', {'idc': challenge.idc}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_challenge_new') }}">Create new</a>
+{% endblock %}

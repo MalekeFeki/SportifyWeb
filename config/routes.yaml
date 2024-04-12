@@ -1,0 +1,7 @@
+#index:
+#    path: /
+#    controller: App\Controller\DefaultController::index
+# config/routes.yaml
+table_route:
+    path: /user/backend
+    controller: App\Controller\UserController::index
