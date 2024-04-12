@@ -1,0 +1,58 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Réclamation{% endblock %}
+
+{% block body %}
+    <h1>Liste des commentaires</h1>
+    <table border=1 class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Reclamation</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for coach_client in coach_clients %}
+            <tr>
+                <td>{{ coach_client.id }}</td>
+                <td>{{ coach_client.commentaire }}</td>
+                
+                <td>
+                    <a href="{{ path('app_coach_client_show', {'id': coach_client.id}) }}">voir</a>
+                    <a href="{{ path('app_coach_client_edit', {'id': coach_client.id}) }}">modifier</a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_coach_client_index') }}">back to list</a>
+
+    <a href="{{ path('app_coach_client_edit', {'id': coach_client.id}) }}">edit</a>
+
+    {{ include('coach_client/_delete_form.html.twig') }}
+
+    {% for coach_client in coach_clients %}
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#commentModal{{ coach_client.id }}">
+            Voir le commentaire {{ coach_client.id }}
+        </button>
+
+        <!-- Modal -->
+        <div class="modal fade" id="commentModal{{ coach_client.id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Commentaire {{ coach_client.id }}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        {{ coach_client.commentaire }}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+{% endblock %}

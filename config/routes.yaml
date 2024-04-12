@@ -1,3 +1,12 @@
-#index:
-#    path: /
-#    controller: App\Controller\DefaultController::index
+home:
+    path: /
+    controller: App\Controller\homeController::index
+
+app_coach_client_index:
+    path: '/coach/client'
+    controller: 'App\Controller\CoachClientController::index'
+
+app_coach_admin_index:
+    path: '/coach/admin'
+    controller: 'App\Controller\CoachAdminController::index'
+

@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit CoachAdmin{% endblock %}
+
+{% block body %}
+    <h1>Edit CoachAdmin</h1>
+
+    {{ include('coach_admin/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('app_coach_admin_index') }}">back to list</a>
+
+{% endblock %}
