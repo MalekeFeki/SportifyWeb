@@ -1,0 +1,53 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Paiement index{% endblock %}
+
+{% block body %}
+    <h1>Paiement index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Idp</th>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Country</th>
+                <th>Ncb</th>
+                <th>Cvc</th>
+                <th>Expdate</th>
+                <th>Postalcode</th>
+                <th>Promocode</th>
+                <th>Price</th>
+                <th>Pdate</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for paiement in paiements %}
+            <tr>
+                <td>{{ paiement.idp }}</td>
+                <td>{{ paiement.username }}</td>
+                <td>{{ paiement.email }}</td>
+                <td>{{ paiement.country }}</td>
+                <td>{{ paiement.ncb }}</td>
+                <td>{{ paiement.cvc }}</td>
+                <td>{{ paiement.expdate ? paiement.expdate|date('Y-m-d') : '' }}</td>
+                <td>{{ paiement.postalcode }}</td>
+                <td>{{ paiement.promocode }}</td>
+                <td>{{ paiement.price }}</td>
+                <td>{{ paiement.pdate ? paiement.pdate|date('Y-m-d') : '' }}</td>
+                <td>
+                    <a href="{{ path('app_paiement_show', {'idp': paiement.idp}) }}">show</a>
+                    <a href="{{ path('app_paiement_edit', {'idp': paiement.idp}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="12">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_paiement_new') }}">Create new</a>
+{% endblock %}

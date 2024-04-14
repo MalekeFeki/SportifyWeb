@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Adhesion{% endblock %}
+
+{% block body %}
+    <h1>Adhesion</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Ida</th>
+                <td>{{ adhesion.ida }}</td>
+            </tr>
+            <tr>
+                <th>Username</th>
+                <td>{{ adhesion.username }}</td>
+            </tr>
+            <tr>
+                <th>Gymname</th>
+                <td>{{ adhesion.gymname }}</td>
+            </tr>
+            <tr>
+                <th>Typea</th>
+                <td>{{ adhesion.typea }}</td>
+            </tr>
+            <tr>
+                <th>Price</th>
+                <td>{{ adhesion.price }}</td>
+            </tr>
+            <tr>
+                <th>Debuta</th>
+                <td>{{ adhesion.debuta ? adhesion.debuta|date('Y-m-d') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Fina</th>
+                <td>{{ adhesion.fina ? adhesion.fina|date('Y-m-d') : '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_adhesion_index') }}">back to list</a>
+
+    <a href="{{ path('app_adhesion_edit', {'ida': adhesion.ida}) }}">edit</a>
+
+    {{ include('adhesion/_delete_form.html.twig') }}
+{% endblock %}

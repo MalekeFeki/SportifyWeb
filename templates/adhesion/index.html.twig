@@ -1,0 +1,45 @@
+{% extends 'base-backend.html.twig' %}
+
+{% block title %}Adhesion index{% endblock %}
+
+{% block body %}
+    <h1>Adhesion index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Ida</th>
+                <th>Username</th>
+                <th>Gymname</th>
+                <th>Typea</th>
+                <th>Price</th>
+                <th>Debuta</th>
+                <th>Fina</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for adhesion in adhesions %}
+            <tr>
+                <td>{{ adhesion.ida }}</td>
+                <td>{{ adhesion.username }}</td>
+                <td>{{ adhesion.gymname }}</td>
+                <td>{{ adhesion.typea }}</td>
+                <td>{{ adhesion.price }}</td>
+                <td>{{ adhesion.debuta ? adhesion.debuta|date('Y-m-d') : '' }}</td>
+                <td>{{ adhesion.fina ? adhesion.fina|date('Y-m-d') : '' }}</td>
+                <td>
+                    <a href="{{ path('app_adhesion_show', {'ida': adhesion.ida}) }}">show</a>
+                    <a href="{{ path('app_adhesion_edit', {'ida': adhesion.ida}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="8">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_adhesion_new') }}">Create new</a>
+{% endblock %}

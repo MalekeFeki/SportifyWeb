@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Adhesion{% endblock %}
+
+{% block body %}
+    <h1>Edit Adhesion</h1>
+
+    {{ include('adhesion/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('app_adhesion_index') }}">back to list</a>
+
+    {{ include('adhesion/_delete_form.html.twig') }}
+{% endblock %}

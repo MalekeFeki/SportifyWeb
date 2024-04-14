@@ -1,0 +1,108 @@
+
+{{ form_start(form) }}
+
+<div class="mb-3">
+    <label for="adhesion_username" class="form-label">Username</label>
+    {{ form_widget(form.username, {'attr': {'class': 'form-control'}}) }}
+</div>
+
+<div class="mb-3">
+    <label for="adhesion_gymname" class="form-label">Gym Name</label>
+    {{ form_widget(form.gymname, {'attr': {'class': 'form-control'}}) }}
+</div>
+
+<div class="mb-3">
+    <label for="adhesion_typea" class="form-label">Membership Type</label>
+    {{ form_widget(form.typea, {'attr': {'class': 'form-select membership-type-select'}}) }}
+</div>
+
+<div class="mb-3">
+    <label for="adhesion_price" class="form-label">Price</label>
+    {{ form_widget(form.price, {'attr': {'class': 'form-control', 'readonly': true}}) }}
+</div>
+
+<div class="mb-3">
+    <label for="adhesion_debuta" class="form-label">Start Date</label>
+    {{ form_widget(form.debuta, {'attr': {'class': 'form-control start-date-picker'}}) }}
+</div>
+
+<div class="mb-3">
+    <label for="adhesion_fina" class="form-label">End Date</label>
+    {{ form_widget(form.fina, {'attr': {'class': 'form-control end-date-picker'}}) }}
+</div>
+
+<button type="submit" class="btn btn-primary">Submit</button>
+
+{{ form_end(form) }}
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var membershipTypeSelect = document.querySelector('.membership-type-select');
+        var startDatePicker = document.querySelector('.start-date-picker');
+        var endDatePicker = document.querySelector('.end-date-picker');
+        var priceInput = document.getElementById('adhesion_price');
+
+        // Function to calculate the price based on duration between start and end dates
+        function calculatePrice(startDate, endDate) {
+            var durationInDays = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24)); // Calculate duration in days
+            var pricePerDay = 0.5; // Price per day
+            return durationInDays * pricePerDay;
+        }
+
+        // Event listener for membership type select change
+        membershipTypeSelect.addEventListener('change', function() {
+            var membershipType = membershipTypeSelect.value;
+            var startDate = new Date();
+            var endDate = new Date();
+            var duration;
+            var price;
+            if (membershipType === 'Gold' || membershipType === 'Platinum' || membershipType === 'Diamond') {
+                duration = (membershipType === 'Gold') ? 3 : ((membershipType === 'Platinum') ? 6 : 12);
+                price = (membershipType === 'Gold') ? 30 : ((membershipType === 'Platinum') ? 50 : 70);
+                endDate.setMonth(endDate.getMonth() + duration);
+                startDatePicker.value = startDate.toISOString().split('T')[0];
+                endDatePicker.value = endDate.toISOString().split('T')[0];
+                startDatePicker.setAttribute('disabled', true);
+                endDatePicker.setAttribute('disabled', true);
+                priceInput.value = price;
+            } else {
+                startDatePicker.removeAttribute('disabled');
+                endDatePicker.removeAttribute('disabled');
+                var startDate = new Date(startDatePicker.value);
+                var endDate = new Date(endDatePicker.value);
+                if (startDate && endDate) {
+                    priceInput.value = calculatePrice(startDate, endDate);
+                }
+            }
+        });
+
+        // Event listener for start date picker change
+        startDatePicker.addEventListener('change', function() {
+            var startDate = new Date(startDatePicker.value);
+            var endDate = new Date(endDatePicker.value);
+            if (startDate && endDate) {
+                priceInput.value = calculatePrice(startDate, endDate);
+            }
+        });
+
+        // Event listener for end date picker change
+        endDatePicker.addEventListener('change', function() {
+            var startDate = new Date(startDatePicker.value);
+            var endDate = new Date(endDatePicker.value);
+            if (startDate && endDate) {
+                priceInput.value = calculatePrice(startDate, endDate);
+            }
+        });
+
+        // Event listener for date picker change
+        [startDatePicker, endDatePicker].forEach(function(datePicker) {
+            datePicker.addEventListener('change', function() {
+                var startDate = new Date(startDatePicker.value);
+                var endDate = new Date(endDatePicker.value);
+                if (startDate && endDate) {
+                    priceInput.value = calculatePrice(startDate, endDate);
+                }
+            });
+        });
+    });
+</script>
