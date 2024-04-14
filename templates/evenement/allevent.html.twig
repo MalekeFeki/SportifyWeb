@@ -22,7 +22,7 @@
 
 
 	<section class="blog-section spad" style="padding: 220px 60px;">
-		<h1 styles="  color: orange;">Events</h1>
+		<h1 style="color:white;">Events</h1>
 		<!-- Search form -->
 		<!-- Search form -->
 		<form id="searchForm">
@@ -37,7 +37,11 @@
 					{% for evenement in pagination %}
 						<div class="blog-item">
 							<div class="bi-pic">
-								<img src="{{ asset('image.jpg') }}" alt="La Traversée des Dunes 2">
+								{% if evenement.photo %}
+									<img src="{{ asset(evenement.photo) }}" alt="La Traversée des Dunes 2">
+								{% else %}
+									<img src="{{ asset('path_to_placeholder_image.jpg') }}" alt="Placeholder Image">
+								{% endif %}
 							</div>
 							<div class="bi-text">
 								<h5>
@@ -68,15 +72,15 @@
 						{% for page in startPage..endPage %}
 							{% if currentPage == page %}
 								<a class="active-page" style="background-color: #f36100;
-									                                            color: white;
-									                                            font-size: 18px;
-									                                            padding: 10px 20px;
-									                                            border-radius: 5px;
-									                                            margin: 0 5px;
-									                                            font-family: 'oswald', sans-serif;
-									                                            font-weight: 500;
-									                                            margin-right: 15px;
-									                                            text-transform: uppercase;">{{ page }}</a>
+																											                                            color: white;
+																											                                            font-size: 18px;
+																											                                            padding: 10px 20px;
+																											                                            border-radius: 5px;
+																											                                            margin: 0 5px;
+																											                                            font-family: 'oswald', sans-serif;
+																											                                            font-weight: 500;
+																											                                            margin-right: 15px;
+																											                                            text-transform: uppercase;">{{ page }}</a>
 							{% else %}
 								<a href="{{ path(routeName, routeParams|merge({'page': page})) }}">{{ page }}</a>
 							{% endif %}
@@ -130,61 +134,64 @@
 	<!-- Blog Section End -->
 
 	{# <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> #}
-    <script type="text/javascript">
-    $(document).ready(function() {
-    var currentPage = {{ currentPage }};
-    var totalPages = {{ totalPages }};
-    var typingTimer; // Timer identifier
-    var doneTypingInterval = 2000; // Time in milliseconds (0.5 seconds)
+	<script type="text/javascript">
+		$(document).ready(function () {
+var currentPage = {{ currentPage }};
+var totalPages = {{ totalPages }};
+var typingTimer; // Timer identifier
+var doneTypingInterval = 2000;
+// Time in milliseconds (0.5 seconds)
 
-    // Function to update pagination links
-    function updatePagination() {
-        $(".page-link").removeClass("current-page");
-        $(".page-link[data-page='" + currentPage + "']").addClass("current-page");
-    }
+// Function to update pagination links
+function updatePagination() {
+$(".page-link").removeClass("current-page");
+$(".page-link[data-page='" + currentPage + "']").addClass("current-page");
+}
 
-    // Event listener for pagination links
-    $(".page-link").on("click", function(e) {
-        e.preventDefault();
-        currentPage = parseInt($(this).attr("data-page"));
-        handleSearch();
-        updatePagination();
-    });
-
-    // Function to handle search
-    function handleSearch() {
-        var query = $("#searchInput").val();
-
-        // Make an Ajax request to the search endpoint
-        $.ajax({
-            url: "{{ path('searchdoo') }}",
-            type: 'POST',
-            dataType: 'json',
-            data: { query: query, page: currentPage },
-            success: function(data) {
-                $("#searchResults").html(data.html);
-                totalPages = data.pagination.totalPages;
-                updatePagination();
-            },
-            error: function(xhr, status, error) {
-                console.error('Error:', error);
-            }
-        });
-    }
-
-    // Event listener for input field with a timer
-    $("#searchInput").on("input", function () {
-        clearTimeout(typingTimer);
-        typingTimer = setTimeout(handleSearch, doneTypingInterval);
-    });
-
-    // Clear the timer if the user presses a key again before the interval expires
-    $("#searchInput").on("keydown", function () {
-        clearTimeout(typingTimer);
-    });
+// Event listener for pagination links
+$(".page-link").on("click", function (e) {
+e.preventDefault();
+currentPage = parseInt($(this).attr("data-page"));
+handleSearch();
+updatePagination();
 });
 
-</script>
+// Function to handle search
+function handleSearch() {
+var query = $("#searchInput").val();
+
+// Make an Ajax request to the search endpoint
+$.ajax({
+url: "{{ path('searchdoo') }}",
+type: 'POST',
+dataType: 'json',
+data: {
+query: query,
+page: currentPage
+},
+success: function (data) {
+$("#searchResults").html(data.html);
+totalPages = data.pagination.totalPages;
+updatePagination();
+},
+error: function (xhr, status, error) {
+console.error('Error:', error);
+}
+});
+}
+
+// Event listener for input field with a timer
+$("#searchInput").on("input", function () {
+clearTimeout(typingTimer);
+typingTimer = setTimeout(handleSearch, doneTypingInterval);
+});
+
+// Clear the timer if the user presses a key again before the interval expires
+$("#searchInput").on("keydown", function () {
+clearTimeout(typingTimer);
+});
+});
+	</script>
 
 
 {% endblock %}

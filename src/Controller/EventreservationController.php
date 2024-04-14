@@ -47,6 +47,7 @@ class EventreservationController extends AbstractController
         return $this->renderForm('eventreservation/new.html.twig', [
             'eventreservation' => $eventreservation,
             'form' => $form,
+            'evenement' => $event,
         ]);
     }
 
@@ -55,6 +56,7 @@ class EventreservationController extends AbstractController
     {
         return $this->render('eventreservation/show.html.twig', [
             'eventreservation' => $eventreservation,
+            
         ]);
     }
 

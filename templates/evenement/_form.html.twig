@@ -10,7 +10,7 @@
 	<div class="col-sm-12 col-md-6">
 		<div class="bg-secondary rounded h-100 p-4">
 
-		{{ form_label(form.nomev, null, {'attr': {'for': 'floatingInput'}}) }}
+			{{ form_label(form.nomev, null, {'attr': {'for': 'floatingInput'}}) }}
 			<div class="form-floating mb-3">
 				{{ form_widget(form.nomev, {'attr': {'class': 'form-control', 'id': 'floatingInput'}}) }}
 				{{ form_label(form.nomev, null, {'attr': {'for': 'floatingInput'}}) }}
@@ -18,9 +18,10 @@
 					<div class="alert alert-primary" role="alert">
 						{{ form_errors(form.nomev) }}
 					</div>
+
 				{% endif %}
 			</div>
-				{{ form_label(form.descrptionev, null, {'attr': {'for': 'floatingInput'}}) }}
+			{{ form_label(form.descrptionev, null, {'attr': {'for': 'floatingInput'}}) }}
 
 			<div class="form-floating mb-3">
 				{{ form_widget(form.descrptionev, {'attr': {'class': 'form-control', 'id': 'floatingInput'}}) }}
@@ -31,7 +32,7 @@
 					</div>
 				{% endif %}
 			</div>
-				{{ form_label(form.dateddebutev, null, {'attr': {'for': 'floatingInput'}}) }}
+			{{ form_label(form.dateddebutev, null, {'attr': {'for': 'floatingInput'}}) }}
 
 			<div class="form-floating mb-3">
 				{{ form_widget(form.dateddebutev, {'attr': {'class': 'form-control', 'id': 'floatingInput'}}) }}
@@ -42,7 +43,7 @@
 					</div>
 				{% endif %}
 			</div>
-				{{ form_label(form.datedfinev, null, {'attr': {'for': 'floatingInput'}}) }}
+			{{ form_label(form.datedfinev, null, {'attr': {'for': 'floatingInput'}}) }}
 
 			<div class="form-floating mb-3">
 				{{ form_widget(form.datedfinev, {'attr': {'class': 'form-control', 'id': 'floatingInput'}}) }}
@@ -59,7 +60,7 @@
 				<div class="me-3">
 					{{ form_widget(form.heureev_hours, {'attr': {'class': 'form-select', 'id': 'floatingSelect'}}) }}
 					{{ form_label(form.heureev_hours, null, {'attr': {'for': 'floatingInput'}}) }}
-					
+
 				</div>
 				<div class="me-3">
 					{{ form_widget(form.heureev_minutes, {'attr': {'class': 'form-select', 'id': 'floatingSelect'}}) }}
@@ -71,14 +72,14 @@
 					{% endif %}
 
 				</div>
-                {% if form_errors(form.heureev_hours) %}
-						<div class="alert alert-primary" role="alert">
-							{{ form_errors(form.heureev_hours) }}
-						</div>
-					{% endif %}
+				{% if form_errors(form.heureev_hours) %}
+					<div class="alert alert-primary" role="alert">
+						{{ form_errors(form.heureev_hours) }}
+					</div>
+				{% endif %}
 			</div>
 
-				{{ form_label(form.lieu, null, {'attr': {'for': 'floatingInput'}}) }}
+			{{ form_label(form.lieu, null, {'attr': {'for': 'floatingInput'}}) }}
 
 			<div class="form-floating mb-3">
 				{{ form_widget(form.lieu, {'attr': {'class': 'form-control', 'id': 'floatingInput'}}) }}
@@ -90,7 +91,7 @@
 				{% endif %}
 			</div>
 
-				{{ form_label(form.city, null, {'attr': {'for': 'floatingInput'}}) }}
+			{{ form_label(form.city, null, {'attr': {'for': 'floatingInput'}}) }}
 
 			<div class="form-floating mb-3">
 				{{ form_widget(form.city) }}
@@ -101,7 +102,7 @@
 					</div>
 				{% endif %}
 			</div>
-				{{ form_label(form.tele, null, {'attr': {'for': 'floatingInput'}}) }}
+			{{ form_label(form.tele, null, {'attr': {'for': 'floatingInput'}}) }}
 
 			<div class="form-floating mb-3">
 				{{ form_widget(form.tele, {'attr': {'class': 'form-control', 'id': 'floatingInput'}}) }}
@@ -113,7 +114,7 @@
 				{% endif %}
 			</div>
 
-				{{ form_label(form.email, null, {'attr': {'for': 'floatingInput'}}) }}
+			{{ form_label(form.email, null, {'attr': {'for': 'floatingInput'}}) }}
 
 			<div class="form-floating mb-3">
 				{{ form_widget(form.email, {'attr': {'class': 'form-control', 'id': 'floatingInput'}}) }}
@@ -124,7 +125,7 @@
 					</div>
 				{% endif %}
 			</div>
-				{{ form_label(form.fb_link, null, {'attr': {'for': 'floatingInput'}}) }}
+			{{ form_label(form.fb_link, null, {'attr': {'for': 'floatingInput'}}) }}
 
 			<div class="form-floating mb-3">
 				{{ form_widget(form.fb_link, {'attr': {'class': 'form-control', 'id': 'floatingInput'}}) }}
@@ -135,7 +136,7 @@
 					</div>
 				{% endif %}
 			</div>
-				{{ form_label(form.IG_link, null, {'attr': {'for': 'floatingInput'}}) }}
+			{{ form_label(form.IG_link, null, {'attr': {'for': 'floatingInput'}}) }}
 
 			<div class="form-floating mb-3">
 				{{ form_widget(form.IG_link, {'attr': {'class': 'form-control', 'id': 'floatingInput'}}) }}
@@ -146,7 +147,7 @@
 					</div>
 				{% endif %}
 			</div>
-				{{ form_label(form.genreEvenement, null, {'attr': {'for': 'floatingInput'}}) }}
+			{{ form_label(form.genreEvenement, null, {'attr': {'for': 'floatingInput'}}) }}
 
 			<div class="form-floating mb-3">
 				{{ form_widget(form.genreEvenement, {'attr': {'class': 'form-select', 'id': 'floatingSelect'}}) }}
@@ -157,7 +158,7 @@
 					</div>
 				{% endif %}
 			</div>
-				{{ form_label(form.typeEV, null, {'attr': {'for': 'floatingInput'}}) }}
+			{{ form_label(form.typeEV, null, {'attr': {'for': 'floatingInput'}}) }}
 
 			<div class="form-floating mb-3">
 				{{ form_widget(form.typeEV, {'attr': {'class': 'form-select', 'id': 'floatingSelect'}}) }}
@@ -168,7 +169,7 @@
 					</div>
 				{% endif %}
 			</div>
-				{{ form_label(form.capacite, null, {'attr': {'for': 'floatingInput'}}) }}
+			{{ form_label(form.capacite, null, {'attr': {'for': 'floatingInput'}}) }}
 
 			<div class="form-floating mb-3">
 				{{ form_widget(form.capacite, {'attr': {'class': 'form-control', 'id': 'floatingInput'}}) }}
@@ -179,9 +180,9 @@
 					</div>
 				{% endif %}
 			</div>
-            {{ form_label(form.photo, null, {'attr': {'for': 'floatingInput'}}) }}
+			{{ form_label(form.photo, null, {'attr': {'for': 'floatingInput'}}) }}
 
-            <div class="form-floating mb-3">
+			<div class="form-floating mb-3">
 				{{ form_widget(form.photo) }}
 				{{ form_label(form.photo, null, {'attr': {'for': 'floatingInput'}}) }}
 				{% if form_errors(form.photo) %}
@@ -192,15 +193,31 @@
 			</div>
 
 
-
 			<button class="btn btn-primary m-2" href="{{ path('app_evenement_index') }}">{{ button_label|default('Save') }}</button>
 
 		</div>
 
 	</div>
 	<div class="col-sm-12 col-md-6">
-		{{ include('evenement/_map_picker.html.twig') }}
-	</div>
+    {{ include('evenement/_map_picker.html.twig') }}
+    <div class="mt-300" style="margin-top: 667px;"> <!-- Add margin top for spacing -->
+        <img id="selectedImage" class="selected-image" src="#" alt="Selected Image" style="display: none; max-width: 70%; height: auto;">
+    </div>
 </div>
+</div>
+{% block javascripts %}
+	<script>
+		function displaySelectedImage(input) {
+if (input.files && input.files[0]) {
+var reader = new FileReader();
+reader.onload = function (e) {
+document.getElementById('selectedImage').src = e.target.result;
+document.getElementById('selectedImage').style.display = 'block';
+}
+reader.readAsDataURL(input.files[0]);
+}
+}
+	</script>
+{% endblock %}
 
 {{ form_end(form) }}

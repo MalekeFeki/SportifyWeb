@@ -2,18 +2,102 @@
 
 {% block title %}New Eventreservation
 {% endblock %}
+{% block stylesheets %}
+	{{ parent() }}
+	<style>
+		/* Color the label */
+		.custom-label {
+			color: white; /* Change the color as desired */
+		}
 
+		/* Center the form */
+		.custom-form {
+			 /* Adjust the width as needed */
+			/* Add any other styling for centering */
+		}
+	</style>
+{% endblock %}
+{% form_theme form _self %}
 {% block body %}
-	<h1>Create new Eventreservation</h1>
+	<section class="blog-details-hero set-bg" data-setbg="{{ asset(evenement.photo) }}">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-8 p-0 m-auto">
+					<div class="bh-text">
+						<h3>{{ evenement.nomev }}</h3>
 
-	{{ form_start(form) }}
-    {{ form_row(form.nom) }}
-    {{ form_row(form.prenom) }}
-    {{ form_row(form.cin) }}
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
 
-    {{ form_row(form.email) }}
-    {{ form_row(form.numTele) }}
-	<button type="submit" class="btn btn-primary">Save</button>
-	<a href="{{ path('app_evenement_show', {'idevent': eventreservation.eventid.idevent}) }}" class="btn btn-secondary">Back to event</a>
 
+	<section style="background-color: #7a7a7a;">
+		<h1 style="color:white;">Create new Eventreservation</h1>
+		{{ form_start(form) }}
+		<div style="margin: auto;
+			width: 50%;" >
+			<div class="form-floating mb-3"  >
+
+
+				{{ form_label(form.nom, null, {'label_attr': {'for': 'floatingInput','class': 'custom-label'}}) }}
+				{{ form_widget(form.nom, {'attr': {'class': 'form-control', 'id': 'floatingInput'}}) }}
+
+				{% if form_errors(form.nom) %}
+					<div class="alert alert-primary" role="alert">
+						{{ form_errors(form.nom) }}
+					</div>
+				{% endif %}
+			</div>
+
+			<div class="form-floating mb-3">
+				{{ form_label(form.prenom, null, {'label_attr': {'class': 'custom-label'}, 'attr': {'for': 'floatingInput'}}) }}
+				{{ form_widget(form.prenom, {'attr': {'class': 'form-control', 'id': 'floatingInput'}}) }}
+
+				{% if form_errors(form.prenom) %}
+					<div class="alert alert-primary" role="alert">
+						{{ form_errors(form.prenom) }}
+					</div>
+				{% endif %}
+			</div>
+			<div class="form-floating mb-3" >
+				{{ form_label(form.cin, null, {'attr': {'class': 'custom-label'}, 'attr': {'for': 'floatingInput'}}) }}
+
+				{{ form_widget(form.cin, {'attr': {'class': 'form-control', 'id': 'floatingInput'}}) }}
+				{% if form_errors(form.cin) %}
+					<div class="alert alert-primary" role="alert">
+						{{ form_errors(form.cin) }}
+					</div>
+				{% endif %}
+			</div>
+			<div class="form-floating mb-3">
+				{{ form_label(form.email, null, {'attr': {'for': 'floatingInput','class': 'custom-label'}}) }}
+
+				{{ form_widget(form.email, {'attr': {'class': 'form-control', 'id': 'floatingInput'}}) }}
+				{% if form_errors(form.email) %}
+					<div class="alert alert-primary" role="alert">
+						{{ form_errors(form.email) }}
+					</div>
+				{% endif %}
+			</div>
+			<div class="form-floating mb-3">
+				{{ form_label(form.numTele, null, {'attr': {'for': 'floatingInput','class': 'custom-label'}}) }}
+
+				{{ form_widget(form.numTele, {'attr': {'class': 'form-control', 'id': 'floatingInput'}}) }}
+				{% if form_errors(form.numTele) %}
+					<div class="alert alert-primary" role="alert">
+						{{ form_errors(form.numTele) }}
+					</div>
+				{% endif %}
+			</div>
+
+
+			{{ form_widget(form.eventid, {'attr': {'style': 'display:none;'}}) }}
+
+			<button type="submit" href="{{ path('app_evenement_show', {'idevent': evenement.idevent}) }}" class="btn btn-primary">Save</button>
+			<a href="{{ path('app_evenement_show', {'idevent': evenement.idevent}) }}" class="btn btn-secondary">Back to event</a>
+			{{ form_end(form) }}
+		</div>
+	</section>
 {% endblock %}

@@ -223,9 +223,9 @@ class EvenementType extends AbstractType
             // You can add more fields as needed
             ->add('photo', FileType::class, [
                 'label' => 'Photo',
-                'mapped' => true,
+                'mapped' => false,
                 'required' => false,
-                'attr' => ['enctype' => 'multipart/form-data' , 'class'=>'form-control form-control-sm bg-dark' ,'id'=>'formFileSm'], // Add this line
+                'attr' => ['enctype' => 'multipart/form-data' , 'class'=>'form-control form-control-sm bg-dark' ,'id'=>'formFileSm','onchange'=>'displaySelectedImage(this)'], // Add this line
                 'constraints' => [
                     new File([
                         'maxSize' => '5M',

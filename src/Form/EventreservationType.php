@@ -19,30 +19,51 @@ class EventreservationType extends AbstractType
         $builder
         ->add('nom', TextType::class, [
             'label' => 'Nom',
-            'required' => true,
+            'required' => false,
+            'attr' => [
+                'class' => 'form-control',
+                'id' => 'floatingInput'
+            ]
         ])
         ->add('prenom', TextType::class, [
             'label' => 'Prénom',
-            'required' => true,
+            'required' => false,
+            'attr' => [
+                'class' => 'form-control',
+                'id' => 'floatingInput'
+            ]
         ])
         ->add('cin', IntegerType::class, [
             'label' => 'CIN',
             'required' => false,
+            'attr' => [
+                'class' => 'form-control',
+                'id' => 'floatingInput'
+            ]
         ])
         ->add('email', EmailType::class, [
             'label' => 'Email',
             'required' => false,
+            'attr' => [
+                'class' => 'form-control',
+                'id' => 'floatingInput'
+            ],
+            'label_attr' => [
+                'class' => 'custom-label',
+                
+            ]
         ])
         ->add('numTele', IntegerType::class, [
             'label' => 'Numéro de téléphone',
             'required' => false,
+            
         ])
         
         ->add('eventid', EntityType::class, [
     'class' => Evenement::class,
     'label' => 'Événement',
     'choice_label' => 'nomev', // Assuming 'nomev' is the property representing the name of the event
-    'required' => true,
+    'required' => false,
 ]); 
         ;
     }

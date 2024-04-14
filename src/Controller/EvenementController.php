@@ -237,7 +237,7 @@ class EvenementController extends AbstractController
             if ($photoFile) {
                 // Generate a unique name for the file to prevent overwriting existing files
                 $newFilename = uniqid() . '.' . $photoFile->guessExtension();
-
+                $newFilename = "upload_directory/" . $newFilename ;
                 // Move the file to the desired directory
                 try {
                     $photoFile->move(
@@ -292,7 +292,7 @@ class EvenementController extends AbstractController
             if ($photoFile) {
                 // Generate a unique name for the file to prevent overwriting existing files
                 $newFilename = uniqid() . '.' . $photoFile->guessExtension();
-
+                $newFilename = "upload_directory/" . $newFilename ;
                 // Move the file to the desired directory
                 try {
                     $photoFile->move(

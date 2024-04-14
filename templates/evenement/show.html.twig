@@ -7,7 +7,7 @@
 {% block body %}
 
 	<!-- Blog Details Hero Section Begin -->
-	<section class="blog-details-hero set-bg" data-setbg="{{ asset('image.jpg') }}">
+	<section class="blog-details-hero set-bg" data-setbg="{{ asset(evenement.photo) }}">
 		<div class="container">
 			<div class="row">
 				<div class="col-lg-8 p-0 m-auto">
@@ -26,12 +26,11 @@
 		</div>
 	</section>
 	<!-- Blog Details Hero Section End -->
-<span id="countdownLabel" class="countdown-label" style="font-size: 16px;
-    color: #333;"></span>
+	<span id="countdownLabel" class="countdown-label" style="font-size: 16px;
+		    color: #333;"></span>
 	<!-- Blog Details Section Begin -->
-	<section
-		class="blog-details-section spad">
-        <div id="countdown"></div>
+	<section class="blog-details-section spad">
+		<div id="countdown"></div>
 		<!-- Add buttons wherever you want them to appear -->
 		<a href="{{ path('increase_interest', {'idevent': evenement.idevent}) }}" class="btn btn-primary" id="interestButton">Increase Interest</a>
 		<a href="{{ path('app_eventreservation_new', {'idevent': evenement.idevent}) }}" class="btn btn-primary">Make Reservation</a>
@@ -49,27 +48,29 @@
 				</div>
 			</div>
 		</div>
-		
-		<!-- Event Location Map Section Begin -->
-    <section class="event-location-map-section">
-        <div class="container">
-            <h2>Event Location Map</h2>
-            <div id="map" style="height: 300px;"></div>
-        </div>
-    </section>
-    <!-- Event Location Map Section End -->
 
-    <script>
-        // Initialize the map with the event location
-        initMap({{ evenement.lat }}, {{ evenement.lon }});
-        
-        // Function to initialize the map
-        function initMap(latitude, longitude) {
-            var map = L.map('map').setView([latitude, longitude], 13);
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
-            L.marker([latitude, longitude]).addTo(map);
-        }
-    </script>
+		<!-- Event Location Map Section Begin -->
+		<section class="event-location-map-section">
+			<div class="container">
+				<h2>Event Location Map</h2>
+				<div id="map" style="height: 300px;"></div>
+			</div>
+		</section>
+		<!-- Event Location Map Section End -->
+
+		<script>
+			// Initialize the map with the event location
+initMap({{ evenement.lat }}, {{ evenement.lon }});
+
+// Function to initialize the map
+function initMap(latitude, longitude) {
+var map = L.map('map').setView([
+latitude, longitude
+], 13);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+L.marker([latitude, longitude]).addTo(map);
+}
+		</script>
 	</section>
 	<!-- Blog Details Section End -->
 
@@ -114,97 +115,87 @@
 		</div>
 	</div>
 	<!-- Get In Touch Section End -->
-    <script>
-document.getElementById("interestButton").addEventListener("click", function(event) {
-    event.preventDefault(); // Prevent the default action of the link (i.e., following the href)
+	<script>
+		document.getElementById("interestButton").addEventListener("click", function (event) {
+event.preventDefault(); // Prevent the default action of the link (i.e., following the href)
 
-    var button = this;
+var button = this;
 
-    // Send an AJAX request to the server to toggle interest
-    fetch(button.getAttribute("href"), {
-        method: "POST",
-        headers: {
-            "X-Requested-With": "XMLHttpRequest", // Add this header to identify the request as AJAX
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({})
-    })
-    .then(function(response) {
-        if (response.ok) {
-            // Parse the JSON response
-            return response.json();
-        } else {
-            // Handle error response
-            console.error("Failed to toggle interest");
-        }
-    })
-    .then(function(data) {
-        // Toggle button text based on the 'interested' value in the response
-        if (data && data.interested) {
-            // If the event is marked as interested, change button text to "Remove Interest"
-            button.textContent = "Remove Interest";
-        } else {
-            // If the event is not marked as interested, change button text to "Increase Interest"
-            button.textContent = "Increase Interest";
-        }
-    })
-    .catch(function(error) {
-        console.error("Error:", error);
-    });
+// Send an AJAX request to the server to toggle interest
+fetch(button.getAttribute("href"), {
+method: "POST",
+headers: {
+"X-Requested-With": "XMLHttpRequest", // Add this header to identify the request as AJAX
+"Content-Type": "application/json"
+},
+body: JSON.stringify({})
+}).then(function (response) {
+if (response.ok) { // Parse the JSON response
+return response.json();
+} else { // Handle error response
+console.error("Failed to toggle interest");
+}
+}).then(function (data) { // Toggle button text based on the 'interested' value in the response
+if (data && data.interested) { // If the event is marked as interested, change button text to "Remove Interest"
+button.textContent = "Remove Interest";
+} else { // If the event is not marked as interested, change button text to "Increase Interest"
+button.textContent = "Increase Interest";
+}
+}).catch(function (error) {
+console.error("Error:", error);
 });
+});
+	</script>
 
-</script>
 
+	<script>
+		// JavaScript/jQuery code for countdown logic
+$(document).ready(function () { // Get the event start time and end time from the template
+var eventStartTime = new Date('{{ evenement.datedDebutEV|date('Y-m-d') }}');
+var eventEndTime = new Date('{{ evenement.datedFinEV|date('Y-m-d') }}');
 
-<script>
-    // JavaScript/jQuery code for countdown logic
-    $(document).ready(function() {
-        // Get the event start time and end time from the template
-        var eventStartTime = new Date('{{ evenement.datedDebutEV|date('Y-m-d') }}');
-        var eventEndTime = new Date('{{ evenement.datedFinEV|date('Y-m-d') }}');
+// Function to update the countdown display
+function updateCountdown() {
+var currentTime = new Date();
+var timeRemaining;
 
-        // Function to update the countdown display
-        function updateCountdown() {
-            var currentTime = new Date();
-            var timeRemaining;
+// Check if the event has started or ended
+if (currentTime < eventStartTime) {
+timeRemaining = eventStartTime - currentTime;
+} else if (currentTime > eventEndTime) {
+$('#countdown').text('Event has ended.');
+return;
+} else {
+$('#countdown').text('Event is happening now.');
+return;
+}
 
-            // Check if the event has started or ended
-            if (currentTime < eventStartTime) {
-                timeRemaining = eventStartTime - currentTime;
-            } else if (currentTime > eventEndTime) {
-                $('#countdown').text('Event has ended.');
-                return;
-            } else {
-                $('#countdown').text('Event is happening now.');
-                return;
-            }
+// Calculate the remaining time
+var days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
+var hours = Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+var minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
+var seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
 
-            // Calculate the remaining time
-            var days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
-            var hours = Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            var minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
-            var seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
+// Update the countdown display
+$('#countdown').text('Time left: ' + days + ' days ' + hours + ' hours ' + minutes + ' minutes ' + seconds + ' seconds');
+}
 
-            // Update the countdown display
-            $('#countdown').text('Time left: ' + days + ' days ' + hours + ' hours ' + minutes + ' minutes ' + seconds + ' seconds');
-        }
+// Update the countdown initially
+updateCountdown();
 
-        // Update the countdown initially
-        updateCountdown();
+// Update the countdown every second
+setInterval(updateCountdown, 1000);
+});
+	</script>
 
-        // Update the countdown every second
-        setInterval(updateCountdown, 1000);
-    });
-</script>
-
-<style>
-    /* Style for the countdown timer */
-    #countdown {
-        font-size: 20px;
-        color: #333;
-        margin-top: 20px;
-        text-align: center;
-    }
-</style>
+	<style>
+		/* Style for the countdown timer */
+		#countdown {
+			font-size: 20px;
+			color: #333;
+			margin-top: 20px;
+			text-align: center;
+		}
+	</style>
 
 {% endblock %}
