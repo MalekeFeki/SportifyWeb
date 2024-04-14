@@ -29,6 +29,7 @@ class UserRepository extends ServiceEntityRepository
             ->getQuery()
             ->getSingleScalarResult();
     }
+    
 
 //    /**
 //     * @return User[] Returns an array of User objects

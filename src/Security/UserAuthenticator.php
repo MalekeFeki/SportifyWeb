@@ -56,7 +56,7 @@ class UserAuthenticator extends AbstractAuthenticator
     // For example, you can redirect the user back to the login page with an error message
     $request->getSession()->set(Security::AUTHENTICATION_ERROR, $exception);
 
-    return new RedirectResponse($this->getLoginUrl($request));
+    return new RedirectResponse($this->urlGenerator->generate('app_login'));
 }
 
     public function authenticate(Request $request): Passport

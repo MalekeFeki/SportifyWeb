@@ -8,6 +8,8 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as assert;
 use Scheb\TwoFactorBundle\Model\Email\TwoFactorInterface;
+use Symfony\Component\HttpFoundation\File\File;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: "utilisateur")] 
@@ -60,6 +62,38 @@ private $roles=[];
     #[Assert\NotBlank(message:"champ obligatoire")]
     private ?string $role = null;
 
+   /**
+ * @ORM\Column(length=255, nullable=true)
+ */
+private ?string $imageName;
+
+/**
+ * @Vich\UploadableField(mapping="user_image", fileNameProperty="imageName")
+ */
+private ?File $imageFile;
+
+
+    // Getters and setters for $imageFile
+    public function getImageFile(): ?File
+    {
+        return $this->imageFile;
+    }
+
+    public function setImageFile(?File $imageFile): void
+    {
+        $this->imageFile = $imageFile;
+    }
+
+    // Getter and setter for $imageName
+    public function getImageName(): ?string
+    {
+        return $this->imageName;
+    }
+
+    public function setImageName(?string $imageName): void
+    {
+        $this->imageName = $imageName;
+    }
     public function getId(): ?int
     {
         return $this->id;
@@ -161,6 +195,13 @@ private $roles=[];
     {
         return $this->mdp;
     }
+    
+    public function setPassword(string $mdp): static
+    {
+        $this->mdp= $mdp;
+
+        return $this;
+    }
 
     // Implémentation de UserInterface
     public function getSalt(): ?string
@@ -180,7 +221,10 @@ private $roles=[];
 }
 public function getRoles(): array
 {
-    return $this->roles;
+    $roles= $this->roles;
+    // guarantee every user at least has ROLE_USER
+    $roles[] = 'ROLE_USER';
+    return array_unique($roles);
 }
 public function setRoles(array $roles): static
 {
@@ -227,4 +271,30 @@ public function setEmailAuthCode(string $authCode): void
 {
     $this->authCode = $authCode;
 }
+/**
+     * @ORM\Column(name="googleAuthenticatorSecret", type="string", nullable=true)
+     */
+    private $googleAuthenticatorSecret;
+
+    // [...]
+
+    public function isGoogleAuthenticatorEnabled(): bool
+    {
+        return null !== $this->googleAuthenticatorSecret;
+    }
+
+    public function getGoogleAuthenticatorUsername(): string
+    {
+        return $this->prenom;
+    }
+
+    public function getGoogleAuthenticatorSecret(): ?string
+    {
+        return $this->googleAuthenticatorSecret;
+    }
+
+    public function setGoogleAuthenticatorSecret(?string $googleAuthenticatorSecret): void
+    {
+        $this->googleAuthenticatorSecret = $googleAuthenticatorSecret;
+    }
 }

@@ -15,7 +15,7 @@
             <div class="card mb-4 mb-xl-0">
                 {% if app.user %}
                 <div class="mb-3">
-                    You are logged in as {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Logout</a>
+                    You are logged in as {{ app.user.userIdentifier }}, <a href="{{ path('frontend') }}">Logout</a>
                 </div>
                 {% endif %}
                 <div class="card-body text-center">
@@ -24,7 +24,13 @@
                     <!-- Profile picture help block -->
                     <div class="small font-italic text-muted mb-4">JPG or PNG no larger than 5 MB</div>
                     <!-- Profile picture upload button -->
-                    <button class="btn btn-primary" type="button">Upload new image</button>
+                    <form method="post" action="" enctype="multipart/form-data">
+
+                     <div class="mb-3">
+        <label class="form-label" for="inputProfilePicture">Upload Profile Picture</label>
+        <input class="form-control" id="inputProfilePicture" type="file" name="profile_picture">
+    </div>
+                    <button class="btn btn-primary" type="submit">Upload new image</button>
                 </div>
             </div>
         </div>
@@ -74,6 +80,7 @@
                         </div>
                         <!-- Save changes button -->
                         <button class="btn btn-primary" type="submit">Save changes</button>
+                         <a href="{{ path('frontend') }}" class="btn btn-primary">Return</a>
                     </form>
                 </div>
             </div>

@@ -14,17 +14,11 @@ use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
-
-
-
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 #[Route('/user')]
 class UserController extends AbstractController
-{   #[Route('/backend', name: 'backend', methods: ['GET'])]
-    public function showBackendPage(): Response
-    {
-        return $this->render('base-backend.html.twig');
-    }
+{   
     #[Route('/frontend', name: 'frontend', methods: ['GET'])]
     public function showFrontendPage(): Response
     {
@@ -74,6 +68,7 @@ class UserController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            
 // Hasher le mot de passe
 $hashedPassword = password_hash($user->getPassword(),PASSWORD_DEFAULT);
 $user->setMdp($hashedPassword);
@@ -133,10 +128,11 @@ $user->setMdp($hashedPassword);
         ->from('malekfeki18@gmail.com') // Set your email address here
         ->to($user->getEmail()) // Send email to the user
         ->subject('Welcome to Our Website')
-        ->html('<p>Hello ' . $user->getUsername() . ',<br>Welcome to our website!</p>');
+        ->html('<p>Hello ' . $user->getNom() . ',<br>Welcome to our website!</p>');
 
     $mailer->send($email);
 }
+
 
 
 

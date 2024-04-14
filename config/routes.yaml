@@ -1,11 +1,11 @@
-#index:
-#    path: /
-#    controller: App\Controller\DefaultController::index
-# config/routes.yaml
+index:
+    path: /
+    controller: App\Controller\UserController::showFrontendPage
+
 table_route:
-    path: /user/backend
-    controller: App\Controller\UserController::index
+    path: /
+    controller: App\Controller\UserController::showFrontendPage
 profile_picture_upload:
     path: /profile/picture/upload
-    controller: App\Controller\ProfileController::uploadPicture
+    controller: App\Controller\UserController::uploadPicture
     methods: ['POST']
