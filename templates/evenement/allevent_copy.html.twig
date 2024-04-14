@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="zxx">
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="description" content="Gym Template">
+		<meta name="keywords" content="Gym, unica, creative, html">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<title>allevent_copy.html.twig</title>
+
+		<!-- Google Font -->
+		<link href="{{asset('https://fonts.googleapis.com/css?family=Muli:300,400,500,600,700,800,900&display=swap')}}" rel="stylesheet">
+		<link
+		href="{{asset('https://fonts.googleapis.com/css?family=Oswald:300,400,500,600,700&display=swap')}}" rel="stylesheet">
+
+		<!-- Css Styles -->
+		<link rel="stylesheet" href="{{asset('css/bootstrap.min.css')}}" type="text/css">
+		<link rel="stylesheet" href="{{asset('css/font-awesome.min.css')}}" type="text/css">
+		<link rel="stylesheet" href="{{asset('css/flaticon.css')}}" type="text/css">
+		<link rel="stylesheet" href="{{asset('css/owl.carousel.min.css')}}" type="text/css">
+		<link rel="stylesheet" href="{{asset('css/barfiller.css')}}" type="text/css">
+		<link rel="stylesheet" href="{{asset('css/magnific-popup.css')}}" type="text/css">
+		<link rel="stylesheet" href="{{asset('css/slicknav.min.css')}}" type="text/css">
+		<link rel="stylesheet" href="{{asset('css/style.css')}}" type="text/css">
+		<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"/>
+		<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+		<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+		</head>
+		<body>
+		{% block body %}
+
+			{% set controllerName = app.request.attributes.get('_controller') %}
+
+			{# {% if controllerName == 'App\\Controller\\EvenementController::allevent' %}
+										{% set routeName = 'allevent' %}
+										{% set routeParams = {} %}
+									{% elseif controllerName == 'App\\Controller\\EvenementController::alleventbycategory' %}
+										{% set routeName = 'allevent_by_category' %}
+										{% set routeParams = { 'category': category } %}
+									{% endif %} #}
+			<section class="blog-section spad" >
+				<div class="row"   >
+					<div class="container" >
+						<div class="col-lg-8 p-0" style=" max-width: 100.666667%;">
+							{% if pagination is not null %}
+
+								{% for evenement in pagination %}
+									<div class="blog-item">
+										<div class="bi-pic">
+											<img src="{{ asset('image.jpg') }}" alt="La Traversée des Dunes 2">
+										</div>
+										<div class="bi-text">
+											<h5>
+												<a href="{{ path('app_evenement_show', {'idevent': evenement.idevent}) }}">{{ evenement.nomev }}</a>
+											</h5>
+											<ul>
+												<li>by
+													{{evenement.role}}</li>
+												<li>{{ evenement.dateddebutev|date('M d, Y') }}</li>
+												<li>20 Comment</li>
+											</ul>
+											<p>{{ evenement.descrptionev }}</p>
+										</div>
+									</div>
+								{% endfor %}
+
+
+								<!-- Pagination -->
+<div class="blog-pagination" id="pagination">
+    {% set pagesToShow = 4 %}
+    {% set startPage = (currentPage > pagesToShow) ? (currentPage - pagesToShow) : 1 %}
+    {% set endPage = (currentPage + pagesToShow < totalPages) ? (currentPage + pagesToShow) : totalPages %}
+
+    {% if currentPage > 1 %}
+        <a href="#" class="page-link" data-page="{{ currentPage - 1 }}">Previous</a>
+    {% endif %}
+
+    {% for page in startPage..endPage %}
+        {% if currentPage == page %}
+            <span class="active-page" style="background-color: #f36100;
+									                                            color: white;
+									                                            font-size: 18px;
+									                                            padding: 10px 20px;
+									                                            border-radius: 5px;
+									                                            margin: 0 5px;
+									                                            font-family: 'oswald', sans-serif;
+									                                            font-weight: 500;
+									                                            margin-right: 15px;
+									                                            text-transform: uppercase;">{{ page }}</span>
+        {% else %}
+            <a href="#" class="page-link" data-page="{{ page }}" >{{ page }}</a>
+        {% endif %}
+    {% endfor %}
+
+    {% if currentPage < totalPages %}
+        <a href="#" class="page-link" data-page="{{ currentPage + 1 }}">Next</a>
+    {% endif %}
+</div>
+
+							</div>
+						{% else %}
+							<!-- Handle case when no search results are found -->
+							<p>No results found.</p>
+						{% endif %}
+					</div>
+				</div>
+			</section>
+<script type="text/javascript">
+    $(document).ready(function() {
+        var currentPage = {{ currentPage }};
+        var totalPages = {{ totalPages }};
+        
+        // Function to update pagination links
+        function updatePagination() {
+            $(".page-link").removeClass("current-page");
+            $(".page-link[data-page='" + currentPage + "']").addClass("current-page");
+        }
+
+        // Event listener for pagination links
+        $(".page-link").on("click", function(e) {
+            e.preventDefault();
+            currentPage = parseInt($(this).attr("data-page"));
+            handleSearch();
+            updatePagination();
+        });
+
+        // Function to handle search
+        function handleSearch() {
+            var query = $("#searchInput").val();
+
+            // Make an Ajax request to the search endpoint
+            $.ajax({
+                url: "{{ path('searchdoo') }}",
+                type: 'POST',
+                dataType: 'json',
+                data: { query: query, page: currentPage },
+                success: function(data) {
+                    $("#searchResults").html(data.html);
+                    totalPages = data.pagination.totalPages;
+                    updatePagination();
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error:', error);
+                }
+            });
+        }
+
+        // Event listener for input field
+        $("#searchInput").on("input", function () {
+            currentPage = 1;
+            handleSearch();
+        });
+    });
+</script>
+
+			{# <script>
+				// Function to handle search
+var typingTimer;
+var doneTypingInterval = 500; // Adjust this value as needed
+
+function handleSearch() {
+var query = document.getElementById('searchInput').value;
+var currentPage = 1; // Default to page 1
+
+fetch('/search-endpoint', {
+method: 'POST',
+headers: {
+'Content-Type': 'application/json'
+},
+body: JSON.stringify(
+{query: query, page: currentPage}
+) // Send the search query and current page
+}).then(response => response.json()).then(data => {
+document.getElementById('searchResults').innerHTML = data.html; // Update the search results
+document.getElementById('pagination').innerHTML = data.pagination; // Update the pagination
+}).catch(error => {
+console.error('Error:', error);
+});
+}
+
+// Event listener for input field
+document.getElementById('searchInput').addEventListener('input', function () {
+clearTimeout(typingTimer);
+typingTimer = setTimeout(handleSearch, doneTypingInterval);
+});
+			</script> #}
+		</body>
+	</html>
+</body></html>{% endblock %}

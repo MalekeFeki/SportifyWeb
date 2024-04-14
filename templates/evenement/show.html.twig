@@ -26,13 +26,16 @@
 		</div>
 	</section>
 	<!-- Blog Details Hero Section End -->
-
+<span id="countdownLabel" class="countdown-label" style="font-size: 16px;
+    color: #333;"></span>
 	<!-- Blog Details Section Begin -->
 	<section
 		class="blog-details-section spad">
+        <div id="countdown"></div>
 		<!-- Add buttons wherever you want them to appear -->
 		<a href="{{ path('increase_interest', {'idevent': evenement.idevent}) }}" class="btn btn-primary" id="interestButton">Increase Interest</a>
 		<a href="{{ path('app_eventreservation_new', {'idevent': evenement.idevent}) }}" class="btn btn-primary">Make Reservation</a>
+
 
 		<div class="container">
 			<div class="row">
@@ -46,6 +49,27 @@
 				</div>
 			</div>
 		</div>
+		
+		<!-- Event Location Map Section Begin -->
+    <section class="event-location-map-section">
+        <div class="container">
+            <h2>Event Location Map</h2>
+            <div id="map" style="height: 300px;"></div>
+        </div>
+    </section>
+    <!-- Event Location Map Section End -->
+
+    <script>
+        // Initialize the map with the event location
+        initMap({{ evenement.lat }}, {{ evenement.lon }});
+        
+        // Function to initialize the map
+        function initMap(latitude, longitude) {
+            var map = L.map('map').setView([latitude, longitude], 13);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+            L.marker([latitude, longitude]).addTo(map);
+        }
+    </script>
 	</section>
 	<!-- Blog Details Section End -->
 
@@ -130,4 +154,57 @@ document.getElementById("interestButton").addEventListener("click", function(eve
 });
 
 </script>
+
+
+<script>
+    // JavaScript/jQuery code for countdown logic
+    $(document).ready(function() {
+        // Get the event start time and end time from the template
+        var eventStartTime = new Date('{{ evenement.datedDebutEV|date('Y-m-d') }}');
+        var eventEndTime = new Date('{{ evenement.datedFinEV|date('Y-m-d') }}');
+
+        // Function to update the countdown display
+        function updateCountdown() {
+            var currentTime = new Date();
+            var timeRemaining;
+
+            // Check if the event has started or ended
+            if (currentTime < eventStartTime) {
+                timeRemaining = eventStartTime - currentTime;
+            } else if (currentTime > eventEndTime) {
+                $('#countdown').text('Event has ended.');
+                return;
+            } else {
+                $('#countdown').text('Event is happening now.');
+                return;
+            }
+
+            // Calculate the remaining time
+            var days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
+            var hours = Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            var minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
+            var seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
+
+            // Update the countdown display
+            $('#countdown').text('Time left: ' + days + ' days ' + hours + ' hours ' + minutes + ' minutes ' + seconds + ' seconds');
+        }
+
+        // Update the countdown initially
+        updateCountdown();
+
+        // Update the countdown every second
+        setInterval(updateCountdown, 1000);
+    });
+</script>
+
+<style>
+    /* Style for the countdown timer */
+    #countdown {
+        font-size: 20px;
+        color: #333;
+        margin-top: 20px;
+        text-align: center;
+    }
+</style>
+
 {% endblock %}

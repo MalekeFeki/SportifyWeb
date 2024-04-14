@@ -1,5 +1,206 @@
-{{ form_start(form) }}
+{{ form_start(form)  }}
 
-    {{ form_widget(form) }}
-    <button class="btn" href="{{ path('app_evenement_index') }}">{{ button_label|default('Save') }}</button>
+<style>
+	input[type="date"] {
+		background-color: white;
+	}
+</style>
+{% form_theme form _self %}
+<div class="row">
+	<div class="col-sm-12 col-md-6">
+		<div class="bg-secondary rounded h-100 p-4">
+
+		{{ form_label(form.nomev, null, {'attr': {'for': 'floatingInput'}}) }}
+			<div class="form-floating mb-3">
+				{{ form_widget(form.nomev, {'attr': {'class': 'form-control', 'id': 'floatingInput'}}) }}
+				{{ form_label(form.nomev, null, {'attr': {'for': 'floatingInput'}}) }}
+				{% if form_errors(form.nomev) %}
+					<div class="alert alert-primary" role="alert">
+						{{ form_errors(form.nomev) }}
+					</div>
+				{% endif %}
+			</div>
+				{{ form_label(form.descrptionev, null, {'attr': {'for': 'floatingInput'}}) }}
+
+			<div class="form-floating mb-3">
+				{{ form_widget(form.descrptionev, {'attr': {'class': 'form-control', 'id': 'floatingInput'}}) }}
+				{{ form_label(form.descrptionev, null, {'attr': {'for': 'floatingInput'}}) }}
+				{% if form_errors(form.descrptionev) %}
+					<div class="alert alert-primary" role="alert">
+						{{ form_errors(form.descrptionev) }}
+					</div>
+				{% endif %}
+			</div>
+				{{ form_label(form.dateddebutev, null, {'attr': {'for': 'floatingInput'}}) }}
+
+			<div class="form-floating mb-3">
+				{{ form_widget(form.dateddebutev, {'attr': {'class': 'form-control', 'id': 'floatingInput'}}) }}
+				{{ form_label(form.dateddebutev, null, {'attr': {'for': 'floatingInput'}}) }}
+				{% if form_errors(form.dateddebutev) %}
+					<div class="alert alert-primary" role="alert">
+						{{ form_errors(form.dateddebutev) }}
+					</div>
+				{% endif %}
+			</div>
+				{{ form_label(form.datedfinev, null, {'attr': {'for': 'floatingInput'}}) }}
+
+			<div class="form-floating mb-3">
+				{{ form_widget(form.datedfinev, {'attr': {'class': 'form-control', 'id': 'floatingInput'}}) }}
+				{{ form_label(form.datedfinev, null, {'attr': {'for': 'floatingInput'}}) }}
+				{% if form_errors(form.datedfinev) %}
+					<div class="alert alert-primary" role="alert">
+						{{ form_errors(form.datedfinev) }}
+					</div>
+				{% endif %}
+			</div>
+
+
+			<div class="form-floating mb-3 d-flex">
+				<div class="me-3">
+					{{ form_widget(form.heureev_hours, {'attr': {'class': 'form-select', 'id': 'floatingSelect'}}) }}
+					{{ form_label(form.heureev_hours, null, {'attr': {'for': 'floatingInput'}}) }}
+					
+				</div>
+				<div class="me-3">
+					{{ form_widget(form.heureev_minutes, {'attr': {'class': 'form-select', 'id': 'floatingSelect'}}) }}
+					{{ form_label(form.heureev_minutes, null, {'attr': {'for': 'floatingInput'}}) }}
+					{% if form_errors(form.heureev_minutes) %}
+						<div class="alert alert-primary" role="alert">
+							{{ form_errors(form.heureev_minutes) }}
+						</div>
+					{% endif %}
+
+				</div>
+                {% if form_errors(form.heureev_hours) %}
+						<div class="alert alert-primary" role="alert">
+							{{ form_errors(form.heureev_hours) }}
+						</div>
+					{% endif %}
+			</div>
+
+				{{ form_label(form.lieu, null, {'attr': {'for': 'floatingInput'}}) }}
+
+			<div class="form-floating mb-3">
+				{{ form_widget(form.lieu, {'attr': {'class': 'form-control', 'id': 'floatingInput'}}) }}
+				{{ form_label(form.lieu, null, {'attr': {'for': 'floatingInput'}}) }}
+				{% if form_errors(form.lieu) %}
+					<div class="alert alert-primary" role="alert">
+						{{ form_errors(form.lieu) }}
+					</div>
+				{% endif %}
+			</div>
+
+				{{ form_label(form.city, null, {'attr': {'for': 'floatingInput'}}) }}
+
+			<div class="form-floating mb-3">
+				{{ form_widget(form.city) }}
+				{{ form_label(form.city, null, {'attr': {'for': 'floatingInput'}}) }}
+				{% if form_errors(form.city) %}
+					<div class="alert alert-primary" role="alert">
+						{{ form_errors(form.city) }}
+					</div>
+				{% endif %}
+			</div>
+				{{ form_label(form.tele, null, {'attr': {'for': 'floatingInput'}}) }}
+
+			<div class="form-floating mb-3">
+				{{ form_widget(form.tele, {'attr': {'class': 'form-control', 'id': 'floatingInput'}}) }}
+				{{ form_label(form.tele, null, {'attr': {'for': 'floatingInput'}}) }}
+				{% if form_errors(form.tele) %}
+					<div class="alert alert-primary" role="alert">
+						{{ form_errors(form.tele) }}
+					</div>
+				{% endif %}
+			</div>
+
+				{{ form_label(form.email, null, {'attr': {'for': 'floatingInput'}}) }}
+
+			<div class="form-floating mb-3">
+				{{ form_widget(form.email, {'attr': {'class': 'form-control', 'id': 'floatingInput'}}) }}
+				{{ form_label(form.email, null, {'attr': {'for': 'floatingInput'}}) }}
+				{% if form_errors(form.email) %}
+					<div class="alert alert-primary" role="alert">
+						{{ form_errors(form.email) }}
+					</div>
+				{% endif %}
+			</div>
+				{{ form_label(form.fb_link, null, {'attr': {'for': 'floatingInput'}}) }}
+
+			<div class="form-floating mb-3">
+				{{ form_widget(form.fb_link, {'attr': {'class': 'form-control', 'id': 'floatingInput'}}) }}
+				{{ form_label(form.fb_link, null, {'attr': {'for': 'floatingInput'}}) }}
+				{% if form_errors(form.fb_link) %}
+					<div class="alert alert-primary" role="alert">
+						{{ form_errors(form.fb_link) }}
+					</div>
+				{% endif %}
+			</div>
+				{{ form_label(form.IG_link, null, {'attr': {'for': 'floatingInput'}}) }}
+
+			<div class="form-floating mb-3">
+				{{ form_widget(form.IG_link, {'attr': {'class': 'form-control', 'id': 'floatingInput'}}) }}
+				{{ form_label(form.IG_link, null, {'attr': {'for': 'floatingInput'}}) }}
+				{% if form_errors(form.IG_link) %}
+					<div class="alert alert-primary" role="alert">
+						{{ form_errors(form.IG_link) }}
+					</div>
+				{% endif %}
+			</div>
+				{{ form_label(form.genreEvenement, null, {'attr': {'for': 'floatingInput'}}) }}
+
+			<div class="form-floating mb-3">
+				{{ form_widget(form.genreEvenement, {'attr': {'class': 'form-select', 'id': 'floatingSelect'}}) }}
+				{{ form_label(form.genreEvenement, null, {'attr': {'for': 'floatingInput'}}) }}
+				{% if form_errors(form.genreEvenement) %}
+					<div class="alert alert-primary" role="alert">
+						{{ form_errors(form.genreEvenement) }}
+					</div>
+				{% endif %}
+			</div>
+				{{ form_label(form.typeEV, null, {'attr': {'for': 'floatingInput'}}) }}
+
+			<div class="form-floating mb-3">
+				{{ form_widget(form.typeEV, {'attr': {'class': 'form-select', 'id': 'floatingSelect'}}) }}
+				{{ form_label(form.typeEV, null, {'attr': {'for': 'floatingInput'}}) }}
+				{% if form_errors(form.typeEV) %}
+					<div class="alert alert-primary" role="alert">
+						{{ form_errors(form.typeEV) }}
+					</div>
+				{% endif %}
+			</div>
+				{{ form_label(form.capacite, null, {'attr': {'for': 'floatingInput'}}) }}
+
+			<div class="form-floating mb-3">
+				{{ form_widget(form.capacite, {'attr': {'class': 'form-control', 'id': 'floatingInput'}}) }}
+				{{ form_label(form.capacite, null, {'attr': {'for': 'floatingInput'}}) }}
+				{% if form_errors(form.capacite) %}
+					<div class="alert alert-primary" role="alert">
+						{{ form_errors(form.capacite) }}
+					</div>
+				{% endif %}
+			</div>
+            {{ form_label(form.photo, null, {'attr': {'for': 'floatingInput'}}) }}
+
+            <div class="form-floating mb-3">
+				{{ form_widget(form.photo) }}
+				{{ form_label(form.photo, null, {'attr': {'for': 'floatingInput'}}) }}
+				{% if form_errors(form.photo) %}
+					<div class="alert alert-primary" role="alert">
+						{{ form_errors(form.photo) }}
+					</div>
+				{% endif %}
+			</div>
+
+
+
+			<button class="btn btn-primary m-2" href="{{ path('app_evenement_index') }}">{{ button_label|default('Save') }}</button>
+
+		</div>
+
+	</div>
+	<div class="col-sm-12 col-md-6">
+		{{ include('evenement/_map_picker.html.twig') }}
+	</div>
+</div>
+
 {{ form_end(form) }}

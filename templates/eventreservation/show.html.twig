@@ -1,42 +1,32 @@
 {% extends 'admin_base.html.twig' %}
 
-{% block title %}Eventreservation{% endblock %}
+{% block title %}Event Reservations{% endblock %}
 
 {% block body %}
-    <h1>Eventreservation</h1>
+    <h1>Event Reservations</h1>
 
     <table class="table">
-        <tbody>
+        <thead>
             <tr>
-                <th>Reservationid</th>
-                <td>{{ eventreservation.reservationid }}</td>
-            </tr>
-            <tr>
+                <th>Reservation ID</th>
                 <th>Nom</th>
-                <td>{{ eventreservation.nom }}</td>
-            </tr>
-            <tr>
                 <th>Prenom</th>
-                <td>{{ eventreservation.prenom }}</td>
-            </tr>
-            <tr>
                 <th>Cin</th>
-                <td>{{ eventreservation.cin }}</td>
-            </tr>
-            <tr>
                 <th>Email</th>
-                <td>{{ eventreservation.email }}</td>
-            </tr>
-            <tr>
                 <th>NumTele</th>
-                <td>{{ eventreservation.numTele }}</td>
             </tr>
+        </thead>
+        <tbody>
+                <tr>
+                    <td>{{ eventReservation.reservationid }}</td>
+                    <td>{{ eventReservation.nom }}</td>
+                    <td>{{ eventReservation.prenom }}</td>
+                    <td>{{ eventReservation.cin }}</td>
+                    <td>{{ eventReservation.email }}</td>
+                    <td>{{ eventReservation.numTele }}</td>
+                </tr>
         </tbody>
     </table>
 
-    <a href="{{ path('app_eventreservation_index') }}">back to list</a>
-
-    <a href="{{ path('app_eventreservation_edit', {'reservationid': eventreservation.reservationid}) }}">edit</a>
-
-    {{ include('eventreservation/_delete_form.html.twig') }}
+    <a href="{{ path('app_eventreservation_index') }}">Back to List</a>
 {% endblock %}

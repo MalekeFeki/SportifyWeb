@@ -8,3 +8,15 @@ increase_interest:
 make_reservation:
     path: '/event/{idevent}/make-reservation'
     controller: 'App\Controller\EvenementController::makeReservation'
+
+app_event_show:
+    path: '/event/{idevent}/reservations'
+    controller: 'App\Controller\EvenementController::showReservations'
+    # methods: ['GET']
+
+    # config/routes.yaml
+
+search_endpoint:
+    path: /search-endpoint
+    controller: App\Controller\EvenementController::search
+    methods: ['POST']

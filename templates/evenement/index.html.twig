@@ -1,75 +1,107 @@
 {% extends 'admin_base.html.twig' %}
 
-{% block title %}Evenement index{% endblock %}
+{% block title %}Evenement index
+{% endblock %}
 
 {% block body %}
-    <h1>gestion Evenement </h1>
+	<h1>gestion Evenement</h1>
+	<a class="btn btn-lg btn-primary m-2" href="{{ path('app_evenement_new') }}">Create new</a>
+	<div class="">
+		<div class="bg-secondary rounded h-100 p-4">
+			<div class="">
+				<table
+					class="table">
+					{# <table class="table" style="width: 30%; max-width: 70px; overflow: hidden; text-overflow: ellipsis;
+																				        white-space: nowrap;"> #}
+					<thead>
+						<tr>
+							<th scope="col">Idevent</th>
+							<th scope="col">Nomev</th>
+							<th scope="col">Dateddebutev</th>
+							<th scope="col">Datedfinev</th>
+							{# <th scope="col">Heureev</th> #}
+							{# <th scope="col">Descrptionev</th>
+																											                <th>Photo</th> #}
+							{# <th scope="col">Lieu</th> #}
+								<th scope="col"> City
+							</th>
+							<th scope="col">
+								Tele
+							</th>
+							<th scope="col">
+								Email
+							</th>
+							{# <th scope="col">FbLink</th>
+																											                <th scope="col">IgLink</th> #}
+							<th scope="col">
+								Genreevenement
+							</th>
+							<th scope="col">
+								Typeev
+							</th>
+							<th style="width: 30%;" scope="col">
+								Nbpersonneinteresse</th>
+							<th scope="col">Capacite</th>
+							{# <th scope="col">Lat</th>
+																											                <th scope="col">Lon</th> #}
+							<th scope="col">actions</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for evenement in evenements %}
+							<tr>
+								<td scope="row">{{ evenement.idevent }}</td>
+								<td>{{ evenement.nomev }}</td>
+								<td>{{ evenement.dateddebutev ? evenement.dateddebutev|date('Y-m-d') : '' }}</td>
+								<td>{{ evenement.datedfinev ? evenement.datedfinev|date('Y-m-d') : '' }}</td>
+								{# <td>{{ evenement.heureev }}</td> #}
+								{# <td>{{ evenement.descrptionev }}</td>
+																																                <td>{{ evenement.photo }}</td> #}
+								{# <td>{{ evenement.lieu }}</td> #}
+									<td>
+								{{ evenement.city }}
+								</td>
+									<td>
+								{{ evenement.tele }}
+								</td>
+									<td>
+								{{ evenement.email }}
+								</td>
+								{# <td>{{ evenement.fbLink }}</td>
+																																                <td>{{ evenement.igLink }}</td> #}
+									<td>
+								{{ evenement.genreevenement }}
+								</td>
+									<td>
+								{{ evenement.typeev }}
+								</td>
+									<td>
+								{{ evenement.nombrepersonneinteresse }}
+								</td>
+									<td>
+								{{ evenement.capacite }}
+								</td>
+								{# <td>{{ evenement.lat }}</td>
+																																                <td>{{ evenement.lon }}</td> #}
+									<td>
+										<form method="post" action="{{ path('app_evenement_edit', {'idevent': evenement.idevent}) }}" onsubmit="return confirm('Are you sure you want to edit this event?');"> <input type="hidden" name="_token" value="{{ csrf_token('edit' ~ evenement.idevent) }}">
+										<button class="btn btn-light m-2">edit</button>
+									</form>
+									{# <button href="{{ path('app_evenement_edit', {'idevent': evenement.idevent}) }}">edit</button> #}
+									<a href="{{ path('app_event_show', {'idevent': evenement.idevent}) }}" class="btn btn-primary">Show Reservations</a>
 
-    <table class="table" style="width: 30%; max-width: 70px; overflow: hidden; text-overflow: ellipsis;
-        white-space: nowrap;" >
-        <thead>
-            <tr>
-                <th>Idevent</th>
-                <th>Nomev</th>
-                <th>Dateddebutev</th>
-                <th>Datedfinev</th>
-                {# <th>Heureev</th> #}
-                {# <th>Descrptionev</th>
-                <th>Photo</th> #}
-                {# <th>Lieu</th> #}
-                <th>City</th>
-                <th>Tele</th>
-                <th>Email</th>
-                {# <th>FbLink</th>
-                <th>IgLink</th> #}
-                <th>Genreevenement</th>
-                <th>Typeev</th>
-                <th style="width: 30%;">Nbpersonneinteresse</th>
-                <th>Capacite</th>
-                {# <th>Lat</th>
-                <th>Lon</th> #}
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for evenement in evenements %}
-            <tr>
-                <td>{{ evenement.idevent }}</td>
-                <td>{{ evenement.nomev }}</td>
-                <td>{{ evenement.dateddebutev ? evenement.dateddebutev|date('Y-m-d') : '' }}</td>
-                <td>{{ evenement.datedfinev ? evenement.datedfinev|date('Y-m-d') : '' }}</td>
-                {# <td>{{ evenement.heureev }}</td> #}
-                {# <td>{{ evenement.descrptionev }}</td>
-                <td>{{ evenement.photo }}</td> #}
-                {# <td>{{ evenement.lieu }}</td> #}
-                <td>{{ evenement.city }}</td>
-                <td>{{ evenement.tele }}</td>
-                <td>{{ evenement.email }}</td>
-                {# <td>{{ evenement.fbLink }}</td>
-                <td>{{ evenement.igLink }}</td> #}
-                <td>{{ evenement.genreevenement }}</td>
-                <td>{{ evenement.typeev }}</td>
-                <td>{{ evenement.nombrepersonneinteresse }}</td>
-                <td>{{ evenement.capacite }}</td>
-                {# <td>{{ evenement.lat }}</td>
-                <td>{{ evenement.lon }}</td> #}
-                <td>
-                <form method="post" action="{{ path('app_evenement_edit', {'idevent': evenement.idevent}) }}" onsubmit="return confirm('Are you sure you want to edit this event?');">
-    <input type="hidden" name="_token" value="{{ csrf_token('edit' ~ evenement.idevent) }}">
-    <button class="btn">edit</button>
-</form>
-                    {# <a href="{{ path('app_evenement_show', {'idevent': evenement.idevent}) }}">show</a> #}
-                    {# <button href="{{ path('app_evenement_edit', {'idevent': evenement.idevent}) }}">edit</button> #}
-                {{ include('evenement/_delete_form.html.twig') }}
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="20">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+									{{ include('evenement/_delete_form.html.twig') }}
 
-    <a href="{{ path('app_evenement_new') }}">Create new</a>
+								</td>
+							</tr>
+						{% else %}
+							<tr>
+								<td colspan="20">no records found</td>
+							</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
 {% endblock %}

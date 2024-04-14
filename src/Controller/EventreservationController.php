@@ -50,7 +50,7 @@ class EventreservationController extends AbstractController
         ]);
     }
 
-    #[Route('/{reservationid}', name: 'app_eventreservation_show', methods: ['GET'])]
+    #[Route('/{reservationid}', name: 'app_eventreservation_show1', methods: ['GET'])]
     public function show(Eventreservation $eventreservation): Response
     {
         return $this->render('eventreservation/show.html.twig', [
@@ -77,13 +77,16 @@ class EventreservationController extends AbstractController
     }
 
     #[Route('/{reservationid}', name: 'app_eventreservation_delete', methods: ['POST'])]
-    public function delete(Request $request, Eventreservation $eventreservation, EntityManagerInterface $entityManager): Response
+    public function delete(Request $request,UrlGeneratorInterface $urlGenerator, Eventreservation $eventreservation, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete'.$eventreservation->getReservationid(), $request->request->get('_token'))) {
             $entityManager->remove($eventreservation);
             $entityManager->flush();
         }
-
-        return $this->redirectToRoute('app_eventreservation_index', [], Response::HTTP_SEE_OTHER);
+        $event = $eventreservation->getEventid();
+        $idevent =$event->getIdevent();
+                return new RedirectResponse(
+            $urlGenerator->generate('app_event_show', ['idevent' => $idevent])
+        );
     }
 }

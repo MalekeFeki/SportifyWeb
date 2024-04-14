@@ -41,7 +41,7 @@ class Evenement
     private ?string $descrptionev;
 
     #[ORM\Column(name: "Photo", type: "string")]
-    // #[Assert\NotBlank(message: "Photo cannot be empty")]
+    #[Assert\NotBlank(message: "Photo cannot be empty")]
     private ?string $photo;
 
     #[ORM\Column(name: "lieu", type: "string")]
@@ -94,13 +94,13 @@ class Evenement
     private ?int $capacite;
 
     #[ORM\Column(name: "lat", type: "float")]
-    #[Assert\NotBlank(message: "Lat cannot be empty")]
-    #[Assert\Type(type: "float", message: "Lat must be a valid float")]
+    // #[Assert\NotBlank(message: "Lat cannot be empty")]
+    // #[Assert\Type(type: "float", message: "Lat must be a valid float")]
     private ?float $lat;
 
     #[ORM\Column(name: "lon", type: "float")]
-    #[Assert\NotBlank(message: "Lon cannot be empty")]
-    #[Assert\Type(type: "float", message: "Lon must be a valid float")]
+    // #[Assert\NotBlank(message: "Lon cannot be empty")]
+    // #[Assert\Type(type: "float", message: "Lon must be a valid float")]
     private ?float $lon;
 
     #[ORM\Column(name: "role", type: "string", length: 0, nullable: true)]

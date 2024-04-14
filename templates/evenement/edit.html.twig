@@ -6,6 +6,7 @@
     <h1>Edit Evenement</h1>
 
     {{ include('evenement/_form.html.twig', {'button_label': 'Update'}) }}
+    {{ include('evenement/_map_picker.html.twig') }} {# Include the map picker HTML file #}
 
     <a href="{{ path('app_evenement_index') }}">back to list</a>
 

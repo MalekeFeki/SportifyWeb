@@ -13,27 +13,28 @@ class EvenementRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Evenement::class);
     }
-    public function searchByName($searchQuery,$page, $pageSize): Paginator
-{
-    $query =  $this->createQueryBuilder('e')
-        ->andWhere('e.nomev LIKE :searchQuery')
-        ->setParameter('searchQuery', '%' . $searchQuery . '%')
-        ->getQuery();
-        // ->getResult();
+    public function searchByName($searchQuery, $page, $pageSize): Paginator
+    {
+        $query = $this->createQueryBuilder('e')
+            ->andWhere('e.nomev LIKE :searchQuery')
+            ->setParameter('searchQuery', '%' . $searchQuery . '%')
+            ->getQuery();
+
+        // Paginate the results
         $paginator = new Paginator($query);
         $paginator->getQuery()
             ->setFirstResult(($page - 1) * $pageSize)
             ->setMaxResults($pageSize);
 
         return $paginator;
-}
+    }
     // You can add custom repository methods here
     public function paginate($page, $pageSize)
     {
-        
+
         $query = $this->createQueryBuilder('e')
             ->orderBy('e.idevent', 'ASC') // Order by the correct identifier field
-            ->getQuery(); 
+            ->getQuery();
 
         $paginator = new Paginator($query);
         $paginator->getQuery()
@@ -58,8 +59,8 @@ class EvenementRepository extends ServiceEntityRepository
             ->setMaxResults($pageSize);
 
         return $paginator;
-    }    
-   
+    }
+
     public function countEventsByCategory(): array
     {
         return $this->createQueryBuilder('e')
