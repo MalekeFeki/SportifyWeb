@@ -2,12 +2,45 @@
 
 {% block title %}Edit Avis{% endblock %}
 
+{% block stylesheets %}
+    <!-- Include necessary CSS files -->
+    <link href="{{ asset('css/bootstrap-back.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/style_back.css') }}" rel="stylesheet">
+    <style>
+        /* Additional Custom Styles */
+        body {
+            background-color: black;
+            color: white;
+            font-family: 'Open Sans', sans-serif;
+        }
+
+        h1 {
+            font-family: 'Roboto', sans-serif;
+            font-weight: 700;
+            color: white;
+        }
+
+        .form-wrapper {
+            margin-bottom: 20px;
+        }
+
+        .back-link {
+            display: block;
+            margin-top: 20px;
+            color: white;
+        }
+    </style>
+{% endblock %}
+
 {% block body %}
+    <!-- Body content -->
     <h1>Edit Avis</h1>
 
-    {{ include('avis/_form.html.twig', {'button_label': 'Update'}) }}
+    <div class="form-wrapper">
+        {{ include('avis/_form.html.twig', {'button_label': 'Update'}) }}
+    </div>
 
-    <a href="{{ path('app_avis_index') }}">back to list</a>
+    <a href="{{ path('app_avis_index') }}" class="back-link">Back to List</a>
 
     {{ include('avis/_delete_form.html.twig') }}
 {% endblock %}

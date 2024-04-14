@@ -2,10 +2,18 @@
 
 {% block title %}New Avis{% endblock %}
 
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/custom.css') }}">
+{% endblock %}
+
+
 {% block body %}
-    <h1>Create new Avis</h1>
+    <div class="container">
+        <h1 class="mt-4 mb-4">Create a New Avis</h1>
 
-    {{ include('avis/_form.html.twig') }}
+        {{ include('avis/_form.html.twig') }}
 
-    <a href="{{ path('app_avis_index') }}">back to list</a>
+        <a href="{{ path('app_avis_index') }}" class="btn btn-secondary">Back to List</a>
+    </div>
 {% endblock %}

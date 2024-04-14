@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Avis;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -14,10 +15,12 @@ class Avis1Type extends AbstractType
         $builder
         ->add('type', ChoiceType::class, [
             'choices' => [
-                'MEDIOCRE' => 'MEMBRE',
-                'PROPRIETAIRE' => 'PROPRIETAIRE',
+                'MEDIOCRE' => 'MEDIOCRE',
+                'PASSABLE' => 'PASSABLE',
+                'MOYEN' => 'MOYEN',
+                'BIEN' => 'BIEN',
+                'EXCELLENT' => 'EXCELLENT',
             ],
-            'placeholder' => 'Choisir votre role', // Optional placeholder text
         ])
             ->add('description')
         ;

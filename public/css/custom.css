@@ -1,0 +1,12 @@
+/* custom.css */
+.container {
+    margin-top: 50px;
+    padding: 20px;
+    background-color: #0078f0;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(65, 0, 0, 0.1);
+}
+
+.btn-secondary {
+    margin-top: 20px;
+}

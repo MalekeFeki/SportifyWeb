@@ -2,8 +2,79 @@
 
 {% block title %}Avis index{% endblock %}
 
+{% block stylesheets %}
+    <!-- Include necessary CSS files -->
+    <link href="{{ asset('css/bootstrap-back.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/style_back.css') }}" rel="stylesheet">
+    <style>
+        /* Additional Custom Styles */
+        body {
+            background-color: black;
+            color: white;
+            font-family: 'Open Sans', sans-serif;
+        }
+
+        h1 {
+            font-family: 'Roboto', sans-serif;
+            font-weight: 700;
+            color: white;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            color: white;
+        }
+
+        th, td {
+            border: 1px solid #444;
+            padding: 10px;
+        }
+
+        th {
+            background-color: #333;
+        }
+
+        tr:nth-child(even) {
+            background-color: #222;
+        }
+
+        tr:nth-child(odd) {
+            background-color: #111;
+        }
+
+        a, .export-button {
+            color: white;
+            text-decoration: none;
+            margin-right: 5px;
+        }
+
+        a:hover, .export-button:hover {
+            text-decoration: underline;
+        }
+
+        .no-records {
+            text-align: center;
+            color: #ccc;
+        }
+
+        .create-new {
+            display: block;
+            margin-top: 20px;
+            text-align: center;
+            color: white;
+        }
+    </style>
+{% endblock %}
+
 {% block body %}
+    <!-- Body content -->
     <h1>Avis index</h1>
+
+    <div class="export-button">
+        <a href="{{ path('export_avis_to_csv') }}">Export to CSV</a>
+    </div>
 
     <table class="table">
         <thead>
@@ -11,7 +82,7 @@
                 <th>Ida</th>
                 <th>Type</th>
                 <th>Description</th>
-                <th>actions</th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -27,11 +98,11 @@
             </tr>
         {% else %}
             <tr>
-                <td colspan="4">no records found</td>
+                <td colspan="4" class="no-records">No records found</td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
 
-    <a href="{{ path('app_avis_new') }}">Create new</a>
+    <a href="{{ path('app_avis_new') }}" class="create-new">Create new</a>
 {% endblock %}

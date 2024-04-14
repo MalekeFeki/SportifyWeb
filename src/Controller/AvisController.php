@@ -33,6 +33,17 @@ class AvisController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            // Check if the description is empty
+            $description = $avi->getDescription();
+            if (empty($description)) {
+                return new Response('<script>alert("Description cannot be empty"); window.history.back();</script>');
+            }
+
+            // Check if the description contains the word "chat"
+            if (stripos($description, 'chat') !== false) {
+                return new Response('<script>alert("This description contains bad words"); window.history.back();</script>');
+            }
+
             $entityManager->persist($avi);
             $entityManager->flush();
 
@@ -80,5 +91,11 @@ class AvisController extends AbstractController
         }
 
         return $this->redirectToRoute('app_avis_index', [], Response::HTTP_SEE_OTHER);
+    }
+    
+    #[Route('/frontend', name: 'frontend', methods: ['GET'])]
+    public function showFrontendPage(): Response
+    {
+        return $this->render('base.html.twig');
     }
 }
