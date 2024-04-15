@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Seance index{% endblock %}
+
+{% block body %}
+    <h1>Seance index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Idseance</th>
+                <th>Nomseance</th>
+                <th>Debut</th>
+                <th>Fin</th>
+                <th>Dates</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for seance in seances %}
+            <tr>
+                <td>{{ seance.idseance }}</td>
+                <td>{{ seance.nomseance }}</td>
+                <td>{{ seance.debut ? seance.debut|date('H:i:s') : '' }}</td>
+                <td>{{ seance.fin ? seance.fin|date('H:i:s') : '' }}</td>
+                <td>{{ seance.dates ? seance.dates|date('Y-m-d') : '' }}</td>
+                <td>
+                    <a href="{{ path('app_seance_show', {'idseance': seance.idseance}) }}">show</a>
+                    <a href="{{ path('app_seance_edit', {'idseance': seance.idseance}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_seance_new') }}">Create new</a>
+{% endblock %}

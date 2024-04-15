@@ -1,0 +1,10 @@
+{{ form_start(form) }}
+    {{ form_row(form.nom) }}
+    {{ form_row(form.adresse) }}
+    {{ form_row(form.region) }}
+
+    {# Render multiple select menu for options field #}
+    {{ form_row(form.options) }}
+    {{ form_row(form.imagesalle) }}
+    <button class="btn">{{ button_label|default('Save') }}</button>
+{{ form_end(form) }}
