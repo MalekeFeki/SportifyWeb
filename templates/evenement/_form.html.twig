@@ -200,7 +200,11 @@
 	</div>
 	<div class="col-sm-12 col-md-6">
     {{ include('evenement/_map_picker.html.twig') }}
+	
     <div class="mt-300" style="margin-top: 667px;"> <!-- Add margin top for spacing -->
+	{% if evenement.photo is defined and evenement.photo %}
+        <img  id="old-image" src="{{ asset(evenement.photo) }}" alt="Event Photo" style=" max-width: 70%; height: auto;">
+    {% endif %}
         <img id="selectedImage" class="selected-image" src="#" alt="Selected Image" style="display: none; max-width: 70%; height: auto;">
     </div>
 </div>
@@ -213,6 +217,7 @@ var reader = new FileReader();
 reader.onload = function (e) {
 document.getElementById('selectedImage').src = e.target.result;
 document.getElementById('selectedImage').style.display = 'block';
+document.getElementById('old-image').style.display = 'none';
 }
 reader.readAsDataURL(input.files[0]);
 }

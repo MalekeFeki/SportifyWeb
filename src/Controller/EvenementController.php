@@ -228,6 +228,13 @@ class EvenementController extends AbstractController
         // Check if the form is submitted and valid
         if ($form->isSubmitted() && $form->isValid()) {
 
+            $existingEvent = $entityManager->getRepository(Evenement::class)->findOneBy(['nomev' => $event->getNomev()]);
+            if ($existingEvent) {
+                $form->get('nomev')->addError(new \Symfony\Component\Form\FormError('Event name must be unique.'));
+                return $this->renderForm('evenement/new.html.twig', [
+                    'form' => $form,
+                ]);
+            }
             // Set latitude and longitude from the form
             $event->setLat($form->get('lat')->getData());
             $event->setLon($form->get('lon')->getData());
@@ -287,6 +294,13 @@ class EvenementController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $existingEvent = $entityManager->getRepository(Evenement::class)->findOneBy(['nomev' => $evenement->getNomev()]);
+            if ($existingEvent) {
+                $form->get('nomev')->addError(new \Symfony\Component\Form\FormError('Event name must be unique.'));
+                return $this->renderForm('evenement/new.html.twig', [
+                    'form' => $form,
+                ]);
+            }
             $photoFile = $form->get('photo')->getData(); // Retrieve the uploaded file object
 
             if ($photoFile) {
@@ -300,8 +314,7 @@ class EvenementController extends AbstractController
                         $newFilename
                     );
                 } catch (FileException $e) {
-                    // Handle the exception if unable to move the file
-                    // For example, you can add flash messages or log the error
+                    // $evenement->setPhoto("null");
                 }
 
                 // Set the file name (or path) in your entity

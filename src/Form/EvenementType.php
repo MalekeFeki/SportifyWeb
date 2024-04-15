@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use App\Entity\Evenement;
+use App\Form\DataTransformer\StringToFileTransformer as DataTransformerStringToFileTransformer;
 use DateTime;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -17,7 +18,7 @@ use Symfony\Component\Validator\Constraints\Callback;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
-
+use App\Form\StringToFileTransformer;
 class EvenementType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -223,7 +224,7 @@ class EvenementType extends AbstractType
             // You can add more fields as needed
             ->add('photo', FileType::class, [
                 'label' => 'Photo',
-                'mapped' => false,
+                'mapped' => true,
                 'required' => false,
                 'attr' => ['enctype' => 'multipart/form-data' , 'class'=>'form-control form-control-sm bg-dark' ,'id'=>'formFileSm','onchange'=>'displaySelectedImage(this)'], // Add this line
                 'constraints' => [
@@ -238,6 +239,7 @@ class EvenementType extends AbstractType
                     ])
                 ],
             ]);
+            $builder->get('photo')->addModelTransformer(new DataTransformerStringToFileTransformer());
             // ->add('submit', SubmitType::class, [
             //     'label' => 'Ajouter l\'événement'
             // ]);
