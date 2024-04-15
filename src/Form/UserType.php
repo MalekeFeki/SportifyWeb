@@ -8,6 +8,7 @@ use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -21,9 +22,8 @@ class UserType extends AbstractType
             ->add('nom')
             ->add('prenom')
             ->add('email')
-            ->add('mdp', PasswordType::class, [
+            ->add('mdp', TextType::class, [
                 'label' => 'Mot de passe',
-                'required' => true,
                 'attr' => ['id' => 'user_mdp'],])
             ->add('showPassword', CheckboxType::class, [
                 'label' => 'Afficher le mot de passe',
@@ -45,6 +45,9 @@ class UserType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => User::class,
+            'password_required' => true,
+            'disable_password_field' => false,
+            
         ]);
     }
     

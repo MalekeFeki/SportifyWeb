@@ -15,7 +15,7 @@
             <div class="card mb-4 mb-xl-0">
                 {% if app.user %}
                 <div class="mb-3">
-                    You are logged in as {{ app.user.userIdentifier }}, <a href="{{ path('frontend') }}">Logout</a>
+                    Welcome to your profile {{ app.user.nom }}
                 </div>
                 {% endif %}
                 <div class="card-body text-center">

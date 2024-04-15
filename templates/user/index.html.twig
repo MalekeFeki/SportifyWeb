@@ -38,7 +38,7 @@
             </tr>
         </thead>
         <tbody>
-        {% for user in users %}
+        {% for user in pagination %}
             <tr>
                 <td>{{ user.id }}</td>
                 <td>{{ user.cin }}</td>
@@ -53,6 +53,7 @@
                     <a href="{{ path('app_user_edit', {'id': user.id}) }}">modifier</a>
                 </td>
             </tr>
+           
         {% else %}
             <tr>
                 <td colspan="9">aucun utilisateur trouvé</td>
@@ -60,8 +61,12 @@
         {% endfor %}
         </tbody>
     </table>
+      <div class="pagination">
+    {{ knp_pagination_render(pagination)}}
+
+            </div>
 <br>
     <a href="{{ path('app_user_new') }}" class="btn btn-primary">Créer un utilisateur</a>
     <!-- Button to go back to the backend page -->
-     <a href="{{ path('frontend') }}" class="btn btn-primary">retour</a>
+     <a href="{{ path('app_admin') }}" class="btn btn-primary">retour</a>
 {% endblock %}

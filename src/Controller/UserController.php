@@ -14,23 +14,44 @@ use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
+use Knp\Component\Pager\PaginatorInterface;
+use Symfony\Component\Mercure\PublisherInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\Mercure\Update;
+
+
 
 #[Route('/user')]
 class UserController extends AbstractController
-{   
+{  // private $publisher;
+
+   // public function __construct(PublisherInterface $publisher)
+    //{
+    //    $this->publisher = $publisher;
+    //}
     #[Route('/frontend', name: 'frontend', methods: ['GET'])]
     public function showFrontendPage(): Response
     {
         return $this->render('base.html.twig');
     }
     #[Route('/', name: 'app_user_index', methods: ['GET'])]
-    public function index(UserRepository $userRepository): Response
-    {
-        return $this->render('user/index.html.twig', [
-            'users' => $userRepository->findAll(),
-        ]);
-    }
+    public function index(UserRepository $userRepository, Request $request, PaginatorInterface $paginator): Response
+{
+    // Get all users from the repository
+    $queryBuilder = $userRepository->createQueryBuilder('u');
+
+    // Paginate the results
+    $pagination = $paginator->paginate(
+        $queryBuilder->getQuery(),
+        $request->query->getInt('page', 1), // Get page number from the request, default to 1
+        10 // Number of items per page
+    );
+
+    // Render the template with paginated users
+    return $this->render('user/index.html.twig', [
+        'pagination' => $pagination,
+    ]);
+}
     #[Route('/count', name: 'api_user_count', methods: ['GET'])]
     public function countUsers(UserRepository $userRepository): JsonResponse
     {
@@ -77,6 +98,12 @@ $user->setMdp($hashedPassword);
 
              // Send welcome email
         $this->sendWelcomeEmail($user, $mailer);
+        // Émettre une notification Mercure pour informer des nouveaux utilisateurs
+        //$update = new Update(
+        //    '/notifications/user-added',
+        //    json_encode(['message' => 'New user added'])
+        //);
+        //$this->publisher->__invoke($update);
             return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
         }
 
@@ -95,12 +122,17 @@ $user->setMdp($hashedPassword);
     }
 
     #[Route('/{id}/edit', name: 'app_user_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, User $user, EntityManagerInterface $entityManager): Response
+    public function edit(Request $request, User $user, EntityManagerInterface $entityManager, UserPasswordEncoderInterface $passwordEncoder): Response
     {
-        $form = $this->createForm(UserType::class, $user);
+        $form = $this->createForm(UserType::class, $user,['password_required' => false]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            // Hasher le nouveau mot de passe s'il a été modifié
+        if ($form->get('mdp')->getData() !== null) {
+            $hashedPassword = $passwordEncoder->encodePassword($user, $form->get('mdp')->getData());
+            $user->setMdp($hashedPassword);
+        }
             $entityManager->flush();
 
             return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
