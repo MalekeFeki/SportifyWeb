@@ -1,10 +1,20 @@
 <head>
 <!-- Google Font -->
-    <link href="https://fonts.googleapis.com/css?family=Muli:300,400,500,600,700,800,900&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Oswald:300,400,500,600,700&display=swap" rel="stylesheet">
+   
+    <link href="{{asset('https://fonts.googleapis.com/css?family=Muli:300,400,500,600,700,800,900&display=swap')}}" rel="stylesheet">
+    <link href="{{asset('https://fonts.googleapis.com/css?family=Oswald:300,400,500,600,700&display=swap')}}" rel="stylesheet">
 
-    <!-- Template Stylesheet -->
-    <link href="{{asset('css/style-profil.css')}}" rel="stylesheet">
+ <!-- Css Styles -->
+    <link rel="stylesheet" href="{{asset('css/bootstrap.min.css')}}" type="text/css">
+    <link rel="stylesheet" href="{{asset('css/font-awesome.min.css')}}" type="text/css">
+    <link rel="stylesheet" href="{{asset('css/flaticon.css')}}" type="text/css">
+    <link rel="stylesheet" href="{{asset('css/owl.carousel.min.css')}}" type="text/css">
+    <link rel="stylesheet" href="{{asset('css/barfiller.css')}}" type="text/css">
+    <link rel="stylesheet" href="{{asset('css/magnific-popup.css')}}" type="text/css">
+    <link rel="stylesheet" href="{{asset('css/slicknav.min.css')}}" type="text/css">
+    <link rel="stylesheet" href="{{asset('css/style.css')}}" type="text/css">
+    <!-- Template Stylesheet 
+    <link href="{{asset('css/style-profil.css')}}" rel="stylesheet">-->
 </head>
 {% block body %}
 <div class="container-xl px-4 mt-4">
@@ -20,12 +30,13 @@
                 {% endif %}
                 <div class="card-body text-center">
                     <!-- Profile picture image -->
-                    <img class="img-account-profile rounded-circle mb-2" src="http://bootdey.com/img/Content/avatar/avatar1.png" alt="">
+                    <img class="img-account-profile rounded-circle mb-2" src="{{asset('img/profil-vide.png')}}" alt="">
                     <!-- Profile picture help block -->
                     <div class="small font-italic text-muted mb-4">JPG or PNG no larger than 5 MB</div>
                     <!-- Profile picture upload button -->
-                    <form method="post" action="" enctype="multipart/form-data">
-
+                    <form method="post" action="{{path('app_profile_edit', {'id': app.user.id })}}" enctype="multipart/form-data">
+                    <!-- Hidden field for user ID -->
+                    <input type="hidden" id="user_id" name="user_id" value="{{ app.user.id }}">
                      <div class="mb-3">
         <label class="form-label" for="inputProfilePicture">Upload Profile Picture</label>
         <input class="form-control" id="inputProfilePicture" type="file" name="profile_picture">
@@ -39,43 +50,36 @@
             <div class="card mb-4">
                 <div class="card-header">Account Details</div>
                 <div class="card-body">
-                    <form>
+                    <form method="post" action="{{ path('app_profile_edit', {'id': app.user.id }) }}" enctype="multipart/form-data">
                         <!-- Form Group (username) -->
                         <div class="mb-3">
                             <label class="small mb-1" for="inputUsername">Email</label>
-                            <input class="form-control" id="inputUsername" type="text" value="{{ app.user.username }}" >
+                            <input class="form-control" id="inputUsername" type="text" name="email" value="{{ app.user.username }}" >
                         </div>
                         <!-- Form Row -->
                         <div class="row gx-3 mb-3">
                             <!-- Form Group (first name) -->
                             <div class="col-md-6">
-                                <label class="small mb-1" for="inputFirstName">First name</label>
-                                <input class="form-control" id="inputFirstName" type="text" value="{{ app.user.nom }}" >
+                                <label class="small mb-1" for="inputFirstName">Nom</label>
+                                <input class="form-control" id="inputFirstName" type="text" name="nom" value="{{ app.user.nom }}" >
                             </div>
                             <!-- Form Group (last name) -->
                             <div class="col-md-6">
-                                <label class="small mb-1" for="inputLastName">Last name</label>
-                                <input class="form-control" id="inputLastName" type="text" value="{{ app.user.prenom }}" >
+                                <label class="small mb-1" for="inputLastName">Prenom</label>
+                                <input class="form-control" id="inputLastName" type="text" name="prenom" value="{{ app.user.prenom }}" >
                             </div>
                         </div>
-                        <!-- Form Row -->
-                        <div class="row gx-3 mb-3">
-                            <!-- Form Group (organization name) -->
-                            <div class="col-md-6">
-                                <label class="small mb-1" for="inputOrgName">Gym name</label>
-                                <input class="form-control" id="inputOrgName" type="text" placeholder="Enter your gym name" >
-                            </div>
-                        </div>
+                      
                         <!-- Form Row -->
                         <div class="row gx-3 mb-3">
                             <!-- Form Group (phone number) -->
                             <div class="col-md-6">
                                 <label class="small mb-1" for="inputPhone">Phone number</label>
-                                <input class="form-control" id="inputPhone" type="tel" value="{{ app.user.numTel }}" >
+                                <input class="form-control" id="inputPhone" type="tel" name="num_tel" value="{{ app.user.numTel }}" >
                             </div>
                             <div class="col-md-6">
                                 <label class="small mb-1" for="inputPhone">CIN</label>
-                                <input class="form-control" id="cin" type="cin" value="{{ app.user.cin }}" >
+                                <input class="form-control" id="cin" type="cin" name="cin"value="{{ app.user.cin }}" >
                             </div>
                         </div>
                         <!-- Save changes button -->

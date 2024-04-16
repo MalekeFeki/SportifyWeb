@@ -9,3 +9,6 @@ profile_picture_upload:
     path: /profile/picture/upload
     controller: App\Controller\UserController::uploadPicture
     methods: ['POST']
+app_profile_edit:
+    path: /{id}/editprofile
+    controller: App\Controller\UserController::profileEdit  

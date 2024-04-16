@@ -18,8 +18,7 @@ use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\Mercure\PublisherInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Mercure\Update;
-
-
+use Symfony\Component\Security\Core\Security;
 
 #[Route('/user')]
 class UserController extends AbstractController
@@ -154,6 +153,7 @@ $user->setMdp($hashedPassword);
 
         return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
     }
+  
     private function sendWelcomeEmail(User $user, MailerInterface $mailer): void
 {
     $email = (new Email())
@@ -164,10 +164,32 @@ $user->setMdp($hashedPassword);
 
     $mailer->send($email);
 }
+#[Route('/{id}/editprofile', name: 'app_profile_edit', methods: ['GET', 'POST'])]
+public function profileEdit(Request $request, EntityManagerInterface $entityManager, UserRepository $userRepository): Response
+{
+    // Get the user ID from the submitted form data
+    $userId = $request->request->get('user_id');
+    
+    // Find the user entity by ID
+    $user = $userRepository->find($userId);
 
+    if (!$user) {
+        throw $this->createNotFoundException('User not found');
+    }
 
+    // Update user properties with the submitted form data
+    $user->setEmail($request->request->get('email'));
+    $user->setNom($request->request->get('nom'));
+    $user->setPrenom($request->request->get('prenom'));
+    $user->setNumTel($request->request->get('num_tel'));
+    $user->setCin($request->request->get('cin'));
 
+    // Persist changes to the database
+    $entityManager->flush();
 
-
-
+    // Redirect to some route after successful update
+    return $this->render('security/profilUser.html.twig');
 }
+}
+
+      
