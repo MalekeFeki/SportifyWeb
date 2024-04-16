@@ -23,7 +23,7 @@ class CoachAdmin
     #[ORM\Column(name: 'prenom', type: 'string', length: 255)]
     private ?string $prenom = null;
 
-    #[ORM\Column(name: 'description', type: 'string', length: 1000, nullable: true)]
+    #[ORM\Column(name: 'Description', type: 'string', length: 1000, nullable: true)]
     #[Assert\NotBlank(message: "La description est obligatoire.")]
     private ?string $description = null;
 

@@ -15,8 +15,8 @@ class CoachAdminType extends AbstractType
     {
 
         $builder
-            ->add('NomCo')
-            ->add('PrenomCo')
+            ->add('Nom')
+            ->add('Prenom')
             ->add('Description')
             ->add('photo', FileType::class, [ // Ajoutez le champ photo de type FileType
                 'label' => 'Photo (JPEG or PNG file)',

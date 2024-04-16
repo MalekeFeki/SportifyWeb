@@ -17,11 +17,11 @@
             </tr>
         </thead>
         <tbody>
-        {% for coach in coach %} <!-- Utilisation de coachs au lieu de coach -->
+        {% for coach_admin in coach_admins %} <!-- Utilisation de coachs au lieu de coach -->
             <tr>
                 <td>{{ coach.id }}</td>
-                <td>{{ coach.nomCo }}</td>
-                <td>{{ coach.prenomCo }}</td>
+                <td>{{ coach.nom }}</td>
+                <td>{{ coach.prenom }}</td>
                 <td>{{ coach.description }}</td> <!-- Correction ici -->
                 <td>{{ coach.sexe }}</td>
                 

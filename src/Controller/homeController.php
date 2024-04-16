@@ -8,7 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class HomeController extends AbstractController
+class homeController extends AbstractController
 {
     private $entityManager;
 
@@ -26,7 +26,7 @@ class HomeController extends AbstractController
         $coachAdmins = $this->entityManager->getRepository(CoachAdmin::class)->findAll();
 
         return $this->render('base.html.twig', [
-            'controller_name' => 'HomeController',
+            'controller_name' => 'homeController',
             'coach_admins' => $coachAdmins,
         ]);
     }
