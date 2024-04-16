@@ -190,6 +190,7 @@ public function profileEdit(Request $request, EntityManagerInterface $entityMana
     // Redirect to some route after successful update
     return $this->render('security/profilUser.html.twig');
 }
+
 }
 
       

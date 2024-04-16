@@ -25,6 +25,84 @@
     {{ include('user/_form.html.twig') }}
 
     <a href="{{ path('app_user_index') }}" class="btn btn-primary">retour</a>
+<form method="post" action="{{ path('app_user_new') }}">
+  <!-- Sign Up Start -->
+<div class="container-fluid">
+    <div class="row h-100 align-items-center justify-content-center" style="min-height: 100vh;">
+        <div class="col-12 col-sm-8 col-md-6 col-lg-5 col-xl-4">
+            <div class="bg-secondary rounded p-4 p-sm-5 my-4 mx-3">
+                <div class="d-flex align-items-center justify-content-between mb-3">
+                    <a href="index.html" class="">
+                        <h3 class="text-primary"><i class="fa fa-user-edit me-2"></i>Sportify</h3>
+                    </a>
+                    <h3>Sign Up</h3>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-6">
+                        <div class="form-floating">
+                            <input type="text" class="form-control" id="floatingText1" name="cin" placeholder="Cin">
+                            <label for="floatingText1">Cin</label>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="form-floating">
+                            <input type="text" class="form-control" id="floatingText2" name="num_tel" placeholder="Numero Telephone">
+                            <label for="floatingText2">Numero Tel</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-6">
+                        <div class="form-floating">
+                            <input type="text" class="form-control" id="floatingText3" name="nom" placeholder="Nom">
+                            <label for="floatingText3">Nom</label>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="form-floating">
+                            <input type="text" class="form-control" id="floatingInput"name="prenom" placeholder="Prenom">
+                            <label for="floatingInput">Prenom</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-4">
+                    <div class="col-6">
+                        <div class="form-floating">
+                            <input type="email" class="form-control" id="floatingInput" name="email" placeholder="Email">
+                            <label for="floatingInput">Email</label>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="form-floating">
+                            <input type="password" class="form-control" id="floatingPassword"name="mdp" placeholder="Password">
+                            <label for="floatingPassword" id="mdp">Mot de passe</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-floating mb-3">
+                    <select class="form-select" id="role" name="role" aria-label="Select Role">
+                        <option selected disabled>Selectionner votre role</option>
+                        <option name="role" value="MEMBRE">MEMBRE</option>
+                        <option name="role" value="PROPRIETAIRE">PROPRIETAIRE</option>
+                    </select>
+                    <label for="role">Role</label>
+                </div>
+                <div class="d-flex align-items-center justify-content-between mb-4">
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" id="exampleCheck1">
+                        <label class="form-check-label" for="exampleCheck1">Check me out</label>
+                    </div>
+                    <a href="#">Forgot Password</a>
+                </div>
+                <button type="submit" class="btn btn-primary py-3 w-100 mb-4" >Sign Up</button>
+                <p class="text-center mb-0">Already have an Account? <a href="{{ path('app_login') }}">Sign In</a></p>
+            </div>
+        </div>
+    </div>
+</div>
+</form>
+<!-- Sign Up End -->
+
      <!-- JavaScript Libraries -->
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
@@ -40,8 +118,8 @@
     <script src="js/main-back.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            var showPasswordCheckbox = document.getElementById('user_showPassword');
-            var passwordField = document.getElementById('user_mdp');
+            var showPasswordCheckbox = document.getElementById('exampleCheck1');
+            var passwordField = document.getElementById('floatingPassword');
             
             showPasswordCheckbox.addEventListener('change', function () {
                 if (this.checked) {
@@ -52,4 +130,5 @@
             });
         });
     </script>
+   
 {% endblock %}

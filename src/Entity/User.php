@@ -8,7 +8,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as assert;
 use Scheb\TwoFactorBundle\Model\Email\TwoFactorInterface;
-use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
@@ -62,38 +62,11 @@ private $roles=[];
     #[Assert\NotBlank(message:"champ obligatoire")]
     private ?string $role = null;
 
-   /**
- * @ORM\Column(length=255, nullable=true)
- */
-private ?string $imageName;
 
-/**
- * @Vich\UploadableField(mapping="user_image", fileNameProperty="imageName")
- */
-private ?File $imageFile;
+#[Assert\NotBlank(message: 'La photo est obligatoire.')]
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    private ?string $photo ;
 
-
-    // Getters and setters for $imageFile
-    public function getImageFile(): ?File
-    {
-        return $this->imageFile;
-    }
-
-    public function setImageFile(?File $imageFile): void
-    {
-        $this->imageFile = $imageFile;
-    }
-
-    // Getter and setter for $imageName
-    public function getImageName(): ?string
-    {
-        return $this->imageName;
-    }
-
-    public function setImageName(?string $imageName): void
-    {
-        $this->imageName = $imageName;
-    }
     public function getId(): ?int
     {
         return $this->id;
@@ -188,9 +161,7 @@ private ?File $imageFile;
         return (string) $this->email;
     }
 
-   
 
-    
     public function getPassword(): ?string
     {
         return $this->mdp;
