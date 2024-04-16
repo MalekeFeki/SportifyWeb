@@ -2,7 +2,7 @@
 
 {% block title %}Liste des commentaires{% endblock %}
 
-{% block body %}
+{% block ajoutCoach %}
     <h1>Liste des commentaires</h1>
     <table border="1" class="table">
         <thead>
@@ -12,6 +12,7 @@
                 <th>Prénom</th>
                 <th>Description</th>
                 <th>Sexe</th>
+                <th>Photo</th> <!-- Add a new column for the photo -->
                 <th>Actions</th>
             </tr>
         </thead>
@@ -23,6 +24,7 @@
                 <td>{{ coach.prenomCo }}</td>
                 <td>{{ coach.description }}</td>
                 <td>{{ coach.sexe }}</td>
+                <td><img src="{{ asset('path_to_your_photos_directory/' ~ coach.photo) }}" alt="Coach Photo" style="width: 100px;"></td> <!-- Display the photo -->
                 <td>
                     <a href="{{ path('app_coach_admin_edit', {'id': coach.id}) }}"><button>modifier</button></a>
                     <form method="post" action="{{ path('app_coach_admin_delete', {'id': coach.id}) }}" onsubmit="return confirm('Are you sure you want to delete this item?');">
@@ -33,7 +35,7 @@
             </tr>
         {% else %}
             <tr>
-                <td colspan="6">Aucun utilisateur trouvé</td>
+                <td colspan="7">Aucun utilisateur trouvé</td>
             </tr>
         {% endfor %}
         </tbody>

@@ -1,6 +1,6 @@
 home:
     path: /
-    controller: App\Controller\homeController::index
+    controller: App\Controller\HomeController::index
 
 app_coach_client_index:
     path: '/coach/client'
@@ -10,3 +10,22 @@ app_coach_admin_index:
     path: '/coach/admin'
     controller: 'App\Controller\CoachAdminController::index'
 
+app_user_index:
+    path: /users
+    controller: App\Controller\UserController::index
+
+app_user_profil:
+    path: /user/profil
+    controller: App\Controller\UserController::profil
+
+coach_client_index:
+    path: /coach_client/index.html
+    controller: App\Controller\CoachClientController::index
+
+coach_client_new:
+    path: /coach_client/new
+    controller: App\Controller\CoachClientController::show
+
+coach_admin_showclient:
+    path: '/coach_admin/showclient/{id}'
+    controller: 'App\Controller\CoachController::showClient'

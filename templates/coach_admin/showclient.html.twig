@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block titre %}Votre Réclamation{% endblock %}
+
+{% block  showclient %}
+   
+
+    <table border=1 class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nom</th>
+                <th>Prenom</th>
+                <th>Description</th>
+                <th>Sexe</th>
+             
+            </tr>
+        </thead>
+        <tbody>
+        {% for coach in coach %} <!-- Utilisation de coachs au lieu de coach -->
+            <tr>
+                <td>{{ coach.id }}</td>
+                <td>{{ coach.nomCo }}</td>
+                <td>{{ coach.prenomCo }}</td>
+                <td>{{ coach.description }}</td> <!-- Correction ici -->
+                <td>{{ coach.sexe }}</td>
+                
+               
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="9">aucun coach trouvé</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    
+
+   
+   
+{% endblock %}

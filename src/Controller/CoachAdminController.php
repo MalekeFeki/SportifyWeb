@@ -10,39 +10,57 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
 #[Route('/coach/admin')]
 class CoachAdminController extends AbstractController
 {
-    #[Route('/', name: 'app_coach_admin_index', methods: ['GET'])]
     public function index(CoachAdminRepository $coachRepository): Response
     {
         $coachs = $coachRepository->findAll();
-
+    
         return $this->render('coach_admin/index.html.twig', [
             'coachs' => $coachs,
         ]);
     }
+    
 
     #[Route('/new', name: 'app_coach_admin_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
-    {
-        $coach = new CoachAdmin();
-        $form = $this->createForm(CoachAdminType::class, $coach);
-        $form->handleRequest($request);
+public function new(Request $request, EntityManagerInterface $entityManager): Response
+{
+    $coach = new CoachAdmin();
+    $form = $this->createForm(CoachAdminType::class, $coach);
+    $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($coach);
-            $entityManager->flush();
+    if ($form->isSubmitted() && $form->isValid()) {
+        // Extrait la photo du formulaire
+        $photoFile = $form->get('photo')->getData();
 
-            return $this->redirectToRoute('app_coach_admin_index', [], Response::HTTP_SEE_OTHER);
+        // Gérer l'upload de la photo
+        if ($photoFile) {
+            $newFilename = uniqid().'.'.$photoFile->guessExtension();
+            try {
+                $photoFile->move(
+                    $this->getParameter('photo_directory'),
+                    $newFilename
+                );
+                $coach->setPhoto($newFilename); // Enregistre le nom du fichier dans l'entité CoachAdmin
+            } catch (FileException $e) {
+                // Gérer les erreurs d'upload
+            }
         }
 
-        return $this->renderForm('coach_admin/new.html.twig', [
-            'coach' => $coach,
-            'form' => $form,
-        ]);
+        $entityManager->persist($coach);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('app_coach_admin_index', [], Response::HTTP_SEE_OTHER);
     }
+
+    return $this->render('coach_admin/new.html.twig', [
+        'form' => $form->createView(), // Assurez-vous de passer le formulaire à Twig
+    ]);
+}
+
 
     #[Route('/{id}', name: 'app_coach_admin_show', methods: ['GET'])]
     public function show(CoachAdmin $coach): Response
@@ -64,9 +82,9 @@ class CoachAdminController extends AbstractController
             return $this->redirectToRoute('app_coach_admin_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->renderForm('coach_admin/edit.html.twig', [
+        return $this->render('coach_admin/edit.html.twig', [
             'coach' => $coach,
-            'form' => $form,
+            'form' => $form->createView(),
         ]);
     }
 

@@ -13,18 +13,19 @@
                 <th>Prenom</th>
                 <th>Description</th>
                 <th>Sexe</th>
-                <th>Actions</th> <!-- Ajout de la colonne Actions -->
+                <th>Photo</th> <!-- Ajout de la colonne Photo -->
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
-        {% for coach in coach %} <!-- Utilisation de coachs au lieu de coach -->
+        {% for coach in coach %}
             <tr>
                 <td>{{ coach.id }}</td>
                 <td>{{ coach.nomCo }}</td>
                 <td>{{ coach.prenomCo }}</td>
-                <td>{{ coach.description }}</td> <!-- Correction ici -->
+                <td>{{ coach.description }}</td>
                 <td>{{ coach.sexe }}</td>
-                
+                <td><img src="{{ asset('path_vers_votre_dossier_photos/' ~ coach.photo) }}" alt="Photo de coach" style="width: 100px;"></td> <!-- Affichage de la photo -->
                 <td>
                     <a href="{{ path('app_coach_admin_show', {'id': coach.id}) }}">voir</a>
                     <a href="{{ path('app_coach_admin_edit', {'id': coach.id}) }}">modifier</a>
@@ -39,9 +40,6 @@
     </table>
 
     <a href="{{ path('app_coach_admin_index') }}">Retour à la liste</a>
-
-    {# Pas besoin de ce lien ici #}
-    <!-- <a href="{{ path('app_coach_admin_edit', {'id': coach.id}) }}">Modifier</a> -->
 
     {{ include('coach_admin/_delete_form.html.twig') }}
 {% endblock %}

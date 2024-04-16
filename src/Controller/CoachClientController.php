@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\CoachClient;
 use App\Form\CoachClientType;
+use App\Repository\CoachAdminRepository;
 use App\Repository\CoachClientRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -12,7 +13,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
+
 #[Route('/coach/client')]
+
 class CoachClientController extends AbstractController
 {
     private $session;
@@ -22,22 +25,26 @@ class CoachClientController extends AbstractController
         $this->session = $session;
     }
     #[Route('/', name: 'app_coach_client_index', methods: ['GET'])]
-    public function index(CoachClientRepository $coachClientRepository): Response
-    {
-        // Supposez que vous avez un moyen de déterminer le remainingTime, par exemple en récupérant la valeur à partir de quelque part
-        $remainingTime = 20; // Définir la valeur de remainingTime
-    
-        // Comptez le nombre de commentaires modifiés
-        $clickedCount = count($this->session->get('edited_comments', []));
-    
-        // Rendre le template en passant les données à afficher
-        return $this->render('coach_client/index.html.twig', [
-            'coach_clients' => $coachClientRepository->findAll(),
-            'clicked_count' => $clickedCount,
-            'remainingTime' => $remainingTime, // Passer remainingTime au template Twig
-        ]);
-    }
-    
+    public function index(CoachClientRepository $coachClientRepository, CoachAdminRepository $coachAdminRepository): Response
+{
+    // Supposez que vous avez un moyen de déterminer le remainingTime, par exemple en récupérant la valeur à partir de quelque part
+    $remainingTime = 20; // Définir la valeur de remainingTime
+
+    // Comptez le nombre de commentaires modifiés
+    $clickedCount = count($this->session->get('edited_comments', []));
+
+    // Récupérez tous les coachs avec leurs photos
+    $coachs = $coachAdminRepository->findAllWithPhotos();
+
+    // Rendre le template en passant les données à afficher
+    return $this->render('coach_client/index.html.twig', [
+        'coach_clients' => $coachClientRepository->findAll(),
+        'coachs' => $coachs, // Passer les coachs à la vue Twig
+        'clicked_count' => $clickedCount,
+        'remainingTime' => $remainingTime, // Passer remainingTime au template Twig
+    ]);
+}
+
     #[Route('/new', name: 'app_coach_client_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {

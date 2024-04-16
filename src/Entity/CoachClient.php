@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\CoachClientRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -20,6 +22,16 @@ class CoachClient
     #[Assert\Length(min: 3, maxMessage: "Le commentaire est inférieur à 3 caractères.")]
     private ?string $commentaire = null;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=CoachAdmin::class, mappedBy="reclamations")
+     */
+    private $coachs;
+
+    public function __construct()
+    {
+        $this->coachs = new ArrayCollection();
+    }
+
     public function getId(): ?int
     {
         return $this->idR;
@@ -33,6 +45,33 @@ class CoachClient
     public function setCommentaire(?string $commentaire): self
     {
         $this->commentaire = $commentaire;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|CoachAdmin[]
+     */
+    public function getCoachs(): Collection
+    {
+        return $this->coachs;
+    }
+
+    public function addCoach(CoachAdmin $coach): self
+    {
+        if (!$this->coachs->contains($coach)) {
+            $this->coachs[] = $coach;
+            $coach->addReclamation($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCoach(CoachAdmin $coach): self
+    {
+        if ($this->coachs->removeElement($coach)) {
+            $coach->removeReclamation($this);
+        }
 
         return $this;
     }
