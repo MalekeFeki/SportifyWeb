@@ -441,10 +441,10 @@
                     {% if coach_admin.photo is not null %}
                         <div class="col-lg-4">
                             <a href="{{ path('coach_admin_showclient',{'id': coach_admin.id}) }}" class="team-link">
-                                <div class="ts-item set-bg" data-setbg="{{asset('img/team/' ~ coach_admin.photo)}}">
+                                <div class="ts-item set-bg" data-setbg="{{asset('uploads/photos/' ~ coach_admin.photo)}}">
                                     <div class="ts_text">
                                         <h4>{{ coach_admin.nom }} {{ coach_admin.prenom }}</h4>
-                                        <span>{{ coach_admin.description }}</span>
+                                        <span>{{ coach_admin.Nom }}</span>
                                     </div>
                                 </div>
                             </a>
