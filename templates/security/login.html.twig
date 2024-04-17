@@ -93,7 +93,7 @@
                     <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
                     <button type="submit" class="btn btn-primary py-3 w-100 mb-4">Sign In</button>
                 </form>
-                <p class="text-center mb-0">Don't have an Account? <a href="user/new.html.twig">Sign Up</a></p>
+                <p class="text-center mb-0">Don't have an Account? <a href="{{path('app_user_new')}}">Sign Up</a></p>
             </div>
         </div>
     </div>

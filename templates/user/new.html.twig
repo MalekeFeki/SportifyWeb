@@ -22,11 +22,11 @@
     <link href="{{asset('css/style_back.css')}}" rel="stylesheet">
     <h1>Inscription</h1>
 
-    {{ include('user/_form.html.twig') }}
 
-    <a href="{{ path('app_user_index') }}" class="btn btn-primary">retour</a>
-<form method="post" action="{{ path('app_user_new') }}">
-  <!-- Sign Up Start -->
+
+    
+<form method="post" action="{{ path('app_user_new') }}" novalidate enctype="multipart/form-data">
+ <!-- Sign Up Start -->
 <div class="container-fluid">
     <div class="row h-100 align-items-center justify-content-center" style="min-height: 100vh;">
         <div class="col-12 col-sm-8 col-md-6 col-lg-5 col-xl-4">
@@ -37,16 +37,22 @@
                     </a>
                     <h3>Sign Up</h3>
                 </div>
+                {{ form_start(form) }}
                 <div class="row mb-3">
                     <div class="col-6">
                         <div class="form-floating">
-                            <input type="text" class="form-control" id="floatingText1" name="cin" placeholder="Cin">
+                            {{ form_widget(form.cin, {'attr': {'class': 'form-control', 'placeholder': 'Cin'}}) }}
                             <label for="floatingText1">Cin</label>
                         </div>
+                        {% if form_errors(form.nom) %}
+					<div class="alert alert-primary" role="alert">
+						{{ form_errors(form.nom) }}
+					</div>
+				{% endif %}
                     </div>
                     <div class="col-6">
                         <div class="form-floating">
-                            <input type="text" class="form-control" id="floatingText2" name="num_tel" placeholder="Numero Telephone">
+                            {{ form_widget(form.num_tel, {'attr': {'class': 'form-control', 'placeholder': 'Numero Telephone'}}) }}
                             <label for="floatingText2">Numero Tel</label>
                         </div>
                     </div>
@@ -54,13 +60,13 @@
                 <div class="row mb-3">
                     <div class="col-6">
                         <div class="form-floating">
-                            <input type="text" class="form-control" id="floatingText3" name="nom" placeholder="Nom">
+                            {{ form_widget(form.nom, {'attr': {'class': 'form-control', 'placeholder': 'Nom'}}) }}
                             <label for="floatingText3">Nom</label>
                         </div>
                     </div>
                     <div class="col-6">
                         <div class="form-floating">
-                            <input type="text" class="form-control" id="floatingInput"name="prenom" placeholder="Prenom">
+                            {{ form_widget(form.prenom, {'attr': {'class': 'form-control', 'placeholder': 'Prenom'}}) }}
                             <label for="floatingInput">Prenom</label>
                         </div>
                     </div>
@@ -68,23 +74,19 @@
                 <div class="row mb-4">
                     <div class="col-6">
                         <div class="form-floating">
-                            <input type="email" class="form-control" id="floatingInput" name="email" placeholder="Email">
+                            {{ form_widget(form.email, {'attr': {'class': 'form-control', 'placeholder': 'Email'}}) }}
                             <label for="floatingInput">Email</label>
                         </div>
                     </div>
                     <div class="col-6">
                         <div class="form-floating">
-                            <input type="password" class="form-control" id="floatingPassword"name="mdp" placeholder="Password">
+                            {{ form_widget(form.mdp, {'attr': {'class': 'form-control', 'placeholder': 'Password'}}) }}
                             <label for="floatingPassword" id="mdp">Mot de passe</label>
                         </div>
                     </div>
                 </div>
                 <div class="form-floating mb-3">
-                    <select class="form-select" id="role" name="role" aria-label="Select Role">
-                        <option selected disabled>Selectionner votre role</option>
-                        <option name="role" value="MEMBRE">MEMBRE</option>
-                        <option name="role" value="PROPRIETAIRE">PROPRIETAIRE</option>
-                    </select>
+                    {{ form_widget(form.role, {'attr': {'class': 'form-select', 'aria-label': 'Select Role'}}) }}
                     <label for="role">Role</label>
                 </div>
                 <div class="d-flex align-items-center justify-content-between mb-4">
@@ -94,14 +96,19 @@
                     </div>
                     <a href="#">Forgot Password</a>
                 </div>
-                <button type="submit" class="btn btn-primary py-3 w-100 mb-4" >Sign Up</button>
+                <button type="submit" class="btn btn-primary py-3 w-100 mb-4"> Sign up </button> 
                 <p class="text-center mb-0">Already have an Account? <a href="{{ path('app_login') }}">Sign In</a></p>
             </div>
         </div>
     </div>
 </div>
+
+
+{{ form_end(form) }}
 </form>
+<a href="{{ path('app_user_index') }}" class="btn btn-primary">retour</a>
 <!-- Sign Up End -->
+
 
      <!-- JavaScript Libraries -->
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>

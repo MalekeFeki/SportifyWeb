@@ -22,14 +22,9 @@ class UserType extends AbstractType
             ->add('nom')
             ->add('prenom')
             ->add('email')
-            ->add('mdp', TextType::class, [
+            ->add('mdp', PasswordType::class, [
                 'label' => 'Mot de passe',
                 'attr' => ['id' => 'user_mdp'],])
-            ->add('showPassword', CheckboxType::class, [
-                'label' => 'Afficher le mot de passe',
-                'required' => false,
-                'attr' => ['id' => 'user_showPassword'], // La case à cocher n'est pas obligatoire
-            ])
             ->add('role', ChoiceType::class, [
                 'choices' => [
                     'MEMBRE' => 'MEMBRE',

@@ -23,7 +23,7 @@ class User implements UserInterface,PasswordAuthenticatedUserInterface, TwoFacto
 
     #[ORM\Column(length: 20)]
     #[Assert\NotBlank(message:"champ obligatoire")]
-    private ?string $cin = null;
+    private ?string $cin ;
 
     #[ORM\Column(length: 15)]
     #[Assert\NotBlank(message:"champ obligatoire")]
@@ -63,9 +63,6 @@ private $roles=[];
     private ?string $role = null;
 
 
-#[Assert\NotBlank(message: 'La photo est obligatoire.')]
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private ?string $photo ;
 
     public function getId(): ?int
     {
@@ -77,7 +74,7 @@ private $roles=[];
         return $this->cin;
     }
 
-    public function setCin(string $cin): static
+    public function setCin(string $cin): self
     {
         $this->cin = $cin;
 

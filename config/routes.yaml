@@ -1,10 +1,10 @@
-index:
-    path: /
-    controller: App\Controller\UserController::showFrontendPage
+#index:
+#    path: /
+#    controller: App\Controller\HomeController::index
 
 table_route:
     path: /
-    controller: App\Controller\UserController::showFrontendPage
+    controller: App\Controller\HomeController::index
 profile_picture_upload:
     path: /profile/picture/upload
     controller: App\Controller\UserController::uploadPicture
