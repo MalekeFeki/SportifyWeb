@@ -80,16 +80,34 @@ class CoachAdminController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            // Extrait la photo du formulaire
+            $photoFile = $form->get('photo')->getData();
+
+            // Gérer l'upload de la photo si un nouveau fichier est téléchargé
+            if ($photoFile) {
+                $newFilename = uniqid().'.'.$photoFile->guessExtension();
+                try {
+                    $photoFile->move(
+                        $this->getParameter('photo_directory'),
+                        $newFilename
+                    );
+                    $coach_admins->setPhoto($newFilename); // Enregistre le nom du fichier dans l'entité CoachAdmin
+                } catch (FileException $e) {
+                    // Gérer les erreurs d'upload
+                }
+            }
+
             $entityManager->flush();
 
             return $this->redirectToRoute('app_coach_admin_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('coach_admin/edit.html.twig', [
-            'coach' => $coach_admins,
+            'coach_admins' => $coach_admins, // Correction ici
             'form' => $form->createView(),
         ]);
     }
+
 
     #[Route('/{id}', name: 'app_coach_admin_delete', methods: ['POST'])]
     public function delete(Request $request, CoachAdmin $coach_admins, EntityManagerInterface $entityManager): Response

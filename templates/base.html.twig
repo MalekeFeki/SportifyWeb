@@ -52,7 +52,11 @@
                 <li><a href="./index.html">Home</a></li>
                 <li><a href="./about-us.html">About Us</a></li>
                 <li><a href="./classes.html">Classes</a></li>
-                <li><a href="./services.html">Services</a></li>
+                 <li><a href="./services.html">Services</a></li>
+            
+
+
+
                <li><a href="#team-section">Our Team</a></li>
                 <li><a href="#">Pages</a>
                     <ul class="dropdown">
@@ -97,7 +101,11 @@
                             <li class="active"><a href="./index.html">Home</a></li>
                             <li><a href="./about-us.html">About Us</a></li>
                             <li><a href="./class-details.html">Classes</a></li>
-                            <li><a href="./services.html">Services</a></li>
+                          <li><a href="./services.html">Services</a></li>
+                           <li><a href="{{ path('app_coach_admin_new') }}">Ajouter Coach</a></li>
+
+
+
                           <li><a href="#team-section">Our Team</a></li>
 
 
@@ -430,22 +438,25 @@
         <div class="row">
             <div class="ts-slider owl-carousel">
                 {% for coach_admin in coach_admins %}
-                <div class="col-lg-4">
-                    <a href="{{ path('coach_admin_showclient',{'id': coach_admin.id}) }}" class="team-link">
-                        <div class="ts-item set-bg" data-setbg="{{asset('img/team/' ~ coach_admin.photo)}}">
-                            <div class="ts_text">
-                                <h4>{{ coach_admin.nom }} {{ coach_admin.prenom }}</h4>
-                                <span>{{ coach_admin.description }}</span>
-                            </div>
+                    {% if coach_admin.photo is not null %}
+                        <div class="col-lg-4">
+                            <a href="{{ path('coach_admin_showclient',{'id': coach_admin.id}) }}" class="team-link">
+                                <div class="ts-item set-bg" data-setbg="{{asset('img/team/' ~ coach_admin.photo)}}">
+                                    <div class="ts_text">
+                                        <h4>{{ coach_admin.nom }} {{ coach_admin.prenom }}</h4>
+                                        <span>{{ coach_admin.description }}</span>
+                                    </div>
+                                </div>
+                            </a>
                         </div>
-                    </a>
-                </div>
+                    {% endif %}
                 {% endfor %}
             </div>
         </div>
     </div>
 </section>
 <!-- Team Section End -->
+
 
 <!-- Team Section End -->
 
@@ -580,7 +591,22 @@
     <script src="{{asset('js/main.js')}}"></script>
 
 
-{% block ajoutCoach %}{%endblock%}
+
+
+{% block modifierCoach %}{% endblock %}
+ {% block ajoutCoach %}{% endblock %}
+
+
+</script>
+
+
+</script>
+
+
+
+
+
+
 </body>
 
 </html>

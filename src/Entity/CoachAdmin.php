@@ -32,9 +32,9 @@ class CoachAdmin
     #[Assert\NotNull(message: "Le sexe est obligatoire.")]
     private ?string $sexe = null;
 
+    
     #[ORM\Column(name: 'photo', type: 'string', length: 255, nullable: true)]
     private ?string $photo = null;
-
     /**
      * @ORM\ManyToMany(targetEntity=CoachClient::class, inversedBy="coachs")
      * @ORM\JoinTable(

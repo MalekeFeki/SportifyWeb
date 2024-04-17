@@ -25,9 +25,10 @@
         <td>{{ coach_admin.prenom }}</td>
         <td>{{ coach_admin.description }}</td>
         <td>{{coach_admin.sexe }}</td>
-        <td><img src="{{ asset('path_to_your_photos_directory/' ~coach_admin.photo) }}" alt="Coach Photo" style="width: 100px;"></td>
+        <td><img src="{{ asset('uploads/photos/' ~coach_admin.photo) }}" alt="Coach Photo" style="width: 100px;"></td>
         <td>
-            <a href="{{ path('app_coach_admin_edit', {'id': coach_admin.id}) }}"><button>modifier</button></a>
+       <a href="{{ path('app_coach_admin_edit', {'id': coach_admin.id}) }}">Modifier</a>
+
             <form method="post" action="{{ path('app_coach_admin_delete', {'id': coach_admin.id}) }}" onsubmit="return confirm('Are you sure you want to delete this item?');">
                 <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ coach_admin.id) }}">
                 <button>supprimer</button>

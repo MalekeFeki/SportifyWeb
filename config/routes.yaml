@@ -1,6 +1,6 @@
 home:
     path: /
-    controller: App\Controller\HomeController::index
+    controller: App\Controller\homeController::index
 
 app_coach_client_index:
     path: '/coach/client'

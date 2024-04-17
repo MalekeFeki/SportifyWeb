@@ -17,9 +17,7 @@ class homeController extends AbstractController
         $this->entityManager = $entityManager;
     }
 
-    /**
-     * @Route("/", name="home")
-     */
+    #[Route('/', name: 'home')]
     public function index(): Response
     {
         // Example of retrieving data from the database using CoachAdmin entity
