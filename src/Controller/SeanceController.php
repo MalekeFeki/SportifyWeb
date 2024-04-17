@@ -3,12 +3,14 @@
 namespace App\Controller;
 
 use App\Entity\Seance;
+use App\Entit\Salle;
 use App\Form\SeanceType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Response; // Import Response class
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 #[Route('/seance')]
 class SeanceController extends AbstractController
@@ -25,14 +27,25 @@ class SeanceController extends AbstractController
         ]);
     }
 
-    #[Route('/new', name: 'app_seance_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    #[Route('/new/{idS}', name: 'app_seance_new', methods: ['GET', 'POST'])]
+    public function new(Request $request, EntityManagerInterface $entityManager, $idS): Response
     {
+        // Retrieve the Salle entity based on the provided ID
+        $salle = $entityManager->getRepository(Salle::class)->find($idS);
+
+        // Check if the Salle entity exists
+        if (!$salle) {
+            throw $this->createNotFoundException('Salle not found for id ' . $idS);
+        }
+
         $seance = new Seance();
+        $seance->setSalle($salle); // Set the Salle entity to the Seance
+
         $form = $this->createForm(SeanceType::class, $seance);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            // Persist the Seance
             $entityManager->persist($seance);
             $entityManager->flush();
 

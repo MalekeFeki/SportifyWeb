@@ -6,6 +6,7 @@ use App\Repository\SalleRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
+
 #[ORM\Entity(repositoryClass: SalleRepository::class)]
 #[ORM\Table(name: "salle")]
 class Salle
@@ -13,7 +14,7 @@ class Salle
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: "IDENTITY")]
     #[ORM\Column(name: "idS", type: "integer", nullable: false)]
-    private $ids;
+    private $idS;
 
     #[ORM\Column(name: "nom", type: "string", length: 50, nullable: false)]
     private $nom;
@@ -38,7 +39,7 @@ class Salle
 
     public function getIds(): ?int
     {
-        return $this->ids;
+        return $this->idS;
     }
 
     public function getNom(): ?string
