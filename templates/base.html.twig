@@ -33,6 +33,7 @@
 </head>
 
 <body>
+
     <!-- Page Preloder -->
     <div id="preloder">
         <div class="loader"></div>
@@ -102,7 +103,11 @@
                             <li><a href="./about-us.html">About Us</a></li>
                             <li><a href="./class-details.html">Classes</a></li>
                           <li><a href="./services.html">Services</a></li>
-                           <li><a href="{{ path('app_coach_admin_new') }}">Ajouter Coach</a></li>
+                          <li><a href="{{ path('app_coach_admin_new') }}">Ajouter Coach</a></li>
+                          <li><a href="{{ path('app_coach_client_new') }}">Réclamer</a></li>
+                          
+                       
+
 
 
 
@@ -178,7 +183,7 @@
         </div>
     </section>
     <!-- Hero Section End -->
-
+{%block body%}{% endblock %}
     <!-- ChoseUs Section Begin -->
     <section class="choseus-section spad">
         <div class="container">
@@ -444,7 +449,13 @@
                                 <div class="ts-item set-bg" data-setbg="{{asset('uploads/photos/' ~ coach_admin.photo)}}">
                                     <div class="ts_text">
                                         <h4>{{ coach_admin.nom }} {{ coach_admin.prenom }}</h4>
-                                        <span>{{ coach_admin.Nom }}</span>
+                                        <span>{{ coach_admin.Description }}</span>
+                                        <!-- Additional details -->
+                                        <div class="additional-details" style="display: none;">
+                                            <h5>{{ coach_admin.nom }} {{ coach_admin.prenom }}</h5>
+                                            <p>{{ coach_admin.description }}</p>
+                                        </div>
+                                        <!-- End additional details -->
                                     </div>
                                 </div>
                             </a>
@@ -593,14 +604,38 @@
 
 
 
-{% block modifierCoach %}{% endblock %}
- {% block ajoutCoach %}{% endblock %}
 
-
-</script>
 
 
 </script>
+
+
+</script>
+<script>
+    $(document).ready(function() {
+        // Détecte le clic sur chaque élément avec la classe "team-link"
+        $('.team-link').click(function(e) {
+            e.preventDefault(); // Empêche le comportement par défaut du lien
+
+            // Récupère l'ID du coach_admin à partir de l'attribut data-id du lien
+            var coach_admin_id = $(this).data('id');
+
+            // Fait une requête AJAX pour récupérer les détails du coach_admin
+            $.ajax({
+                type: 'GET',
+                url: '/coach_admin_details/' + coach_admin_id, // Endpoint pour récupérer les détails du coach_admin
+                success: function(response) {
+                    // Affiche les détails du coach_admin dans une boîte de dialogue ou une autre zone de votre choix
+                    alert(response); // Remplacez cela par votre propre logique d'affichage
+                },
+                error: function(error) {
+                    console.log(error); // Gère les erreurs
+                }
+            });
+        });
+    });
+</script>
+
 
 
 
@@ -608,5 +643,6 @@
 
 
 </body>
+
 
 </html>

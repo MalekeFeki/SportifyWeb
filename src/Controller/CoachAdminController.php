@@ -35,6 +35,18 @@ class CoachAdminController extends AbstractController
         $form->handleRequest($request);
     
         if ($form->isSubmitted() && $form->isValid()) {
+            // Vérifier si un coach avec le même nom et prénom existe déjà
+            $formData = $form->getData();
+            $existingCoach = $coachAdminRepository->findOneBy([
+                'nom' => $formData->getNom(),
+                'prenom' => $formData->getPrenom()
+            ]);
+    
+            if ($existingCoach) {
+                $this->addFlash('error', 'Un coach avec le même nom et prénom existe déjà.');
+                return $this->redirectToRoute('app_coach_admin_new');
+            }
+    
             // Extrait la photo du formulaire
             $photoFile = $form->get('photo')->getData();
     

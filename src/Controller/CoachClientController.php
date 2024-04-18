@@ -51,45 +51,50 @@ class CoachClientController extends AbstractController
     
 
     #[Route('/new', name: 'app_coach_client_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
-    {
-        // Vérifier si le nombre d'ajouts a dépassé 3
-        $clickedCount = count($this->session->get('edited_comments', []));
-        if ($clickedCount >= 3) {
-            $blockedUntil = $this->session->get('blocked_until', 0);
-            if ($blockedUntil > time()) {
-                $remainingTime = max(0, $blockedUntil - time()); // Calcul du temps restant
-                return $this->render('coach_client/new.html.twig', [
-                    'remainingTime' => $remainingTime,
-                ]);
-            }
+public function new(Request $request, EntityManagerInterface $entityManager, CoachAdminRepository $coachAdminRepository): Response
+{
+    // Vérifier si le nombre d'ajouts a dépassé 3
+    $addedCount = count($this->session->get('added_comments', []));
+    if ($addedCount >= 3) {
+        $blockedUntil = $this->session->get('blocked_until', 0);
+        if ($blockedUntil > time()) {
+            $remainingTime = max(0, $blockedUntil - time()); // Calcul du temps restant
+            return $this->render('coach_client/new.html.twig', [
+                'remainingTime' => $remainingTime,
+            ]);
         }
-
+    }
+    
+        // Récupérer les coachs pour afficher dans le formulaire
+        $coach_admins = $coachAdminRepository->findAll();
+    
         $coachClient = new CoachClient();
         $form = $this->createForm(CoachClientType::class, $coachClient);
         $form->handleRequest($request);
-
+    
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($coachClient);
             $entityManager->flush();
-
+    
             // Enregistrer l'ajout du commentaire dans la session
             $editedComments = $this->session->get('edited_comments', []);
             $editedComments[] = $coachClient->getId();
             $this->session->set('edited_comments', $editedComments);
-
+    
             // Réinitialiser le compteur et bloquer pendant 20 secondes
             $this->session->set('blocked_until', time() + 20);
-
+    
             return $this->redirectToRoute('app_coach_client_index', [], Response::HTTP_SEE_OTHER);
         }
-
+    
         return $this->renderForm('coach_client/new.html.twig', [
             'coach_client' => $coachClient,
             'form' => $form,
+            'coach_admins' => $coach_admins, // Passer les coachs au modèle Twig
             'remainingTime' => 0, // Ajoutez cette ligne pour éviter l'erreur lorsque la condition n'est pas remplie
         ]);
     }
+    
 
     #[Route('/{id}', name: 'app_coach_client_show', methods: ['GET'])]
     public function show(CoachClient $coachClient): Response
@@ -100,33 +105,37 @@ class CoachClientController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_coach_client_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, CoachClient $coachClient, EntityManagerInterface $entityManager): Response
+    public function edit(Request $request, CoachClient $coachClient, EntityManagerInterface $entityManager, CoachAdminRepository $coachAdminRepository): Response
     {
         $form = $this->createForm(CoachClientType::class, $coachClient);
         $form->handleRequest($request);
-
+    
         if ($form->isSubmitted() && $form->isValid()) {
             // Vérifier si le commentaire a déjà été modifié plus de 3 fois
             $editedComments = $this->session->get('edited_comments', []);
             if (count($editedComments) < 3) {
                 $entityManager->flush();
-
+    
                 // Enregistrer le commentaire comme modifié dans la session
                 $editedComments[] = $coachClient->getId();
                 $this->session->set('edited_comments', $editedComments);
-
+    
                 return $this->redirectToRoute('app_coach_client_index', [], Response::HTTP_SEE_OTHER);
             } else {
                 return new Response('Vous ne pouvez pas modifier ce commentaire plus de 3 fois.');
             }
         }
-
+    
+        // Récupérer les coachs pour afficher dans le formulaire
+        $coach_admins = $coachAdminRepository->findAll();
+    
         return $this->renderForm('coach_client/edit.html.twig', [
             'coach_client' => $coachClient,
             'form' => $form,
+            'coach_admins' => $coach_admins, // Passer les coachs au modèle Twig
         ]);
     }
-
+    
     #[Route('/{id}', name: 'app_coach_client_delete', methods: ['POST'])]
     public function delete(Request $request, CoachClient $coachClient, EntityManagerInterface $entityManager): Response
     {
