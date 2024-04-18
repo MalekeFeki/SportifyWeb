@@ -113,6 +113,7 @@ ol {
   Helper CSS
 -----------------------*/
 
+
 .section-title {
 	margin-bottom: 45px;
 	text-align: center;
@@ -160,6 +161,10 @@ ol {
 .text-white li,
 .text-white a {
 	color: #fff;
+}
+
+.white-text {
+    color: #ffffff; /* Set the text color to white */
 }
 
 /* buttons */

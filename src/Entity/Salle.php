@@ -5,7 +5,7 @@ namespace App\Entity;
 use App\Repository\SalleRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 #[ORM\Entity(repositoryClass: SalleRepository::class)]
 #[ORM\Table(name: "salle")]

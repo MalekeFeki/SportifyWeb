@@ -12,6 +12,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+
 
 #[Route('/salle')]
 class SalleController extends AbstractController
@@ -34,6 +36,21 @@ class SalleController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            // Handle file upload
+            $file = $form['imagesalle']->getData();
+            if ($file) {
+                $fileName = md5(uniqid()).'.'.$file->guessExtension();
+
+                // Move the file to the directory where you want to store it
+                $file->move(
+                    $this->getParameter('salle_images_directory'),
+                    $fileName
+                );
+
+                // Set the file name to the Salle entity
+                $salle->setImagesalle($fileName);
+            }
+
             $entityManager->persist($salle);
             $entityManager->flush();
 
@@ -46,6 +63,7 @@ class SalleController extends AbstractController
         ]);
     }
 
+
     #[Route('/{idS}', name: 'app_salle_show', methods: ['GET'])]
     public function show(Salle $salle): Response
     {
@@ -55,22 +73,33 @@ class SalleController extends AbstractController
     }
 
     #[Route('/{idS}/edit', name: 'app_salle_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Salle $salle, EntityManagerInterface $entityManager): Response
-    {
-        $form = $this->createForm(SalleType::class, $salle);
-        $form->handleRequest($request);
+public function edit(Request $request, Salle $salle, EntityManagerInterface $entityManager): Response
+{
+    $form = $this->createForm(SalleType::class, $salle);
+    $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->flush();
-
-            return $this->redirectToRoute('index', [], Response::HTTP_SEE_OTHER);
+    if ($form->isSubmitted() && $form->isValid()) {
+        // Handle file upload
+        $file = $form['imagesalle']->getData();
+        if ($file instanceof UploadedFile) {
+            $fileName = uniqid().'.'.$file->guessExtension();
+            $file->move(
+                $this->getParameter('salle_images_directory'),
+                $fileName
+            );
+            $salle->setImagesalle($fileName);
         }
 
-        return $this->renderForm('salle/edit.html.twig', [
-            'salle' => $salle,
-            'form' => $form,
-        ]);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('index', [], Response::HTTP_SEE_OTHER);
     }
+
+    return $this->renderForm('salle/edit.html.twig', [
+        'salle' => $salle,
+        'form' => $form,
+    ]);
+}
 
     #[Route('/{idS}', name: 'app_salle_delete', methods: ['POST'])]
     public function delete(Request $request, Salle $salle, EntityManagerInterface $entityManager): Response

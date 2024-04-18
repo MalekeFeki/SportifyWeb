@@ -3,6 +3,7 @@
 {% block title %}Salle{% endblock %}
 
 {% block body %}
+
     <h1>Salle</h1>
 
     <table class="table">
@@ -37,7 +38,7 @@
         </tbody>
     </table>
 
-    <a href="{{ path('app_salle_index') }}">back to list</a>
+    <a href="{{ path('index') }}">back to list</a>
 
     <a href="{{ path('app_salle_edit', {'idS': salle.idS}) }}">edit</a>
 

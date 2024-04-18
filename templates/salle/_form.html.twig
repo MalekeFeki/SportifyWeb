@@ -1,4 +1,9 @@
-{{ form_start(form) }}
+<style>
+    .white-text {
+        color: white;
+    }
+</style>
+{{ form_start(form, { 'attr': {'novalidate': 'novalidate'} }) }}
     {{ form_row(form.nom) }}
     {{ form_row(form.adresse) }}
     {{ form_row(form.region) }}
