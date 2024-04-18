@@ -1,4 +1,16 @@
 {{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
+<div class="newAvis">
+    <div class="form-group">
+        <label for="{{ form.type.vars.id }}">Type:</label>
+        {{ form_widget(form.type, {'attr': {'class': 'form-control'}}) }}
+    </div>
+    <div class="form-group">
+        <label for="{{ form.description.vars.id }}">Description:</label>
+        {{ form_widget(form.description, {'attr': {'class': 'form-control', 'rows': '5'}}) }}
+    </div>
+    <div class="text-center">
+        <button type="submit" class="btn btn-primary">{{ button_label|default('Save') }}</button>
+        <a href="{{ path('app_avis_index') }}" class="btn btn-secondary">Back to List</a>
+    </div>
+    </div>
 {{ form_end(form) }}

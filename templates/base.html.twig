@@ -22,6 +22,338 @@
     <link rel="stylesheet" href="{{asset('css/magnific-popup.css')}}" type="text/css">
     <link rel="stylesheet" href="{{asset('css/slicknav.min.css')}}" type="text/css">
     <link rel="stylesheet" href="{{asset('css/style.css')}}" type="text/css">
+    <style>
+/* Additional Custom Styles */
+/* Additional Custom Styles */
+.indexAvis {
+    background-color: black;
+    color: white;
+    font-family: 'Open Sans', sans-serif;
+}
+
+.indexChallenge {
+    background-color: black;
+    color: white;
+    font-family: 'Open Sans', sans-serif;
+}
+
+h1.indexAvis {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 700;
+    color: white;
+}
+
+
+h1.indexChallenge {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 700;
+    color: white;
+}
+
+.left-half {
+    width: 50%;
+    float: left;
+}
+
+.right-half {
+    width: 50%;
+    float: right;
+}
+
+.indexAvis th,
+.indexAvis td {
+    border: 1px solid #444;
+    padding: 10px;
+    color: white;
+}
+
+.indexChallenge th,
+.indexChallenge td {
+    border: 1px solid #444;
+    padding: 10px;
+    color: white;
+}
+.indexAvis th {
+    background-color: #333;
+}
+.indexChallenge th {
+    background-color: #333;
+}
+
+.indexAvis tr:nth-child(even) {
+    background-color: #222;
+}
+
+.indexChallenge tr:nth-child(even) {
+    background-color: #222;
+}
+.indexAvis tr:nth-child(odd) {
+    background-color: #111;
+}
+.indexChallenge tr:nth-child(odd) {
+    background-color: #111;
+}
+
+
+.indexAvis a {
+    color: white;
+    text-decoration: none;
+    margin-right: 5px;
+}
+.indexChallenge a {
+    color: white;
+    text-decoration: none;
+    margin-right: 5px;
+}
+
+.indexAvis a:hover {
+    text-decoration: underline;
+}
+.indexChallenge a:hover {
+    text-decoration: underline;
+}
+
+.indexAvis .no-records {
+    text-align: center;
+    color: #ccc;
+}
+
+.indexChallenge  .no-records {
+    text-align: center;
+    color: #ccc;
+}
+
+/* custom.css */
+
+.newAvis body {
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa;
+    margin: 0;
+    padding: 0;
+}
+
+.newAvis .container {
+    max-width: 800px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+}
+
+.newAvis h1 {
+    margin-top: 0;
+    margin-bottom: 20px;
+}
+
+.newAvis .form-control {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.newAvis .btn-secondary {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #f36100;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+}
+
+.newAvis .btn-secondary:hover {
+    background-color: #0056b3;
+}
+
+
+
+/* Custom styles for the chart canvas within .indexAvis */
+#avisChart {
+    max-width: 300px;
+    width: 100%;
+    margin: 20px auto; /* Center the pie chart */
+}
+
+/* Style for the "Create new" button within .indexAvis */
+.indexAvis .create-new {
+    display: block;
+    margin: 20px auto; /* Center the button */
+    padding: 8px 16px;
+    background-color: #28a745;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+    width: fit-content; /* Set width to fit content */
+}
+
+.indexAvis .create-new:hover {
+    background-color: #218838;
+}
+
+/* Style for the "Export to CSV" button within .indexAvis */
+.indexAvis .export-csv {
+    display: block;
+    margin: 0 auto 20px; /* Center the button with margin-top */
+    padding: 8px 16px;
+    background-color: #28a745;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+    width: fit-content; /* Set width to fit content */
+}
+
+.indexAvis .export-csv:hover {
+    background-color: #218838;
+}
+
+/* Additional styles can be added in custom.css */
+
+.newAvis {
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    margin-top: 20px;
+    text-align: center;
+}
+
+.newAvis .container {
+    max-width: 800px;
+    margin: auto;
+    padding: 20px;
+}
+
+.newAvis .card {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    overflow: hidden;
+    text-align: left;
+}
+
+.newAvis .card-header {
+    background-color: #f36100;
+    color: #fff;
+    padding: 10px 15px;
+}
+
+.newAvis .card-title {
+    margin-bottom: 0;
+    font-size: 24px;
+}
+
+.newAvis .card-body {
+    padding: 20px;
+}
+
+.newAvis .form-group {
+    text-align: center;
+}
+
+.newAvis .form-control {
+    width: 100%;
+}
+
+.newAvis .btn-primary {
+    background-color: #28a745;
+    color: #fff;
+    border-color: #28a745;
+}
+
+.newAvis .btn-secondary {
+    background-color: #6c757d;
+    color: #fff;
+    border-color: #6c757d;
+    margin-left: 10px;
+}
+
+.newAvis .btn-primary:hover {
+    background-color: #218838;
+    border-color: #1e7e34;
+}
+
+.newAvis .btn-secondary:hover {
+    background-color: #5a6268;
+    border-color: #545b62;
+}
+
+/* custom.css */
+
+/* Additional Custom Styles */
+body {
+    background-color: #f8f9fa; /* Light background color */
+    font-family: 'Roboto', sans-serif;
+}
+
+.newChallenge h1 {
+    color: #007bff; /* Blue color for headings */
+    margin-bottom: 20px;
+}
+
+.newChallenge .container {
+    max-width: 800px;
+    margin: auto;
+    padding: 20px;
+}
+
+.newChallenge .btn {
+    margin-right: 10px;
+}
+
+.newChallenge .btn-secondary {
+    background-color: #6c757d;
+    color: #fff;
+    border-color: #6c757d;
+}
+
+.newChallenge .btn-secondary:hover {
+    background-color: #5a6268;
+    border-color: #545b62;
+}
+
+/* Form wrapper styles */
+.newChallenge .form-wrapper {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-top: 20px;
+}
+
+/* Form input styles */
+.newChallenge .form-group {
+    margin-bottom: 20px;
+}
+
+.newChallenge .form-control {
+    width: 100%;
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+}
+
+.newChallenge .form-control:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+.newChallenge .form-label {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+
+    </style>
 </head>
 
 <body>

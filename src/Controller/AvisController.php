@@ -9,6 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 #[Route('/avis')]
 class AvisController extends AbstractController
@@ -93,9 +94,27 @@ class AvisController extends AbstractController
         return $this->redirectToRoute('app_avis_index', [], Response::HTTP_SEE_OTHER);
     }
     
-    #[Route('/frontend', name: 'frontend', methods: ['GET'])]
-    public function showFrontendPage(): Response
+    #[Route('/export-to-csv', name: 'export_avis_to_csv')]
+    public function exportToCsv(EntityManagerInterface $entityManager): Response
     {
-        return $this->render('base.html.twig');
+        $avis = $entityManager
+            ->getRepository(Avis::class)
+            ->findAll();
+
+        $response = new StreamedResponse(function() use ($avis) {
+            $handle = fopen('php://output', 'w+');
+            fputcsv($handle, ['Ida', 'Type', 'Description']);
+
+            foreach ($avis as $avi) {
+                fputcsv($handle, [$avi->getIda(), $avi->getType(), $avi->getDescription()]);
+            }
+
+            fclose($handle);
+        });
+
+        $response->headers->set('Content-Type', 'text/csv');
+        $response->headers->set('Content-Disposition', 'attachment; filename="avis.csv"');
+
+        return $response;
     }
 }

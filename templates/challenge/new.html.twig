@@ -2,10 +2,84 @@
 
 {% block title %}New Challenge{% endblock %}
 
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/custom.css') }}">
+    <style>
+        /* Additional Custom Styles */
+        body {
+            background-color: #f8f9fa; /* Light background color */
+            font-family: 'Roboto', sans-serif;
+        }
+
+        h1 {
+            color: #007bff; /* Blue color for headings */
+            margin-bottom: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: auto;
+            padding: 20px;
+        }
+
+        .btn {
+            margin-right: 10px;
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+            color: #fff;
+            border-color: #6c757d;
+        }
+
+        .btn-secondary:hover {
+            background-color: #5a6268;
+            border-color: #545b62;
+        }
+
+        /* Form wrapper styles */
+        .form-wrapper {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        /* Form input styles */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+        }
+
+        .form-label {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+    </style>
+{% endblock %}
+
 {% block body %}
-    <h1>Create new Challenge</h1>
+    <div class="container">
+        <h1>Create new Challenge</h1>
 
-    {{ include('challenge/_form.html.twig') }}
+        <div class="form-wrapper">
+            {{ include('challenge/_form.html.twig', {'button_label': 'Create'}) }}
+        </div>
 
-    <a href="{{ path('app_challenge_index') }}">back to list</a>
+        <a href="{{ path('app_challenge_index') }}" class="btn btn-secondary">Back to List</a>
+    </div>
 {% endblock %}

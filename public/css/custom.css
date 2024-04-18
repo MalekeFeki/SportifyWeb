@@ -10,3 +10,32 @@
 .btn-secondary {
     margin-top: 20px;
 }
+/* Additional styles can be added in custom.css */
+
+.newAvis {
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    margin-top: 20px;
+}
+
+.newAvis h1 {
+    margin-bottom: 20px;
+    font-size: 28px;
+    color: #333;
+}
+
+.newAvis form {
+    margin-bottom: 20px;
+}
+
+.newAvis .btn-secondary {
+    background-color: #6c757d;
+    color: #fff;
+    border-color: #6c757d;
+}
+
+.newAvis .btn-secondary:hover {
+    background-color: #5a6268;
+    border-color: #545b62;
+}

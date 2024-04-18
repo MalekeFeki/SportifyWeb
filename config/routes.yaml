@@ -5,3 +5,22 @@
 table_route:
     path: /user/backend
     controller: App\Controller\UserController::index
+
+    # config/routes.yaml
+export_avis_to_csv:
+    path: '/export-avis-to-csv'
+    controller: App\Controller\AvisController::exportToCsv
+
+# config/routes.yaml
+
+api_qr_code:
+    path: '/api/qr-code'
+    controller: 'App\Controller\Api\QrCodeController::generateQrCode'
+
+# config/routes.yaml
+
+app_generate_qr_code:
+    path: '/generate-qr-code'
+    controller: 'App\Controller\QrCodeController::generateQrCode'
+    methods: ['GET']
+

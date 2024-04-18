@@ -3,37 +3,46 @@
 {% block title %}Challenge index{% endblock %}
 
 {% block body %}
-    <h1>Challenge index</h1>
+    <div class="container">
+        <div class="left-half">
+            <h1 class="indexChallenge">Challenge index</h1>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Idc</th>
-                <th>Nom</th>
-                <th>Difficulty</th>
-                <th>Description</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for challenge in challenges %}
-            <tr>
-                <td>{{ challenge.idc }}</td>
-                <td>{{ challenge.nom }}</td>
-                <td>{{ challenge.difficulty }}</td>
-                <td>{{ challenge.description }}</td>
-                <td>
-                    <a href="{{ path('app_challenge_show', {'idc': challenge.idc}) }}">show</a>
-                    <a href="{{ path('app_challenge_edit', {'idc': challenge.idc}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="5">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+            <table class="table indexChallenge">
+                <thead>
+                    <tr>
+                        <th>Idc</th>
+                        <th>Nom</th>
+                        <th>Difficulty</th>
+                        <th>Description</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for challenge in challenges %}
+                    <tr>
+                        <td>{{ challenge.idc }}</td>
+                        <td>{{ challenge.nom }}</td>
+                        <td>{{ challenge.difficulty }}</td>
+                        <td>{{ challenge.description }}</td>
+                        <td>
+                            <a href="{{ path('app_challenge_show', {'idc': challenge.idc}) }}" class="indexChallenge">show</a>
+                            <a href="{{ path('app_challenge_edit', {'idc': challenge.idc}) }}" class="indexChallenge">edit</a>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="5" class="no-records">No records found</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
 
-    <a href="{{ path('app_challenge_new') }}">Create new</a>
+            <a href="{{ path('app_challenge_new') }}" class="btn btn-primary">Create new</a>
+            
+            <a href="{{ path('app_generate_qr_code') }}" class="btn btn-success">Generate QR Code</a> <!-- Added button -->
+        </div>
+        <div class="right-half">
+            <!-- Empty right half -->
+        </div>
+    </div>
 {% endblock %}
