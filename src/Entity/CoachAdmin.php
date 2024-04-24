@@ -18,13 +18,16 @@ class CoachAdmin
     private ?int $id = null;
 
     #[ORM\Column(name: 'nom', type: 'string', length: 255)]
+    #[Assert\Length(min: 3, maxMessage: "Le nom est inférieur à 3 caractères.")]
     private ?string $nom = null;
 
     #[ORM\Column(name: 'prenom', type: 'string', length: 255)]
+    #[Assert\Length(min: 3, maxMessage: "Le pénom est inférieur à 3 caractères.")]
     private ?string $prenom = null;
 
     #[ORM\Column(name: 'Description', type: 'string', length: 1000, nullable: true)]
     #[Assert\NotBlank(message: "La description est obligatoire.")]
+   
     private ?string $description = null;
 
     #[ORM\Column(name: 'sexe', type: 'string', length: 10, nullable: true)]

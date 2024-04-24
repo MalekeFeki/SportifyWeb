@@ -75,4 +75,10 @@ class CoachClient
 
         return $this;
     }
+
+    // Méthode getComment() ajoutée
+    public function getComment(): ?string
+    {
+        return $this->commentaire;
+    }
 }

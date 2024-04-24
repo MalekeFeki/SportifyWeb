@@ -13,9 +13,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
-
 #[Route('/coach/client')]
-
 class CoachClientController extends AbstractController
 {
     private $session;
@@ -24,6 +22,7 @@ class CoachClientController extends AbstractController
     {
         $this->session = $session;
     }
+
     #[Route('/', name: 'app_coach_client_index', methods: ['GET'])]
     #[Route('/', name: 'app_coach_client_index', methods: ['GET'])]
     public function index(CoachClientRepository $coachClientRepository, CoachAdminRepository $coachAdminRepository): Response
@@ -49,44 +48,49 @@ class CoachClientController extends AbstractController
         ]);
     }
     
-
     #[Route('/new', name: 'app_coach_client_new', methods: ['GET', 'POST'])]
-public function new(Request $request, EntityManagerInterface $entityManager, CoachAdminRepository $coachAdminRepository): Response
-{
-    // Vérifier si le nombre d'ajouts a dépassé 3
-    $addedCount = count($this->session->get('added_comments', []));
-    if ($addedCount >= 3) {
-        $blockedUntil = $this->session->get('blocked_until', 0);
-        if ($blockedUntil > time()) {
-            $remainingTime = max(0, $blockedUntil - time()); // Calcul du temps restant
-            return $this->render('coach_client/new.html.twig', [
-                'remainingTime' => $remainingTime,
-            ]);
+    public function new(Request $request, EntityManagerInterface $entityManager, CoachAdminRepository $coachAdminRepository): Response
+    {
+        // Vérifier si le nombre d'ajouts a dépassé 3
+        $addedCount = count($this->session->get('added_comments', []));
+        if ($addedCount >= 3) {
+            $blockedUntil = $this->session->get('blocked_until', 0);
+            if ($blockedUntil > time()) {
+                $remainingTime = max(0, $blockedUntil - time()); // Calcul du temps restant
+                return $this->render('coach_client/new.html.twig', [
+                    'remainingTime' => $remainingTime,
+                ]);
+            }
         }
-    }
-    
+        
         // Récupérer les coachs pour afficher dans le formulaire
         $coach_admins = $coachAdminRepository->findAll();
-    
+
         $coachClient = new CoachClient();
         $form = $this->createForm(CoachClientType::class, $coachClient);
         $form->handleRequest($request);
-    
+
         if ($form->isSubmitted() && $form->isValid()) {
+            // Vérifier si le texte contient des mots grossiers
+            $commentText = $coachClient->getComment();
+            if ($this->containsProfanity($commentText)) {
+                return new Response('Votre commentaire contient des mots inappropriés.');
+            }
+
             $entityManager->persist($coachClient);
             $entityManager->flush();
-    
+
             // Enregistrer l'ajout du commentaire dans la session
             $editedComments = $this->session->get('edited_comments', []);
             $editedComments[] = $coachClient->getId();
             $this->session->set('edited_comments', $editedComments);
-    
+
             // Réinitialiser le compteur et bloquer pendant 20 secondes
             $this->session->set('blocked_until', time() + 20);
-    
+
             return $this->redirectToRoute('app_coach_client_index', [], Response::HTTP_SEE_OTHER);
         }
-    
+
         return $this->renderForm('coach_client/new.html.twig', [
             'coach_client' => $coachClient,
             'form' => $form,
@@ -94,7 +98,6 @@ public function new(Request $request, EntityManagerInterface $entityManager, Coa
             'remainingTime' => 0, // Ajoutez cette ligne pour éviter l'erreur lorsque la condition n'est pas remplie
         ]);
     }
-    
 
     #[Route('/{id}', name: 'app_coach_client_show', methods: ['GET'])]
     public function show(CoachClient $coachClient): Response
@@ -145,5 +148,19 @@ public function new(Request $request, EntityManagerInterface $entityManager, Coa
         }
 
         return $this->redirectToRoute('app_coach_client_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    // Fonction pour détecter les mots grossiers
+    private function containsProfanity(string $text): bool
+    {
+        $profaneWords = ['word1', 'word2', 'word3']; // Liste de mots grossiers à détecter
+
+        foreach ($profaneWords as $profaneWord) {
+            if (stripos($text, $profaneWord) !== false) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
