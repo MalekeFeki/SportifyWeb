@@ -20,3 +20,8 @@ search_endpoint:
     path: /search-endpoint
     controller: App\Controller\EvenementController::search
     methods: ['POST']
+
+event_pdf:
+    path: /event/{idevent}/pdf
+    controller: App\Controller\EvenementController::generateEventPdfnow
+

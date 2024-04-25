@@ -96,9 +96,9 @@
 				{% endif %}
 			</div>
 
+    {# That will display the error of the captcha to user #}
 
 			{{ form_widget(form.eventid, {'attr': {'style': 'display:none;'}}) }}
-
 			<button type="submit" href="{{ path('app_evenement_show', {'idevent': evenement.idevent}) }}" class="btn btn-primary" style="    margin: 10px;
     width: 12%;
     margin-left: 468px;">Save</button>

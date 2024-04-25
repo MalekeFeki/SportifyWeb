@@ -9,6 +9,7 @@ use App\Repository\EventreservationRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use phpDocumentor\Reflection\Types\Integer;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -36,6 +37,9 @@ class EventreservationController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            $recaptchaResponse = $request->request->get('g-recaptcha-response');
+            
             $entityManager->persist($eventreservation);
             $entityManager->flush();
 
@@ -50,7 +54,7 @@ class EventreservationController extends AbstractController
             'evenement' => $event,
         ]);
     }
-
+    
     #[Route('/{reservationid}', name: 'app_eventreservation_show1', methods: ['GET'])]
     public function show(Eventreservation $eventreservation): Response
     {

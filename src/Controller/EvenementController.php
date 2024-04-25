@@ -7,6 +7,7 @@ use App\Entity\Eventreservation;
 use App\Form\EvenementType;
 use App\Repository\EvenementRepository;
 use App\Repository\EventreservationRepository;
+use App\Service\PdfService;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Knp\Component\Pager\PaginatorInterface;
@@ -59,7 +60,7 @@ class EvenementController extends AbstractController
         $totalPages = ceil($totalItems / $pageSize); // Calculate total pages
         $categoryCounts = $evenementRepository->countEventsByCategory();
         // Render the pagination HTML
-        $paginationHtml = $this->renderView('evenement/allevent_copy.html.twig', [
+        $paginationHtml = $this->renderView('evenement/allevent_search.html.twig', [
             'currentPage' => $currentPage, // Pass currentPage to the template
             'pagination' => $pagination,
             'totalPages' => $totalPages,
@@ -244,7 +245,7 @@ class EvenementController extends AbstractController
             if ($photoFile) {
                 // Generate a unique name for the file to prevent overwriting existing files
                 $newFilename = uniqid() . '.' . $photoFile->guessExtension();
-                $newFilename = "upload_directory/" . $newFilename ;
+                $newFilename = "upload_directory/" . $newFilename;
                 // Move the file to the desired directory
                 try {
                     $photoFile->move(
@@ -295,18 +296,22 @@ class EvenementController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $existingEvent = $entityManager->getRepository(Evenement::class)->findOneBy(['nomev' => $evenement->getNomev()]);
-            if ($existingEvent) {
-                $form->get('nomev')->addError(new \Symfony\Component\Form\FormError('Event name must be unique.'));
-                return $this->renderForm('evenement/new.html.twig', [
-                    'form' => $form,
-                ]);
+            $namenow = $form->get('nomev')->getData();
+            if ($existingEvent == $namenow) {
+                if ($existingEvent) {
+                    $form->get('nomev')->addError(new \Symfony\Component\Form\FormError('Event name must be unique.'));
+                    return $this->renderForm('evenement/new.html.twig', [
+                        'form' => $form,
+                    ]);
+                }
             }
+
             $photoFile = $form->get('photo')->getData(); // Retrieve the uploaded file object
 
             if ($photoFile) {
                 // Generate a unique name for the file to prevent overwriting existing files
                 $newFilename = uniqid() . '.' . $photoFile->guessExtension();
-                $newFilename = "upload_directory/" . $newFilename ;
+                $newFilename = "upload_directory/" . $newFilename;
                 // Move the file to the desired directory
                 try {
                     $photoFile->move(
@@ -314,7 +319,6 @@ class EvenementController extends AbstractController
                         $newFilename
                     );
                 } catch (FileException $e) {
-                    // $evenement->setPhoto("null");
                 }
 
                 // Set the file name (or path) in your entity
@@ -369,10 +373,23 @@ class EvenementController extends AbstractController
         // Return JSON response indicating failure
         return new JsonResponse(['error' => 'Event not found'], Response::HTTP_NOT_FOUND);
     }
+
     public function makeReservation(Evenement $evenement): Response
     {
         // Redirect to the reservation page
         // You can directly redirect to the reservation page or perform additional logic here if needed
         return $this->redirectToRoute('app_eventreservation_new', ['eventid' => $evenement->getIdevent()]);
+    }
+    #[Route('/event/{idevent}/pdf', name: 'event_pdf')]
+    public function generateEventPdfnow(Evenement $evenement, PdfService $pdfService): Response
+    {
+        $name= $evenement->getNomev();
+        // Generate PDF for the event
+        $pdfService->generateEventPdf($evenement,$name);
+
+        // Optionally, you can return a response or redirect
+        // For example, redirect back to the event details page
+        return $this->redirectToRoute('app_evenement_index', [], Response::HTTP_SEE_OTHER);
+        
     }
 }

@@ -5,3 +5,8 @@ controllers:
 kernel:
     resource: ../../src/Kernel.php
     type: annotation
+
+# event_pdf:
+#     path: '/event/{Idevent}/pdf'
+#     controller: 'App\Controller\EventController::generateEventPdf'
+#     methods: ['GET'] # Specify the HTTP method(s) allowed for this route

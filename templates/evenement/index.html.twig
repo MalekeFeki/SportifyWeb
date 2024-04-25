@@ -89,6 +89,7 @@
 									</form>
 									{# <button href="{{ path('app_evenement_edit', {'idevent': evenement.idevent}) }}">edit</button> #}
 									<a href="{{ path('app_event_show', {'idevent': evenement.idevent}) }}" class="btn btn-primary">Show Reservations</a>
+									<a class="btn btn-lg btn-secondary m-2" href="{{ path('event_pdf', {'idevent': evenement.idevent}) }}">Generate PDF</a> {# Add this line #}
 
 									{{ include('evenement/_delete_form.html.twig') }}
 
