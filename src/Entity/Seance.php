@@ -29,8 +29,9 @@ class Seance
     #[ORM\Column(name: "fin", type: "time")]
     private $fin;
 
-    #[Doctrine\ORM\Mapping\Column(type: "date", nullable: false)]
-    #[ORM\Column(name: "dates", type: "date")]
+    /**
+    * @ORM\Column(type="date")
+    */
     private $dates;
 
     #[Doctrine\ORM\Mapping\ManyToOne(targetEntity: Salle::class)]

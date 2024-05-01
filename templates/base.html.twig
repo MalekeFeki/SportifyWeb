@@ -22,6 +22,20 @@
     <link rel="stylesheet" href="{{asset('css/magnific-popup.css')}}" type="text/css">
     <link rel="stylesheet" href="{{asset('css/slicknav.min.css')}}" type="text/css">
     <link rel="stylesheet" href="{{asset('css/style.css')}}" type="text/css">
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="{{ asset('js/bootstrap.min.js') }}"></script>
+
+
+
+    <!-- Leaflet CSS -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+
+<!-- Leaflet JavaScript -->
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+
+
 </head>
 
 <body>
@@ -228,7 +242,7 @@
                     <div class="bs-text">
                         <h2>registration now to get more deals</h2>
                         <div class="bt-tips">Where health, beauty and fitness meet.</div>
-                        <a href="{{ path('app_user_new') }}" class="primary-btn  btn-normal">Appointment</a>
+                        {# <a href="{{ path('app_user_new') }}" class="primary-btn  btn-normal">Appointment</a> #}
                     </div>
                 </div>
             </div>
@@ -346,7 +360,7 @@
                             <span>Our Team</span>
                             <h2>TRAIN WITH EXPERTS</h2>
                         </div>
-                        <a href="{{ path('app_user_new') }}" class="primary-btn btn-normal appoinment-btn">appointment</a>
+                        {# <a href="{{ path('app_user_new') }}" class="primary-btn btn-normal appoinment-btn">appointment</a> #}
                     </div>
                 </div>
             </div>

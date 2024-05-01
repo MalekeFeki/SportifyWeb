@@ -1,12 +1,59 @@
-{{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
+
+
+<style>
+    .white-text {
+        color: white;
+    }
+    .btn-white {
+    color: white;
+    background-color: transparent;
+    border: 1px solid white;
+}
+
+.btn-white:hover {
+    background-color: white;
+    color: black;
+}
+
+</style>
+
+{{ form_start(form, { 'attr': {'novalidate': 'novalidate'} }) }}
+    {{ form_row(form.dates, {
+        'attr': {
+            'class': 'form-control js-datepicker',
+            'id': 'floatingInput'
+        }
+    }) }}
+    {{ form_row(form.debut) }}
+    {{ form_row(form.fin) }}
+    {# {{ form_row(form.salle) }} #}
+
+    <button class="btn btn-white">{{ button_label|default('Save') }}</button>
+
 {{ form_end(form) }}
-<script>
+
+{# <script>
     $(document).ready(function() {
-        // you may need to change this code if you are not using Bootstrap Datepicker
+        // Initialize the Datepicker with Symfony's expected date format
         $('.js-datepicker').datepicker({
             format: 'yyyy-mm-dd'
         });
     });
+</script> #}
+<script>
+    $(document).ready(function() {
+        // Initialize the Datepicker with Symfony's expected date format
+        $('.js-datepicker').datepicker({
+            format: 'yyyy-mm-dd'
+        });
+
+        // Convert date format before form submission
+        $('form').submit(function() {
+            let dateString = $('.js-datepicker').val();
+            let dateParts = dateString.split("/");
+            let formattedDate = dateParts[2] + "-" + dateParts[1] + "-" + dateParts[0];
+            $('.js-datepicker').val(formattedDate);
+        });
+    });
 </script>
+

@@ -8,4 +8,4 @@ table_route:
 
 app_seance_new:
     path: '/seance/{idS}/new-seance'
-    controller: 'App\Controller\SalleController::newseance'
+    controller: 'App\Controller\SeanceController::new'

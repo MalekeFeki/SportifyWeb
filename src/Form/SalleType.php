@@ -45,10 +45,10 @@ class SalleType extends AbstractType
                     'Climatisation' => 'climatisation',
                 ],
             ])
-            ->add('imagesalle', Type\FileType::class, [
-                'required' => false, 
-            ]);
+            ->add('imagesalle');
     }
+
+
 
     public function configureOptions(OptionsResolver $resolver): void
     {

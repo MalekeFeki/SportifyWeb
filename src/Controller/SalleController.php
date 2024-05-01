@@ -36,20 +36,20 @@ class SalleController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // Handle file upload
-            $file = $form['imagesalle']->getData();
-            if ($file) {
-                $fileName = md5(uniqid()).'.'.$file->guessExtension();
+            // // Handle file upload
+            // $file = $form['imagesalle']->getData();
+            // if ($file) {
+            //     $fileName = md5(uniqid()).'.'.$file->guessExtension();
 
-                // Move the file to the directory where you want to store it
-                $file->move(
-                    $this->getParameter('salle_images_directory'),
-                    $fileName
-                );
+            //     // Move the file to the directory where you want to store it
+            //     $file->move(
+            //         $this->getParameter('salle_images_directory'),
+            //         $fileName
+            //     );
 
-                // Set the file name to the Salle entity
-                $salle->setImagesalle($fileName);
-            }
+            //     // Set the file name to the Salle entity
+            //     $salle->setImagesalle($fileName);
+            // }
 
             $entityManager->persist($salle);
             $entityManager->flush();
@@ -112,11 +112,11 @@ public function edit(Request $request, Salle $salle, EntityManagerInterface $ent
         return $this->redirectToRoute('index', [], Response::HTTP_SEE_OTHER);
     }
 
-    // #[Route('/newseance/{idS}', name: '')]
-public function newseance(Salle $salle): Response
-{
-    return $this->redirectToRoute('app_seance_new', ['idS' => $salle->getIdS()]);
-}
+//     // #[Route('/newseance/{idS}', name: '')]
+// public function newseance(Salle $salle): Response
+// {
+//     return $this->redirectToRoute('app_seance_new', ['idS' => $salle->getIdS()]);
+// }
 
 
 

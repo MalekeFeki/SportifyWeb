@@ -1,4 +1,4 @@
-{% extends 'base.html.twig' %}
+{# {% extends 'base.html.twig' %}
 
 {% block title %}Salle index{% endblock %}
 
@@ -10,7 +10,7 @@
 </style>
     <h1>Salle index</h1>
 
-    <table class="table">
+    <table class="table" style="color: white;">
         <thead>
             <tr>
                 <th>Ids</th>
@@ -49,4 +49,43 @@
     </table>
 
     <a href="{{ path('app_salle_new') }}">Create new</a>
+{% endblock %} #}
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des Salles{% endblock %}
+
+{% block body %}
+    <style>
+        .salle-card {
+            border: 0px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 10px;
+            background-color: #000000;
+        }
+        .salle-name {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .salle-address {
+            color: #666;
+            margin-bottom: 5px;
+        }
+        .salle-region {
+            color: #888;
+        }
+    </style>
+
+    <h1>Liste des Salles</h1>
+
+    {% for salle in salles %}
+        <div class="salle-card">
+            <div class="salle-name"> <a href="{{ path('app_salle_show', {'idS': salle.idS}) }}">{{ salle.nom }}</a>  <a href="{{ path('app_salle_edit', {'idS': salle.idS}) }}" class="white-text">edit</a>  </div>
+            <div class="salle-address">{{ salle.adresse }}</div>
+            <div class="salle-region">{{ salle.region }}</div>
+        </div>
+    {% endfor %}
 {% endblock %}
+

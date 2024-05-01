@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Seance;
-use App\Entit\Salle;
+use App\Entity\Salle;
 use App\Form\SeanceType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
