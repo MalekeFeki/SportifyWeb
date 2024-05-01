@@ -24,3 +24,4 @@ app_generate_qr_code:
     controller: 'App\Controller\QrCodeController::generateQrCode'
     methods: ['GET']
 
+
