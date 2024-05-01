@@ -41,7 +41,7 @@ class EventreservationType extends AbstractType
                 'required' => false,
                 'attr' => [
                     'class' => 'form-control',
-                    'id' => 'app_eventreservation_cin'
+                    'id' => 'eventreservation_cin'
                     
                 ]
             ])
@@ -68,11 +68,12 @@ class EventreservationType extends AbstractType
                 'label' => 'Événement',
                 'choice_label' => 'nomev', // Assuming 'nomev' is the property representing the name of the event
                 'required' => false,
-            ])->add('captcha', Recaptcha3Type::class, [
-                'constraints' => new Recaptcha3(),
-                'action_name' => 'homepage',
-                
             ]);
+            // ->add('captcha', Recaptcha3Type::class, [
+            //     'constraints' => new Recaptcha3(),
+            //     'action_name' => 'homepage',
+                
+            // ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

@@ -34,39 +34,38 @@ class EventreservationController extends AbstractController
             'eventreservations' => $eventreservationRepository->findAll(),
         ]);
     }
-    #[Route('/detect-cin/{idevent}', name: 'app_eventreservation_detect_cin', methods: ['POST'])]
-public function detectCIN(Request $request, Evenement $event): Response
-{
-    // Receive the captured image data
-    $imageDataUrl = $request->request->get('capturedImageData');
+    #[Route('/detect-cin/{idevent}', name: 'app_eventreservation_detect_cin', methods: ['GET', 'POST'])]
+    public function detectCIN(Request $request, Evenement $event): Response
+    {
+        // Receive the captured image data
+        $imageDataUrl = $request->request->get('capturedImageData');
 
-    // Convert base64 image data to a file
-    $imageData = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $imageDataUrl));
+        // Convert base64 image data to a file
+        $imageData = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $imageDataUrl));
 
-    // Create a temporary file path with a .jpg extension
-    $tempFilePath = tempnam(sys_get_temp_dir(), 'image_') . '.png';
-    
-    // Save the image data to the temporary file
-    file_put_contents($tempFilePath, $imageData);
-    // echo($tempFilePath);
-    // Execute the Python script
-    $process = new Process(['C:/Users/RAY3N/anaconda3/python.exe', 'C:\Users\RAY3N\Desktop\pi symfony\web_sportify\python\file1.py', $tempFilePath]);
-    $process->run();
-    
-    // Check if the process was successful
-    if (!$process->isSuccessful()) {
-        $error = $process->getErrorOutput();
-        return $this->json(['error' => 'Python script failed: ' . $error]);
+        // Create a temporary file path with a .jpg extension
+        $tempFilePath = tempnam(sys_get_temp_dir(), 'image_') . '.png';
+
+        // Save the image data to the temporary file
+        file_put_contents($tempFilePath, $imageData);
+        // echo($tempFilePath);
+        // Execute the Python script
+        $process = new Process(['C:/Users/RAY3N/anaconda3/python.exe', 'C:\Users\RAY3N\Desktop\pi symfony\web_sportify\SportifyWeb\src\Service\scriptfile1.py', $tempFilePath]);
+        $process->run();
+
+        // Check if the process was successful
+        if (!$process->isSuccessful()) {
+            $error = $process->getErrorOutput();
+            return $this->json(['error' => 'Python script failed: ' . $error]);
+        }
+        // echo ($process->getOutput().'aaa bb');
+        // Get the output of the Python script (ID numbers)
+        $idNumbers = json_decode($process->getOutput(), true);
+        // Process the ID numbers as needed
+
+        // Return a response
+        return $this->json(['cin' => $idNumbers['id_numbers'][0] ?? "" ]);
     }
-    echo($process->getOutput());
-    // Get the output of the Python script (ID numbers)
-    $idNumbers = json_decode($process->getOutput(), true);
-    // Process the ID numbers as needed
-    // ...
-
-    // Return a response
-    return $this->json(['cin' => $idNumbers['id_numbers'][0] ?? "1"]);
-}
 
     #[Route('/new/{idevent}', name: 'app_eventreservation_new', methods: ['GET', 'POST'])]
     public function new(MailerInterface $mailer, Request $request, EntityManagerInterface $entityManager, Evenement $event, UrlGeneratorInterface $urlGenerator): Response
@@ -74,7 +73,7 @@ public function detectCIN(Request $request, Evenement $event): Response
         $eventreservation = new Eventreservation();
         $eventreservation->setEventid($event); // Set the event for the reservation
 
-        
+
         $form = $this->createForm(EventreservationType::class, $eventreservation);
         $form->handleRequest($request);
 

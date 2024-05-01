@@ -72,6 +72,10 @@
 						{{ form_errors(form.cin) }}
 					</div>
 				{% endif %}
+				<button id="openCameraBtn">Open Camera</button>
+				<button id="captureBtn" style="display: none;">Capture Image</button>
+				<video id="cameraFeed" width="320" height="240" autoplay style="display: none;"></video>
+				<canvas id="capturedImageCanvas" style="display: none;"></canvas>
 			</div>
 			<div class="form-floating mb-3" style="margin: auto;
 			width: 50%;">
@@ -100,10 +104,7 @@
 
 </div>
     {# That will display the error of the captcha to user #}
-            <button id="openCameraBtn">Open Camera</button>
-
-<canvas id="capturedImageCanvas" style="display: none;"></canvas>
-<button id="captureBtn" style="display: none;">Capture Image</button>
+            
 		
 			{{ form_widget(form.eventid, {'attr': {'style': 'display:none;'}}) }}
 			<button type="submit" href="{{ path('app_evenement_show', {'idevent': evenement.idevent}) }}" class="btn btn-primary" style="    margin: 10px;
@@ -114,10 +115,10 @@
 			{{ form_end(form) }}
 		</div>
 	</section>
-        <video id="cameraFeed" width="320" height="240" style="display: none;"></video>
+
+
 	<script>
 document.addEventListener('DOMContentLoaded', function() {
-	var cinField ;
     const openCameraBtn = document.getElementById('openCameraBtn');
     const cameraFeed = document.getElementById('cameraFeed');
     const capturedImageCanvas = document.getElementById('capturedImageCanvas');
@@ -136,44 +137,75 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-     captureBtn.addEventListener('click', async function(event) {
+    captureBtn.addEventListener('click', function(event) {
         event.preventDefault(); // Prevent page from refreshing
-        if (stream && cameraFeed.srcObject) {
-            const track = stream.getVideoTracks()[0];
-            const imageCapture = new ImageCapture(track);
-            const capturedImageBitmap = await imageCapture.grabFrame();
-            capturedImageCanvas.width = capturedImageBitmap.width;
-            capturedImageCanvas.height = capturedImageBitmap.height;
-            const ctx = capturedImageCanvas.getContext('2d');
-            ctx.drawImage(capturedImageBitmap, 0, 0);
-            const capturedImageDataUrl = capturedImageCanvas.toDataURL('image/jpeg');
-
-            // Send the captured image data to the server for processing
-            const formData = new FormData();
-            formData.append('capturedImageData', capturedImageDataUrl);
-
-            fetch('{{ path('app_eventreservation_detect_cin', {'idevent': evenement.idevent}) }}', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-    		console.log(data); // Log the data received from the server
-    		const cinNumber = data.cin;
-                    // Populate the CIN field in the form
-                    const cinField = document.getElementById('eventreservation_cin');
-                     cinField.value = cinNumber;
-
-		})
-            .catch(error => {
-                console.error('Error:', error);
-            });
-			
-        }
-		event.preventDefault();
+        startCapturing();
     });
+
+    function startCapturing() {
+        const intervalId = setInterval(captureAndSend, 2000); // Capture every 3 seconds
+        captureBtn.addEventListener('click', stopCapturing);
+
+        function captureAndSend() {
+            if (stream && cameraFeed.srcObject) {
+                const track = stream.getVideoTracks()[0];
+                const imageCapture = new ImageCapture(track);
+                imageCapture.grabFrame()
+                    .then(capturedImageBitmap => {
+                        capturedImageCanvas.width = capturedImageBitmap.width;
+                        capturedImageCanvas.height = capturedImageBitmap.height;
+                        const ctx = capturedImageCanvas.getContext('2d');
+                        ctx.drawImage(capturedImageBitmap, 0, 0);
+                        const capturedImageDataUrl = capturedImageCanvas.toDataURL('image/jpeg');
+
+                        // Send the captured image data to the server for processing
+                        const formData = new FormData();
+                        formData.append('capturedImageData', capturedImageDataUrl);
+
+                        fetch('{{ path('app_eventreservation_detect_cin', {'idevent': evenement.idevent}) }}', {
+                            method: 'POST',
+                            body: formData
+                        })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Network response was not ok');
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+							var db = JSON.stringify(data);
+							var db = JSON.parse(db);
+                            const cin = db.cin;
+                            if (cin.length === 8) {
+								const cinField = document.getElementById('eventreservation_cin');
+                				cinField.value = cin;
+                                stopCapturing();
+                            } else {
+                                
+                
+                
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                        });
+                    })
+                    .catch(error => {
+                        console.error('Error capturing image:', error);
+                    });
+            }
+        }
+
+        function stopCapturing() {
+            clearInterval(intervalId);
+            captureBtn.removeEventListener('click', stopCapturing);
+			stream.getTracks().forEach(track => track.stop()); // Stop the camera feed
+			cameraFeed.style.display = 'none';
+        }
+    }
 });
 </script>
+
 
 
 {% endblock %}

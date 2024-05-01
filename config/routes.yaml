@@ -25,3 +25,10 @@ event_pdf:
     path: /event/{idevent}/pdf
     controller: App\Controller\EvenementController::generateEventPdfnow
 
+app_eventreservation_detect_cin:
+    path: reservation/detect-cin/{idevent}
+    controller: App\Controller\EventreservationController::detectCIN
+    methods: ['POST','GET']
+
+
+
