@@ -35,7 +35,7 @@
 
 	<section style="background-color: #7a7a7a;">
 		<h1 style="color:white;">Create new Eventreservation</h1>
-		{{ form_start(form) }}
+		{{ form_start(form, {'id': 'reservationForm'}) }}
 		<div >
 			<div class="form-floating mb-3" style="margin: auto;
 			width: 50%;" >
@@ -66,7 +66,7 @@
 			width: 50%;" >
 				{{ form_label(form.cin, null, {'attr': {'class': 'custom-label'}, 'attr': {'for': 'floatingInput'}}) }}
 
-				{{ form_widget(form.cin, {'attr': {'class': 'form-control', 'id': 'floatingInput'}}) }}
+				{{ form_widget(form.cin, {'attr': {'class': 'form-control' ,'id': 'eventreservation_cin'}}) }}
 				{% if form_errors(form.cin) %}
 					<div class="alert alert-primary" role="alert">
 						{{ form_errors(form.cin) }}
@@ -95,15 +95,85 @@
 					</div>
 				{% endif %}
 			</div>
+<div>
 
+
+</div>
     {# That will display the error of the captcha to user #}
+            <button id="openCameraBtn">Open Camera</button>
 
+<canvas id="capturedImageCanvas" style="display: none;"></canvas>
+<button id="captureBtn" style="display: none;">Capture Image</button>
+		
 			{{ form_widget(form.eventid, {'attr': {'style': 'display:none;'}}) }}
 			<button type="submit" href="{{ path('app_evenement_show', {'idevent': evenement.idevent}) }}" class="btn btn-primary" style="    margin: 10px;
     width: 12%;
     margin-left: 468px;">Save</button>
+	
 			<a href="{{ path('app_evenement_show', {'idevent': evenement.idevent}) }}" class="btn btn-secondary">Back to event</a>
 			{{ form_end(form) }}
 		</div>
 	</section>
+        <video id="cameraFeed" width="320" height="240" style="display: none;"></video>
+	<script>
+document.addEventListener('DOMContentLoaded', function() {
+	var cinField ;
+    const openCameraBtn = document.getElementById('openCameraBtn');
+    const cameraFeed = document.getElementById('cameraFeed');
+    const capturedImageCanvas = document.getElementById('capturedImageCanvas');
+    const captureBtn = document.getElementById('captureBtn');
+    let stream = null;
+
+    openCameraBtn.addEventListener('click', async function(event) {
+        event.preventDefault(); // Prevent page from refreshing
+        try {
+            stream = await navigator.mediaDevices.getUserMedia({ video: true });
+            cameraFeed.srcObject = stream;
+            cameraFeed.style.display = 'block'; // Show the video element
+            captureBtn.style.display = 'block';
+        } catch (error) {
+            console.error('Error accessing camera:', error);
+        }
+    });
+
+     captureBtn.addEventListener('click', async function(event) {
+        event.preventDefault(); // Prevent page from refreshing
+        if (stream && cameraFeed.srcObject) {
+            const track = stream.getVideoTracks()[0];
+            const imageCapture = new ImageCapture(track);
+            const capturedImageBitmap = await imageCapture.grabFrame();
+            capturedImageCanvas.width = capturedImageBitmap.width;
+            capturedImageCanvas.height = capturedImageBitmap.height;
+            const ctx = capturedImageCanvas.getContext('2d');
+            ctx.drawImage(capturedImageBitmap, 0, 0);
+            const capturedImageDataUrl = capturedImageCanvas.toDataURL('image/jpeg');
+
+            // Send the captured image data to the server for processing
+            const formData = new FormData();
+            formData.append('capturedImageData', capturedImageDataUrl);
+
+            fetch('{{ path('app_eventreservation_detect_cin', {'idevent': evenement.idevent}) }}', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+    		console.log(data); // Log the data received from the server
+    		const cinNumber = data.cin;
+                    // Populate the CIN field in the form
+                    const cinField = document.getElementById('eventreservation_cin');
+                     cinField.value = cinNumber;
+
+		})
+            .catch(error => {
+                console.error('Error:', error);
+            });
+			
+        }
+		event.preventDefault();
+    });
+});
+</script>
+
+
 {% endblock %}

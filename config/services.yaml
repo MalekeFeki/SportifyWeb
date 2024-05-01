@@ -7,6 +7,8 @@ parameters:
     
     upload_directory: '%kernel.project_dir%/public/upload_directory'
 services:
+    Pyrrah\OpenWeatherMapBundle\Services\Client: '@pyrrah.openweathermap.client'
+
     # default configuration for services in *this* file
     _defaults:
         autowire: true      # Automatically injects dependencies in your services.

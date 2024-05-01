@@ -17,6 +17,8 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Pyrrah\OpenWeatherMapBundle\Services\Client;
+use Symfony\Component\HttpClient\HttpClient;
 
 #[Route('/event')]
 class EvenementController extends AbstractController
@@ -79,6 +81,8 @@ class EvenementController extends AbstractController
     #[Route('/allevent', name: 'allevent', methods: ['GET'])]
     public function allevent(Request $request, EvenementRepository $evenementRepository, PaginatorInterface $paginator): Response
     {
+
+        
         // Retrieve search query from the request
         $searchQuery = $request->query->get('query');
 
@@ -202,9 +206,59 @@ class EvenementController extends AbstractController
         ]);
     }
     #[Route('/{idevent}', name: 'app_evenement_show', methods: ['GET'])]
-    public function show(Evenement $evenement): Response
+    public function show(Evenement $evenement,Client $weatherClient): Response
     {
+        // Get latitude and longitude from the event
+    $latitude = $evenement->getLat();
+    $longitude = $evenement->getLon();
+
+    // Get the start date of the event
+    $startDate = $evenement->getDatedDebutEV()->format('Y-m-d');
+
+    // Your WeatherAPI.com API key
+    $apiKey = 'cb88a4d536274914ac9180047242904';
+
+    // Prepare the API URL with the required parameters
+    $url = sprintf(
+        'http://api.weatherapi.com/v1/current.json?q=%s,%s&key=%s&dt=%s',
+        $latitude,
+        $longitude,
+        $apiKey,
+        $startDate
+    );
+    $httpClient = HttpClient::create();
+    // Make a GET request to the API
+    $response = $httpClient->request('GET', $url);
+
+    // Decode the JSON response
+    $weatherData = $response->toArray();
+
+    // Handle the weather data as needed
+    // Example: Extract temperature
+    $temperature = $weatherData['current']['temp_c'];
+
+    // Example: Extract weather condition
+    $weatherCondition = $weatherData['current']['condition']['text'];
+    $localTime = $weatherData['location']['localtime'];
+
+
+    
+    
+
+
+
+        // Get the current date and time
+        $currentDateTime = new \DateTime();
+
+        // Check if the event is happening now or has already passed
+        $isEventPassed = $currentDateTime > $evenement->getDatedFinEV();
+        $isEventHappeningNow = $currentDateTime >= $evenement->getDatedDebutEV() && $currentDateTime <= $evenement->getDatedFinEV();
+        // Check if the event capacity is greater than 0
+        $isCapacityGreaterThanZero = $evenement->getCapacite() > 0;
         // Format the DateTime objects as strings
+        // $location = $evenement->getLat() . ',' . $evenement->getLon();
+        
+        // $weather = $weatherClient->getWeather($location);
         $formattedDatedDebutEV = $evenement->getDatedDebutEV()->format('Y-m-d');
         $formattedDatedFinEV = $evenement->getDatedFinEV()->format('Y-m-d');
         $formattedHeureEV = $evenement->getHeureEV();
@@ -213,6 +267,13 @@ class EvenementController extends AbstractController
             'formattedDatedDebutEV' => $formattedDatedDebutEV,
             'formattedDatedFinEV' => $formattedDatedFinEV,
             'formattedHeureEV' => $formattedHeureEV,
+            'isCapacityGreaterThanZero' => $isCapacityGreaterThanZero,
+            'isEventPassed' => $isEventPassed,
+            'isEventHappeningNow' => $isEventHappeningNow,
+            'temperature' => $temperature,
+            'weatherCondition' => $weatherCondition, // Pass weather data to the template
+            'localTime'=>$localTime ,
+
         ]);
     }
     // --------------------------admin-----------------------------------------------
@@ -358,6 +419,8 @@ class EvenementController extends AbstractController
 
         return $this->redirectToRoute('app_evenement_index', [], Response::HTTP_SEE_OTHER);
     }
+
+    
     public function increaseInterest($idevent, EntityManagerInterface $entityManager): Response
     {
         // Get the event by its ID and increment the number of interested people
@@ -380,12 +443,14 @@ class EvenementController extends AbstractController
         // You can directly redirect to the reservation page or perform additional logic here if needed
         return $this->redirectToRoute('app_eventreservation_new', ['eventid' => $evenement->getIdevent()]);
     }
+
+
     #[Route('/event/{idevent}/pdf', name: 'event_pdf')]
     public function generateEventPdfnow(Evenement $evenement, PdfService $pdfService): Response
     {
         $name= $evenement->getNomev();
         // Generate PDF for the event
-        $pdfService->generateEventPdf($evenement,$name);
+        $pdfService->printEvent($evenement,$name);
 
         // Optionally, you can return a response or redirect
         // For example, redirect back to the event details page

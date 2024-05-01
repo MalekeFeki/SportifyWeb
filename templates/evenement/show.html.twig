@@ -18,7 +18,7 @@
 								{{ evenement.role }}</li>
 							<li>{{ evenement.dateddebutev|date('M d, Y') }}</li>
 							<!-- You may need to adjust this based on your actual data -->
-							<li>20 Comment</li>
+							<li>{{ evenement.heureev}}</li>
 						</ul>
 					</div>
 				</div>
@@ -27,13 +27,24 @@
 	</section>
 	<!-- Blog Details Hero Section End -->
 	<span id="countdownLabel" class="countdown-label" style="font-size: 16px;
-		    color: #333;"></span>
+								    color: #fffff;"></span>
 	<!-- Blog Details Section Begin -->
 	<section class="blog-details-section spad">
-		<div id="countdown"></div>
+		<div id="countdown" style="    font-size: 20px;
+									    color: #f00;
+									    margin-top: 20px;
+									    text-align: center;"></div>
 		<!-- Add buttons wherever you want them to appear -->
 		<a href="{{ path('increase_interest', {'idevent': evenement.idevent}) }}" class="btn btn-primary" id="interestButton">Increase Interest</a>
-		<a href="{{ path('app_eventreservation_new', {'idevent': evenement.idevent}) }}" class="btn btn-primary">Make Reservation</a>
+		{% if isCapacityGreaterThanZero %}
+			{% if not isEventPassed and not isEventHappeningNow %}
+				<a href="{{ path('app_eventreservation_new', {'idevent': evenement.idevent}) }}" class="btn btn-primary">Make Reservation</a>
+			{% else %}
+				<button class="btn btn-primary" disabled>Make Reservation</button>
+			{% endif %}
+		{% else %}
+			<button class="btn btn-primary" disabled>Make Reservation</button>
+		{% endif %}
 
 
 		<div class="container">
@@ -56,6 +67,17 @@
 				<div id="map" style="height: 300px;"></div>
 			</div>
 		</section>
+		{# Display weather information #}
+{% if temperature is defined and weatherCondition is defined %}
+    <div>
+        <h2>Weather Information</h2>
+        <p>Temperature: {{ temperature }}°C</p>
+        <p>Weather: {{ weatherCondition }}</p>
+		
+        {# Add more weather information as needed #}
+    </div>
+{% endif %}
+
 		<!-- Event Location Map Section End -->
 
 		<script>

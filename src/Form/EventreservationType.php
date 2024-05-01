@@ -41,7 +41,8 @@ class EventreservationType extends AbstractType
                 'required' => false,
                 'attr' => [
                     'class' => 'form-control',
-                    'id' => 'floatingInput'
+                    'id' => 'app_eventreservation_cin'
+                    
                 ]
             ])
             ->add('email', EmailType::class, [
@@ -81,3 +82,4 @@ class EventreservationType extends AbstractType
         ]);
     }
 }
+
