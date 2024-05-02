@@ -11,6 +11,7 @@ use App\Service\PdfService;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Knp\Component\Pager\PaginatorInterface;
+use MercurySeries\FlashyBundle\FlashyNotifier;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -278,7 +279,7 @@ class EvenementController extends AbstractController
     }
     // --------------------------admin-----------------------------------------------
     #[Route('/admin/new', name: 'app_evenement_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, ManagerRegistry $entityManager): Response
+    public function new(Request $request, ManagerRegistry $entityManager,FlashyNotifier $flashy): Response
     {
         // Create a new instance of Evenement entity
         $event = new Evenement();
@@ -289,7 +290,7 @@ class EvenementController extends AbstractController
 
         // Check if the form is submitted and valid
         if ($form->isSubmitted() && $form->isValid()) {
-
+            $flashy->success('found cin !', '');
             $existingEvent = $entityManager->getRepository(Evenement::class)->findOneBy(['nomev' => $event->getNomev()]);
             if ($existingEvent) {
                 $form->get('nomev')->addError(new \Symfony\Component\Form\FormError('Event name must be unique.'));
@@ -421,21 +422,35 @@ class EvenementController extends AbstractController
     }
 
     
-    public function increaseInterest($idevent, EntityManagerInterface $entityManager): Response
-    {
-        // Get the event by its ID and increment the number of interested people
-        $event = $entityManager->getRepository(Evenement::class)->find($idevent);
-        if ($event) {
-            $event->setNombrepersonneinteresse($event->getNombrepersonneinteresse() + 1);
-            $entityManager->flush();
-
-            // Return JSON response with updated interest count
-            return new JsonResponse(['interested' => true, 'newInterestCount' => $event->getNombrepersonneinteresse()]);
-        }
-
-        // Return JSON response indicating failure
-        return new JsonResponse(['error' => 'Event not found'], Response::HTTP_NOT_FOUND);
+    public function increaseInterest($idevent, Request $request, EntityManagerInterface $entityManager): JsonResponse
+{
+    // Get the event by its ID
+    $event = $entityManager->getRepository(Evenement::class)->find($idevent);
+    
+    if (!$event) {
+        return new JsonResponse(['error' => 'Event not found'], JsonResponse::HTTP_NOT_FOUND);
     }
+    
+    // Get the current interest count
+    $currentInterestCount = $event->getNombrepersonneinteresse();
+    
+    // Check if the user is currently interested based on the request data
+    $isInterested = $request->request->get('isInterested');
+    
+    if ($isInterested) {
+        // If the user is currently interested, decrement the interest count
+        $event->setNombrepersonneinteresse($currentInterestCount - 1);
+    } else {
+        // If the user is not currently interested, increment the interest count
+        $event->setNombrepersonneinteresse($currentInterestCount + 1);
+    }
+    
+    // Persist changes to the database
+    $entityManager->flush();
+    
+    // Return JSON response with updated interest count
+    return new JsonResponse(['interested' => !$isInterested, 'newInterestCount' => $event->getNombrepersonneinteresse()]);
+}
 
     public function makeReservation(Evenement $evenement): Response
     {
@@ -446,11 +461,12 @@ class EvenementController extends AbstractController
 
 
     #[Route('/event/{idevent}/pdf', name: 'event_pdf')]
-    public function generateEventPdfnow(Evenement $evenement, PdfService $pdfService): Response
+    public function generateEventPdfnow(Evenement $evenement, PdfService $pdfService,FlashyNotifier $flashy): Response
     {
         $name= $evenement->getNomev();
         // Generate PDF for the event
         $pdfService->printEvent($evenement,$name);
+        $flashy->success('found cin !', '');
 
         // Optionally, you can return a response or redirect
         // For example, redirect back to the event details page

@@ -7,6 +7,7 @@ use App\Entity\Eventreservation;
 use App\Form\EventreservationType;
 use App\Repository\EventreservationRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use MercurySeries\FlashyBundle\FlashyNotifier;
 use phpDocumentor\Reflection\Types\Integer;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormError;
@@ -27,6 +28,7 @@ use Symfony\Component\Process\Process;
 #[Route('/reservation')]
 class EventreservationController extends AbstractController
 {
+    
     #[Route('/show', name: 'app_eventreservation_index', methods: ['GET'])]
     public function index(EventreservationRepository $eventreservationRepository): Response
     {
@@ -35,7 +37,7 @@ class EventreservationController extends AbstractController
         ]);
     }
     #[Route('/detect-cin/{idevent}', name: 'app_eventreservation_detect_cin', methods: ['GET', 'POST'])]
-    public function detectCIN(Request $request, Evenement $event): Response
+    public function detectCIN(Request $request, Evenement $event,FlashyNotifier $flashy): Response
     {
         // Receive the captured image data
         $imageDataUrl = $request->request->get('capturedImageData');
@@ -62,13 +64,17 @@ class EventreservationController extends AbstractController
         // Get the output of the Python script (ID numbers)
         $idNumbers = json_decode($process->getOutput(), true);
         // Process the ID numbers as needed
-
+        if ($idNumbers['id_numbers'][0] ?? '' == 8) {
+            // Trigger Flashy success message
+            $flashy->success('found cin !', '');
+        }
+        
         // Return a response
         return $this->json(['cin' => $idNumbers['id_numbers'][0] ?? "" ]);
     }
 
     #[Route('/new/{idevent}', name: 'app_eventreservation_new', methods: ['GET', 'POST'])]
-    public function new(MailerInterface $mailer, Request $request, EntityManagerInterface $entityManager, Evenement $event, UrlGeneratorInterface $urlGenerator): Response
+    public function new(MailerInterface $mailer, Request $request, EntityManagerInterface $entityManager,FlashyNotifier $flashy, Evenement $event, UrlGeneratorInterface $urlGenerator): Response
     {
         $eventreservation = new Eventreservation();
         $eventreservation->setEventid($event); // Set the event for the reservation
@@ -78,7 +84,7 @@ class EventreservationController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
+            $flashy->success('Eventresravation created!');
             $recaptchaResponse = $request->request->get('g-recaptcha-response');
             $entityManager->persist($eventreservation);
             $entityManager->flush();
@@ -89,9 +95,11 @@ class EventreservationController extends AbstractController
                 ->html($this->renderView('reservation_confirmation.html.twig', [
                     'username' => $eventreservation->getNom(),
                     'event_name' => $eventreservation->getPrenom(),
+                    'id_reservation' =>$eventreservation->getReservationid(),
                 ]));
 
             $mailer->send($email);
+            
             return new RedirectResponse(
                 $urlGenerator->generate('app_evenement_show', ['idevent' => $event->getIdevent()])
             );

@@ -40,10 +40,18 @@
         <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@500&display=swap" rel="stylesheet">
     <!--Stylesheet-->
-    
+    <!-- Flashy depends on jQuery -->
+    <!-- Include jQuery -->
+    <link rel="stylesheet" href="{{ asset('bundles/mercuryseriesflashy/css/flashy.css') }}">
+    <!-- Flashy depends on jQuery -->
+    <script src="//code.jquery.com/jquery.js"></script>
+    <!-- Load Flashy default JavaScript -->
+    <script src="{{ asset('bundles/mercuryseriesflashy/js/flashy.js') }}"></script>
+
 	</head>
 
 	<body>
+	
 		<div
 			class="container-fluid position-relative d-flex p-0">
 			<!-- Spinner Start -->
@@ -196,6 +204,12 @@
 					</div>
 				</div>
 			</nav>
+			<div class="flashy" style="top: 99px;
+    right: 136px;" >
+			<p>11</p>
+			{{ include('@MercurySeriesFlashy/flashy.html.twig') }}
+			</div>
+
 			<!-- Navbar End -->
 			{% block body %}{% endblock %}
 

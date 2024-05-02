@@ -12,13 +12,24 @@
 
 		/* Center the form */
 		.custom-form {
-			 /* Adjust the width as needed */
+			;
+			/* Adjust the width as needed */
 			/* Add any other styling for centering */
 		}
 	</style>
 {% endblock %}
 {% form_theme form _self %}
 {% block body %}
+ <!-- Include Flashy default partial -->
+    
+	{# <script>
+        // Optionally, you can trigger a Flashy message using JavaScript
+        // Example: Trigger a Flashy success message after 3 seconds
+        setTimeout(function() {
+            Flashy.create('success', 'Your success message here');
+        }, 6000);
+    </script> #}
+
 	<section class="blog-details-hero set-bg" data-setbg="{{ asset(evenement.photo) }}">
 		<div class="container">
 			<div class="row">
@@ -36,9 +47,9 @@
 	<section style="background-color: #7a7a7a;">
 		<h1 style="color:white;">Create new Eventreservation</h1>
 		{{ form_start(form, {'id': 'reservationForm'}) }}
-		<div >
+		<div>
 			<div class="form-floating mb-3" style="margin: auto;
-			width: 50%;" >
+													width: 50%;">
 
 
 				{{ form_label(form.nom, null, {'label_attr': {'for': 'floatingInput','class': 'custom-label'}}) }}
@@ -52,7 +63,7 @@
 			</div>
 
 			<div class="form-floating mb-3" style="margin: auto;
-			width: 50%;">
+													width: 50%;">
 				{{ form_label(form.prenom, null, {'label_attr': {'class': 'custom-label'}, 'attr': {'for': 'floatingInput'}}) }}
 				{{ form_widget(form.prenom, {'attr': {'class': 'form-control', 'id': 'floatingInput'}}) }}
 
@@ -63,7 +74,7 @@
 				{% endif %}
 			</div>
 			<div class="form-floating mb-3" style="margin: auto;
-			width: 50%;" >
+													width: 50%;">
 				{{ form_label(form.cin, null, {'attr': {'class': 'custom-label'}, 'attr': {'for': 'floatingInput'}}) }}
 
 				{{ form_widget(form.cin, {'attr': {'class': 'form-control' ,'id': 'eventreservation_cin'}}) }}
@@ -72,13 +83,34 @@
 						{{ form_errors(form.cin) }}
 					</div>
 				{% endif %}
-				<button id="openCameraBtn">Open Camera</button>
-				<button id="captureBtn" style="display: none;">Capture Image</button>
+				<button id="openCameraBtn" style="
+					font-size: 14px;
+    color: #ffffff;
+    text-transform: uppercase;
+    font-weight: 700;
+    width: 17%;
+    border: none;
+    padding: 14px 0 12px;
+    background: #101010;
+    margin: 10px;
+    margin-left: 07px;">Open Camera</button>
+				<button id="captureBtn" style="
+					font-size: 14px;
+    color: #ffffff;
+    text-transform: uppercase;
+    font-weight: 700;
+    width: 17%;
+    border: none;
+    padding: 14px 0 12px;
+    background: #101010;
+    margin: 10px;
+    margin-left: 07px; 
+						display: none;" >Capture Image</button>
 				<video id="cameraFeed" width="320" height="240" autoplay style="display: none;"></video>
 				<canvas id="capturedImageCanvas" style="display: none;"></canvas>
 			</div>
 			<div class="form-floating mb-3" style="margin: auto;
-			width: 50%;">
+													width: 50%;">
 				{{ form_label(form.email, null, {'attr': {'for': 'floatingInput','class': 'custom-label'}}) }}
 
 				{{ form_widget(form.email, {'attr': {'class': 'form-control', 'id': 'floatingInput'}}) }}
@@ -89,7 +121,7 @@
 				{% endif %}
 			</div>
 			<div class="form-floating mb-3" style="margin: auto;
-			width: 50%;">
+													width: 50%;">
 				{{ form_label(form.numTele, null, {'attr': {'for': 'floatingInput','class': 'custom-label'}}) }}
 
 				{{ form_widget(form.numTele, {'attr': {'class': 'form-control', 'id': 'floatingInput'}}) }}
@@ -99,18 +131,23 @@
 					</div>
 				{% endif %}
 			</div>
-<div>
+			<div></div>
+			{# That will display the error of the captcha to user #}
 
 
-</div>
-    {# That will display the error of the captcha to user #}
-            
-		
 			{{ form_widget(form.eventid, {'attr': {'style': 'display:none;'}}) }}
-			<button type="submit" href="{{ path('app_evenement_show', {'idevent': evenement.idevent}) }}" class="btn btn-primary" style="    margin: 10px;
-    width: 12%;
-    margin-left: 468px;">Save</button>
-	
+			<button type="submit" href="{{ path('app_evenement_show', {'idevent': evenement.idevent}) }}" class="btn btn-primary" style="
+					font-size: 14px;
+				    color: #ffffff;
+				    text-transform: uppercase;
+				    font-weight: 700;
+				    width: 13%;
+				    border: none;
+				    padding: 14px 0 12px;
+				    background: #f36100;
+					margin: 10px;
+					    margin-left: 628px;">Save</button>
+
 			<a href="{{ path('app_evenement_show', {'idevent': evenement.idevent}) }}" class="btn btn-secondary">Back to event</a>
 			{{ form_end(form) }}
 		</div>
@@ -118,94 +155,85 @@
 
 
 	<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const openCameraBtn = document.getElementById('openCameraBtn');
-    const cameraFeed = document.getElementById('cameraFeed');
-    const capturedImageCanvas = document.getElementById('capturedImageCanvas');
-    const captureBtn = document.getElementById('captureBtn');
-    let stream = null;
+		document.addEventListener('DOMContentLoaded', function () {
+const openCameraBtn = document.getElementById('openCameraBtn');
+const cameraFeed = document.getElementById('cameraFeed');
+const capturedImageCanvas = document.getElementById('capturedImageCanvas');
+const captureBtn = document.getElementById('captureBtn');
+let stream = null;
 
-    openCameraBtn.addEventListener('click', async function(event) {
-        event.preventDefault(); // Prevent page from refreshing
-        try {
-            stream = await navigator.mediaDevices.getUserMedia({ video: true });
-            cameraFeed.srcObject = stream;
-            cameraFeed.style.display = 'block'; // Show the video element
-            captureBtn.style.display = 'block';
-        } catch (error) {
-            console.error('Error accessing camera:', error);
-        }
-    });
-
-    captureBtn.addEventListener('click', function(event) {
-        event.preventDefault(); // Prevent page from refreshing
-        startCapturing();
-    });
-
-    function startCapturing() {
-        const intervalId = setInterval(captureAndSend, 2000); // Capture every 3 seconds
-        captureBtn.addEventListener('click', stopCapturing);
-
-        function captureAndSend() {
-            if (stream && cameraFeed.srcObject) {
-                const track = stream.getVideoTracks()[0];
-                const imageCapture = new ImageCapture(track);
-                imageCapture.grabFrame()
-                    .then(capturedImageBitmap => {
-                        capturedImageCanvas.width = capturedImageBitmap.width;
-                        capturedImageCanvas.height = capturedImageBitmap.height;
-                        const ctx = capturedImageCanvas.getContext('2d');
-                        ctx.drawImage(capturedImageBitmap, 0, 0);
-                        const capturedImageDataUrl = capturedImageCanvas.toDataURL('image/jpeg');
-
-                        // Send the captured image data to the server for processing
-                        const formData = new FormData();
-                        formData.append('capturedImageData', capturedImageDataUrl);
-
-                        fetch('{{ path('app_eventreservation_detect_cin', {'idevent': evenement.idevent}) }}', {
-                            method: 'POST',
-                            body: formData
-                        })
-                        .then(response => {
-                            if (!response.ok) {
-                                throw new Error('Network response was not ok');
-                            }
-                            return response.json();
-                        })
-                        .then(data => {
-							var db = JSON.stringify(data);
-							var db = JSON.parse(db);
-                            const cin = db.cin;
-                            if (cin.length === 8) {
-								const cinField = document.getElementById('eventreservation_cin');
-                				cinField.value = cin;
-                                stopCapturing();
-                            } else {
-                                
-                
-                
-                            }
-                        })
-                        .catch(error => {
-                            console.error('Error:', error);
-                        });
-                    })
-                    .catch(error => {
-                        console.error('Error capturing image:', error);
-                    });
-            }
-        }
-
-        function stopCapturing() {
-            clearInterval(intervalId);
-            captureBtn.removeEventListener('click', stopCapturing);
-			stream.getTracks().forEach(track => track.stop()); // Stop the camera feed
-			cameraFeed.style.display = 'none';
-        }
-    }
+openCameraBtn.addEventListener('click', async function (event) {
+event.preventDefault(); // Prevent page from refreshing
+try {
+stream = await navigator.mediaDevices.getUserMedia({video: true});
+cameraFeed.srcObject = stream;
+cameraFeed.style.display = 'block'; // Show the video element
+captureBtn.style.display = 'block';
+} catch (error) {
+console.error('Error accessing camera:', error);
+}
 });
-</script>
+
+captureBtn.addEventListener('click', function (event) {
+event.preventDefault(); // Prevent page from refreshing
+startCapturing();
+});
+
+function startCapturing() {
+const intervalId = setInterval(captureAndSend, 2000); // Capture every 3 seconds
+captureBtn.addEventListener('click', stopCapturing);
+
+function captureAndSend() {
+if (stream && cameraFeed.srcObject) {
+const track = stream.getVideoTracks()[0];
+const imageCapture = new ImageCapture(track);
+imageCapture.grabFrame().then(capturedImageBitmap => {
+capturedImageCanvas.width = capturedImageBitmap.width;
+capturedImageCanvas.height = capturedImageBitmap.height;
+const ctx = capturedImageCanvas.getContext('2d');
+ctx.drawImage(capturedImageBitmap, 0, 0);
+const capturedImageDataUrl = capturedImageCanvas.toDataURL('image/jpeg');
+
+// Send the captured image data to the server for processing
+const formData = new FormData();
+formData.append('capturedImageData', capturedImageDataUrl);
+
+fetch('{{ path('app_eventreservation_detect_cin', {'idevent': evenement.idevent}) }}', {
+method: 'POST',
+body: formData
+}).then(response => {
+if (!response.ok) {
+throw new Error('Network response was not ok');
+}
+return response.json();
+}).then(data => {
+var db = JSON.stringify(data);
+var db = JSON.parse(db);
+const cin = db.cin;
+if (cin.length === 8) {
+const cinField = document.getElementById('eventreservation_cin');
+cinField.value = cin;
+stopCapturing();
+} else {}
+}).catch(error => {
+console.error('Error:', error);
+});
+}).catch(error => {
+console.error('Error capturing image:', error);
+});
+}
+}
+
+function stopCapturing() {
+clearInterval(intervalId);
+captureBtn.removeEventListener('click', stopCapturing);
+stream.getTracks().forEach(track => track.stop()); // Stop the camera feed
+cameraFeed.style.display = 'none';
+}
+}
+});
+	</script>
 
 
-
+    
 {% endblock %}
