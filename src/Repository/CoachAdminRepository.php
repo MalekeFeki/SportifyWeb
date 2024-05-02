@@ -26,4 +26,14 @@ class CoachAdminRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+    public function findByFirstLetter($letter)
+{
+    return $this->createQueryBuilder('c')
+        ->andWhere('c.nom LIKE :letter OR c.prenom LIKE :letter')
+        ->setParameter('letter', $letter.'%')
+        ->orderBy('c.nom', 'ASC')
+        ->getQuery()
+        ->getResult();
+}
+
 }

@@ -29,3 +29,8 @@ coach_client_new:
 coach_admin_showclient:
     path: '/coach_admin/showclient/{id}'
     controller: 'App\Controller\CoachController::showClient'
+
+app_coach_stats:
+    path: /coach/stats
+    controller: App\Controller\CoachAdminController::stats
+

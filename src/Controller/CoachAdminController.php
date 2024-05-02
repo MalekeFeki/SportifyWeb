@@ -11,19 +11,29 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 #[Route('/coach/admin')]
 class CoachAdminController extends AbstractController
 {
-    public function index(CoachAdminRepository $coachRepository): Response
+    #[Route('/', name: 'app_coach_stats', methods: ['GET'])]
+    public function index(Request $request, CoachAdminRepository $coachAdminRepository): Response
     {
-        $coach_admins = $coachRepository->findAll();
+        $letter = $request->query->get('letter');
+        $coach_admins = [];
+    
+        if ($letter) {
+            // Effectuer la recherche en fonction de la lettre sélectionnée
+            $coach_admins = $coachAdminRepository->findByFirstLetter($letter);
+        } else {
+            // Afficher tous les coachs si aucune lettre n'est sélectionnée
+            $coach_admins = $coachAdminRepository->findAll();
+        }
     
         return $this->render('coach_admin/index.html.twig', [
-            'coach_admins' => $coach_admins, // Change 'coachs' to 'coach_admins'
+            'coach_admins' => $coach_admins,
         ]);
     }
-    
     
     #[Route('/new', name: 'app_coach_admin_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager, CoachAdminRepository $coachAdminRepository): Response
@@ -62,6 +72,12 @@ class CoachAdminController extends AbstractController
                 } catch (FileException $e) {
                     // Gérer les erreurs d'upload
                 }
+            } else {
+                // Set the photo attribute even if no new photo is uploaded
+                if (!$photoFile && $coach_admin->getPhoto()) {
+                    // Preserve the existing photo if no new one is uploaded
+                    $coach_admin->setPhoto($coach_admin->getPhoto());
+                }
             }
     
             $entityManager->persist($coach_admin);
@@ -76,12 +92,37 @@ class CoachAdminController extends AbstractController
         ]);
     }
     
-
     #[Route('/{id}', name: 'app_coach_admin_show', methods: ['GET'])]
-    public function show(CoachAdmin $coach_admins): Response
+   
+    public function show(Request $request, CoachAdmin $coach_admins, CoachAdminRepository $coachAdminRepository): Response
     {
+        // Créer le formulaire de recherche
+        $searchForm = $this->createFormBuilder(null, ['attr' => ['class' => 'form-inline']])
+            ->add('nom', TextType::class, ['required' => false, 'label' => 'Nom', 'attr' => ['class' => 'form-control mr-sm-2', 'placeholder' => 'Nom']])
+            ->add('prenom', TextType::class, ['required' => false, 'label' => 'Prénom', 'attr' => ['class' => 'form-control mr-sm-2', 'placeholder' => 'Prénom']])
+            ->getForm();
+
+        // Gérer la soumission du formulaire
+        $searchForm->handleRequest($request);
+
+        // Si le formulaire est soumis et valide, effectuez la recherche
+        if ($searchForm->isSubmitted() && $searchForm->isValid()) {
+            $searchData = $searchForm->getData();
+            $searchNom = $searchData['nom'];
+            $searchPrenom = $searchData['prenom'];
+
+            // Effectuer la recherche dans votre repository et récupérer les résultats
+            $searchResults = $coachAdminRepository->findByNomAndPrenom($searchNom, $searchPrenom);
+        } else {
+            // Si le formulaire n'est pas soumis ou n'est pas valide, laissez $searchResults vide
+            $searchResults = [];
+        }
+
+        // Passer le formulaire et les résultats de la recherche à la vue Twig
         return $this->render('coach_admin/show.html.twig', [
-            'coach' => $coach_admins,
+            'coach_admin' => $coach_admins,
+            'searchForm' => $searchForm->createView(),
+            'searchResults' => $searchResults,
         ]);
     }
 
@@ -120,7 +161,6 @@ class CoachAdminController extends AbstractController
         ]);
     }
 
-
     #[Route('/{id}', name: 'app_coach_admin_delete', methods: ['POST'])]
     public function delete(Request $request, CoachAdmin $coach_admins, EntityManagerInterface $entityManager): Response
     {
@@ -130,5 +170,24 @@ class CoachAdminController extends AbstractController
         }
 
         return $this->redirectToRoute('app_coach_admin_index', [], Response::HTTP_SEE_OTHER);
+    }
+    
+    #[Route('/stats', name: 'app_coach_stats')]
+    public function stats(CoachAdminRepository $coachAdminRepository): Response
+    {
+        $coachCount = $coachAdminRepository->createQueryBuilder('c')
+            ->select('COUNT(c.id)')
+            ->getQuery()
+            ->getSingleScalarResult();
+    
+        // Autres calculs de statistiques
+        // Fetch coach admins if necessary
+    $coach_admins = $coachAdminRepository->findAll(); // Fetch coach admins if necessary
+    
+        return $this->render('coach_admin/stat.html.twig', [
+            'coachCount' => $coachCount,
+            'coach_admins' => $coach_admins,
+            // Autres données de statistiques à passer au template
+        ]);
     }
 }

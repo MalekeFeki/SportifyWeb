@@ -1,35 +1,40 @@
-<!-- Classes Section Begin -->
-<section class="classes-section spad">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="section-title">
-                    <span>Our Classes</span>
-                    <h2>WHAT WE CAN OFFER</h2>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            {% for coach in coach %}
-            <div class="col-lg-4 col-md-6">
-                <div class="class-item">
-                    <div class="ci-pic">
-                        <img src="{{ asset('path_vers_votre_dossier_photos/' ~ coach.photo) }}" alt="Photo de coach" style="width: 100%;">
-                    </div>
-                    <div class="ci-text">
-                        <h5>{{ coach.nomCo }}</h5>
-                        <p>{{ coach.description }}</p>
-                        <a href="{{ path('app_coach_admin_show', {'id': coach.id}) }}">voir</a>
-                        <a href="{{ path('app_coach_admin_edit', {'id': coach.id}) }}">modifier</a>
-                    </div>
-                </div>
-            </div>
-            {% else %}
-            <div class="col-lg-12">
-                <p>aucun utilisateur trouvé</p>
-            </div>
+{% extends 'base.html.twig' %}
+
+{% block title %}Détails du coach{% endblock %}
+
+{% block body %}
+    <h1>Détails du coach</h1>
+
+    {# Afficher le formulaire de recherche #}
+    {{ form_start(searchForm) }}
+    {{ form_row(searchForm.search) }}
+    <button type="submit">Search</button>
+    {{ form_end(searchForm) }}
+
+    {# Afficher les résultats de la recherche #}
+    {% if searchResults %}
+        <h2>Résultats de la recherche</h2>
+        <ul>
+            {% for result in searchResults %}
+                <li>{{ result.nom }}, {{ result.prenom }}</li>
+                {# Affichez d'autres détails du résultat selon vos besoins #}
             {% endfor %}
-        </div>
-    </div>
-</section>
-<!-- ChoseUs Section End -->
+        </ul>
+    {% endif %}
+
+    {# Afficher les détails du coach #}
+    <ul>
+        {% for coach in coach_admins %}
+            <li>Nom : {{ coach.nom }}</li>
+            <li>Prénom : {{ coach.prenom }}</li>
+            <li>Description : {{ coach.description }}</li>
+            {# Ajoutez d'autres détails du coach selon vos besoins #}
+            <li>
+                <a href="{{ path('app_coach_admin_show', {'id': coach.id}) }}">Voir</a>
+                <a href="{{ path('app_coach_admin_edit', {'id': coach.id}) }}">Modifier</a>
+            </li>
+        {% else %}
+            <p>Aucun utilisateur trouvé</p>
+        {% endfor %}
+    </ul>
+{% endblock %}
