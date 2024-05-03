@@ -179,6 +179,19 @@ class CoachAdminController extends AbstractController
             ->select('COUNT(c.id)')
             ->getQuery()
             ->getSingleScalarResult();
+         $maleCoachCount = $coachAdminRepository->createQueryBuilder('c')
+            ->select('COUNT(c.id)')
+            ->where('c.sexe = :sexe')
+            ->setParameter('sexe', 'HOMME')
+            ->getQuery()
+            ->getSingleScalarResult();
+
+            $femaleCoachCount = $coachAdminRepository->createQueryBuilder('c')
+            ->select('COUNT(c.id)')
+            ->where('c.sexe = :sexe')
+            ->setParameter('sexe', 'FEMME')
+            ->getQuery()
+            ->getSingleScalarResult();
     
         // Autres calculs de statistiques
         // Fetch coach admins if necessary
@@ -186,6 +199,8 @@ class CoachAdminController extends AbstractController
     
         return $this->render('coach_admin/stat.html.twig', [
             'coachCount' => $coachCount,
+            'maleCoachCount' => $maleCoachCount,
+            'femaleCoachCount' => $femaleCoachCount,
             'coach_admins' => $coach_admins,
             // Autres données de statistiques à passer au template
         ]);

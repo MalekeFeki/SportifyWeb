@@ -12,6 +12,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
 
 #[Route('/coach/client')]
 class CoachClientController extends AbstractController
@@ -47,9 +49,19 @@ class CoachClientController extends AbstractController
             'remainingTime' => $remainingTime, // Passer remainingTime au template Twig
         ]);
     }
+    private function sendEmail(CoachClient $coachClient, MailerInterface $mailer): void
+    {
+        $email = (new Email())
+            ->from('malekfeki18@gmail.com') // Set your email address here
+            ->to( 'inesdkhl@gmail.com') // Send email to the user
+            ->subject('Welcome to Our Website')
+            ->html('<p> Réclamation  ' );
+    
+        $mailer->send($email);
+    }
     
     #[Route('/new', name: 'app_coach_client_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager, CoachAdminRepository $coachAdminRepository): Response
+    public function new(Request $request, EntityManagerInterface $entityManager, CoachAdminRepository $coachAdminRepository, MailerInterface $mailer): Response
     {
         // Vérifier si le nombre d'ajouts a dépassé 3
         $addedCount = count($this->session->get('added_comments', []));
@@ -79,6 +91,8 @@ class CoachClientController extends AbstractController
 
             $entityManager->persist($coachClient);
             $entityManager->flush();
+                    // Send welcome email
+          $this->sendEmail( $coachClient,$mailer);
 
             // Enregistrer l'ajout du commentaire dans la session
             $editedComments = $this->session->get('edited_comments', []);
