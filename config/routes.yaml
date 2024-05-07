@@ -1,0 +1,130 @@
+#index:
+#    path: /
+#    controller: App\Controller\DefaultController::index
+increase_interest:
+    path: '/event/{idevent}/increase-interest'
+    controller: 'App\Controller\EvenementController::increaseInterest'
+    
+make_reservation:
+    path: '/event/{idevent}/make-reservation'
+    controller: 'App\Controller\EvenementController::makeReservation'
+
+app_event_show:
+    path: '/event/{idevent}/reservations'
+    controller: 'App\Controller\EvenementController::showReservations'
+    # methods: ['GET']
+
+    # config/routes.yaml
+
+search_endpoint:
+    path: /search-endpoint
+    controller: App\Controller\EvenementController::search
+    methods: ['POST']
+
+event_pdf:
+    path: /event/{idevent}/pdf
+    controller: App\Controller\EvenementController::generateEventPdfnow
+
+app_eventreservation_detect_cin:
+    path: reservation/detect-cin/{idevent}
+    controller: App\Controller\EventreservationController::detectCIN
+    methods: ['POST','GET']
+
+
+
+app_home:
+    path: /
+    controller: App\Controller\HomeController::showAcceuil
+    
+#app_admin:
+#    path: /admin
+#    controller: App\Controller\AdminController::showBackendPage
+    
+
+app_profile_edit:
+    path: /{id}/editprofile
+    controller: App\Controller\UserController::profileEdit  
+# app_user_edit:
+#     path: /user/{id}/edit
+#     controller: App\Controller\UserController::edit  
+
+
+
+app_seance_new:
+    path: '/seance/{idS}/new-seance'
+    controller: 'App\Controller\SeanceController::new'
+
+search_salle:
+    path: /salle/search-salle
+    controller: App\Controller\SalleController::searchSalle
+    methods: [POST]
+
+index_salle:
+    path: /salle/
+    controller: App\Controller\SalleController::index
+    methods: [GET, POST]
+
+app_coach_client_index:
+    path: '/coach/client'
+    controller: 'App\Controller\CoachClientController::index'
+
+app_coach_admin_index:
+    path: '/coach/admin'
+    controller: 'App\Controller\CoachAdminController::index'
+
+
+
+coach_client_index:
+    path: /coach_client/index.html
+    controller: App\Controller\CoachClientController::index
+
+coach_client_new:
+    path: /coach_client/new
+    controller: App\Controller\CoachClientController::show
+
+coach_admin_showclient:
+    path: '/coach_admin/showclient/{id}'
+    controller: 'App\Controller\CoachController::showClient'
+
+app_coach_stats:
+    path: /coach/stats
+    controller: App\Controller\CoachAdminController::stats
+
+export_avis_to_csv:
+    path: '/export-avis-to-csv'
+    controller: App\Controller\AvisController::exportToCsv
+
+# config/routes.yaml
+
+api_qr_code:
+    path: '/api/qr-code'
+    controller: 'App\Controller\Api\QrCodeController::generateQrCode'
+
+# config/routes.yaml
+
+app_generate_qr_code:
+    path: '/generate-qr-code'
+    controller: 'App\Controller\QrCodeController::generateQrCode'
+    methods: ['GET']
+
+profile_picture_upload:
+    path: /profile/picture/upload
+    controller: App\Controller\ProfileController::uploadPicture
+    methods: ['POST']
+
+generate_pdf:
+    path: /generate-pdf
+    controller: App\Controller\PdfController::generatePdf
+
+
+bmi_calculator:
+    path: /bmi-calculator
+    controller: App\Controller\AdhesionController::bmiCalculator
+
+Contact:
+   path: /Contact
+   controller: App\Controller\AdhesionController::Contact
+
+submit_form:
+    path: /submit-form
+    controller: App\Controller\FormController::submitForm
