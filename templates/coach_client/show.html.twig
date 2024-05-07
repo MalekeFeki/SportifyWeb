@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Réclamation{% endblock %}
+
+{% block réclamation %}
+    <h1>Liste des commentaires</h1>
+    <form action="{{ path('app_coach_client_delete_multiple') }}" method="post">
+        <table border=1 class="table">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Réclamation</th>
+                    <th>Actions</th>
+                    <th>Sélectionner</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for coach_client in coach_clients %}
+                <tr>
+                    <td>{{ coach_client.id }}</td>
+                    <td>{{ coach_client.commentaire }}</td>
+                    <td>
+                        <a href="{{ path('app_coach_client_show', {'id': coach_client.id}) }}">Voir</a>
+                        <a href="{{ path('app_coach_client_edit', {'id': coach_client.id}) }}">Modifier</a>
+                    </td>
+                    <td><input type="checkbox" name="selected_comments[]" value="{{ coach_client.id }}"></td>
+                    <!-- Ajouter un champ caché pour chaque commentaire sélectionné -->
+                    <input type="hidden" name="selected_comments[]" value="{{ coach_client.id }}">
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <button type="submit" class="btn btn-danger" onclick="return confirm('Êtes-vous sûr de vouloir supprimer les commentaires sélectionnés ?')">Supprimer les commentaires sélectionnés</button>
+    </form>
+
+    <a href="{{ path('app_coach_client_index') }}">Retour à la liste</a>
+{% endblock %}

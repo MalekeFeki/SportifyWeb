@@ -1,0 +1,8 @@
+<form method="post" action="{{ path('app_paiement_delete', {'idp': paiement.idp}) }}" onsubmit="return confirm('Are you sure you want to delete this item?');">
+    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ paiement.idp) }}">
+    
+   <div style="background-color: black; height: 20px;"></div>
+   <div style="background-color: black;">
+    <button class="btn" style="background-color: #F36100; color: white;">Delete</button>
+    </div>
+</form>

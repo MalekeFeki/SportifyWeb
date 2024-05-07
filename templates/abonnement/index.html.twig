@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des Abonnements{% endblock %}
+
+{% block body %}
+    <h1>Liste des Abonnements</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Plan</th>
+                <th>Durée</th>
+                <th>Description</th>
+                <th>Prix</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for abonnement in abonnements %}
+                <tr>
+                    <td>{{ abonnement.idS }}</td>
+                    <td>{{ abonnement.plan }}</td>
+                    <td>{{ abonnement.duree }}</td>
+                    <td>{{ abonnement.description }}</td>
+                    <td>{{ abonnement.prix }}</td>
+                    <td>
+                        <a href="{{ path('abonnement_show', {'idS': abonnement.idS}) }}">Voir</a>
+                        <a href="{{ path('abonnement_edit', {'idS': abonnement.idS}) }}">Modifier</a>
+                        <form action="{{ path('abonnement_delete', {'idS': abonnement.idS}) }}" method="post" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet abonnement ?')">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ abonnement.idS) }}">
+                            <button type="submit">Supprimer</button>
+                        </form>
+                    </td>
+                </tr>
+                             <a href="{{ path('abonnement_new', {'idS': abonnement.idS}) }}">Créer un nouvel abonnement</a>
+
+            {% endfor %}
+        </tbody>
+    </table>
+
+   
+{% endblock %}

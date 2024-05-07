@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Supprimer l'Abonnement{% endblock %}
+
+{% block body %}
+    <h1>Supprimer l'Abonnement</h1>
+
+    <p>Êtes-vous sûr de vouloir supprimer cet abonnement ?</p>
+
+    <form action="{{ path('abonnement_delete', {'idS': abonnement.idS}) }}" method="post">
+        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ abonnement.idS) }}">
+        <button type="submit">Confirmer la suppression</button>
+    </form>
+
+    <a href="{{ path('abonnement_index') }}">Annuler</a>
+{% endblock %}

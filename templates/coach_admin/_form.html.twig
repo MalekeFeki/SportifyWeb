@@ -1,0 +1,8 @@
+{{ form_start(form, {'attr': {'novalidate': 'novalidate'}, enctype: 'multipart/form-data'}) }} <!-- Ajout de enctype pour prendre en charge les fichiers -->
+    {{ form_widget(form) }}
+    <div>
+        <label for="coach_photo">Photo:</label>
+        <input type="file" id="coach_photo" name="coach[photo]" accept="image/*"> <!-- Ajout du champ pour télécharger la photo -->
+    </div>
+    <button class="btn">{{ button_label|default('Save') }}</button>
+{{ form_end(form) }}

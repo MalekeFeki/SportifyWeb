@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Coach{% endblock %}
+
+{% block réclamation %}
+    <h1>votre réclamation </h1>
+
+    {{ include('coach_client/_form.html.twig') }}
+
+    <a href="{{ path('app_coach_client_index') }}">back to list</a>
+{% endblock %}

@@ -1,0 +1,84 @@
+<style>
+    .white-text {
+        color: white;
+    }
+    .btn-white {
+        color: white;
+        background-color: transparent;
+        border: 1px solid white;
+    }
+
+    .btn-white:hover {
+        background-color: white;
+        color: black;
+    }
+</style>
+
+{{ form_start(form, { 'attr': {'novalidate': 'novalidate'} }) }}
+    {{ form_row(form.nom) }}
+    
+    <div id="map" style="height: 400px; width: 800px;"></div>
+    {{ form_row(form.adresse) }}
+    
+    {{ form_row(form.region) }}
+
+    {# Render multiple select menu for options field #}
+    {{ form_row(form.options) }}
+    {{ form_row(form.imageSalle) }}
+    <button class="btn btn-white">{{ button_label|default('Save') }}</button>
+{{ form_end(form) }}
+
+<script>
+    // Initialize the map with Tunisia's coordinates
+    var map = L.map('map').setView([34.0479, 9.6381], 7); // Tunisia's coordinates
+
+    // Add a tile layer
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+    var marker = null; // Variable to store the marker
+
+    
+
+    // Add a marker when user clicks on the map
+    map.on('click', function(event) {
+        // Remove the previous marker if it exists
+        if (marker) {
+            map.removeLayer(marker);
+        }
+        // Add a new marker
+        marker = L.marker(event.latlng).addTo(map);
+        // You can add more customization or functionality here
+    });
+
+    // Reverse geocode to get address from marker position
+    map.on('click', function(event) {
+        fetch('https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=' + event.latlng.lat + '&lon=' + event.latlng.lng)
+            .then(response => response.json())
+            .then(data => {
+                var address = data.display_name;
+                // Update your form field with the retrieved address
+                document.getElementById('salle_adresse').value = address;
+
+                // Retrieve the region from the reverse geocoded address
+                var region = extractRegion(address);
+                if (region) {
+                    document.getElementById('salle_region').value = region;
+                }
+            })
+            .catch(error => console.error('Error:', error));
+    });
+
+    function extractRegion(address) {
+        var startIndex = address.indexOf('Gouvernorat');
+        if (startIndex !== -1) {
+            var endIndex = address.indexOf(',', startIndex);
+            if (endIndex !== -1) {
+                var region = address.substring(startIndex + 12, endIndex).trim();
+                return region;
+            }
+        }
+        return null;
+    }
+</script>

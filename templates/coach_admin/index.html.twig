@@ -1,0 +1,67 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des coachs{% endblock %}
+
+{% block body %}
+    <h1>Liste des coachs</h1>
+
+    {# Affichage de la liste des lettres disponibles pour le filtrage #}
+    <ul>
+        {% for letter in 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' %}
+            <li><a href="{{ path('app_coach_admin_index', {'letter': letter}) }}">{{ letter }}</a></li>
+        {% endfor %}
+    </ul>
+
+    {# Formulaire de recherche avancée par ordre alphabétique #}
+    <form method="get" action="{{ path('app_coach_admin_index') }}" class="form-inline">
+        <label for="searchLetter">Rechercher par lettre :</label>
+        <select name="letter" id="searchLetter" class="form-control mr-sm-2">
+            <option value="">Toutes les lettres</option>
+            {% for letter in 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' %}
+                <option value="{{ letter }}">{{ letter }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit" class="btn btn-primary">Rechercher</button>
+    </form>
+
+    {# Affichage de la liste des coachs filtrés #}
+    <table border="1" class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nom</th>
+                <th>Prénom</th>
+                <th>Description</th>
+                <th>Sexe</th>
+                <th>Photo</th> <!-- Add a new column for the photo -->
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for coach_admin in coach_admins %}
+                <tr>
+                    <td>{{ coach_admin.id }}</td>
+                    <td>{{ coach_admin.nom }}</td>
+                    <td>{{ coach_admin.prenom }}</td>
+                    <td>{{ coach_admin.description }}</td>
+                    <td>{{ coach_admin.sexe }}</td>
+                    <td><img src="{{ asset('uploads/photos/' ~ coach_admin.photo) }}" alt="Coach Photo" style="width: 100px;"></td>
+                    <td>
+                        <a href="{{ path('app_coach_admin_edit', {'id': coach_admin.id}) }}">Modifier</a>
+
+                        <form method="post" action="{{ path('app_coach_admin_delete', {'id': coach_admin.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet élément ?');">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ coach_admin.id) }}">
+                            <button>Supprimer</button>
+                        </form>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="7">Aucun utilisateur trouvé</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_coach_admin_new') }}">Créer un nouveau</a>
+{% endblock %}

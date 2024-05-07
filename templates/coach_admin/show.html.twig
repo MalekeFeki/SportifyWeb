@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Détails du coach{% endblock %}
+
+{% block body %}
+    <h1>Détails du coach</h1>
+
+    {# Afficher le formulaire de recherche #}
+    {{ form_start(searchForm) }}
+    {{ form_row(searchForm.search) }}
+    <button type="submit">Search</button>
+    {{ form_end(searchForm) }}
+
+    {# Afficher les résultats de la recherche #}
+    {% if searchResults %}
+        <h2>Résultats de la recherche</h2>
+        <ul>
+            {% for result in searchResults %}
+                <li>{{ result.nom }}, {{ result.prenom }}</li>
+                {# Affichez d'autres détails du résultat selon vos besoins #}
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    {# Afficher les détails du coach #}
+    <ul>
+        {% for coach in coach_admins %}
+            <li>Nom : {{ coach.nom }}</li>
+            <li>Prénom : {{ coach.prenom }}</li>
+            <li>Description : {{ coach.description }}</li>
+            {# Ajoutez d'autres détails du coach selon vos besoins #}
+            <li>
+                <a href="{{ path('app_coach_admin_show', {'id': coach.id}) }}">Voir</a>
+                <a href="{{ path('app_coach_admin_edit', {'id': coach.id}) }}">Modifier</a>
+            </li>
+        {% else %}
+            <p>Aucun utilisateur trouvé</p>
+        {% endfor %}
+    </ul>
+{% endblock %}

@@ -1,0 +1,360 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+	{{ evenement.nomev }}
+{% endblock %}
+
+{% block body %}
+	<style>
+		.weather-widget {
+			background-color: #f2f9fe;
+			border-radius: 8px;
+			padding: 20px;
+			max-width: 300px;
+			22px auto
+			box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+			font-family: 'Arial', sans-serif;
+		}
+
+		.weather-widget h2 {
+			color: #47a3da;
+			margin-bottom: 10px;
+		}
+
+		.weather-widget p {
+			color: #555;
+			line-height: 1.6;
+		}
+
+		.weather-widget .temperature {
+			font-size: 24px;
+			font-weight: bold;
+		}
+
+		.weather-widget .weather-condition {
+			font-style: italic;
+		}
+
+		#countdown {
+			font-size: 2rem; /* 20px */
+			color: #fff; /* Red color */
+			margin: 20px 427px 55px 420px;
+			text-align: center;
+			background-color: #000; /* Black background */
+			padding: 10px;
+			border-radius: 5px;
+			box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+			display: inline-block;
+			min-width: 200px;
+		}
+
+		/* Add a gradient background for a cool effect */
+		#countdown {
+
+			display: block;
+			background: linear-gradient(135deg, #fb7236, #ee0400);
+		}
+
+		/* Add an animation to make the countdown 'pulse' */
+		@keyframes pulse {
+			0% {
+				transform: scale(1);
+			}
+			50% {
+				transform: scale(1.05);
+			}
+			100% {
+				transform: scale(1);
+			}
+		}
+
+		#countdown {
+			animation: pulse 2s infinite;
+		}
+
+		#interestButton {
+			background-color: #4267B2; /* Facebook blue */
+			color: white;
+			padding: 10px 20px;
+			border: none;
+			border-radius: 5px;
+			font-size: 16px;
+			font-weight: bold;
+			text-decoration: none;
+			box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+			transition: background-color 0.3s, box-shadow 0.3s;
+		}
+
+		#interestButton:hover {
+			background-color: #365899; /* Darker blue */
+			box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+		}
+
+		#interestButton:active {
+			background-color: #29487d; /* Even darker blue */
+			box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2) inset;
+		}
+	</style>
+	<!-- Blog Details Hero Section Begin -->
+	<section class="blog-details-hero set-bg" data-setbg="{{ asset(evenement.photo) }}">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-8 p-0 m-auto">
+					<div class="bh-text">
+						<h3>{{ evenement.nomev }}</h3>
+						<ul>
+							<li>by
+								{{ evenement.role }}</li>
+							<li>{{ evenement.dateddebutev|date('M d, Y') }}</li>
+							<!-- You may need to adjust this based on your actual data -->
+							<li>{{ evenement.heureev}}</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	<!-- Blog Details Hero Section End -->
+	<span id="countdownLabel" class="countdown-label" style="font-size: 16px;
+																				    color: #fffff;"></span>
+	<!-- Blog Details Section Begin -->
+	<section class="blog-details-section spad">
+		<div id="countdown" style="    font-size: 20px;
+																											    color: #fff;
+																											    "></div>
+		<!-- Add buttons wherever you want them to appear -->
+		<a href="{{ path('increase_interest', {'idevent': evenement.idevent}) }}" class="btn btn-primary" id="interestButton">Increase Interest</a>
+		<span id="interestCount" class="interest-count" style="color:white;">{{ evenement.nombrepersonneinteresse }}</span>
+
+		<script>
+			document.getElementById("interestButton").addEventListener("click", function (event) {
+event.preventDefault(); // Prevent the default action of the link (i.e., following the href)
+
+var button = this;
+var currentInterestCount = parseInt(document.getElementById("interestCount").textContent); // Get the current interest count
+var isInterested = button.textContent === "Remove Interest";
+// Check if the user is currently interested
+
+// Send an AJAX request to the server to toggle interest
+fetch(button.getAttribute("href"), {
+method: "POST",
+headers: {
+"X-Requested-With": "XMLHttpRequest", // Add this header to identify the request as AJAX
+"Content-Type": "application/json"
+},
+body: JSON.stringify(
+{isInterested: isInterested}
+) // Send whether the user is currently interested
+}).then(function (response) {
+if (response.ok) { // Parse the JSON response
+return response.json();
+} else { // Handle error response
+console.error("Failed to toggle interest");
+}
+}).then(function (data) { // Update the button text and interest count based on the response
+if (isInterested) { // User is currently interested, so change button text to "Increase Interest" and decrement interest count
+button.textContent = "Increase Interest";
+document.getElementById("interestCount").textContent = currentInterestCount - 1;
+} else { // User is currently not interested, so change button text to "Remove Interest" and increment interest count
+button.textContent = "Remove Interest";
+document.getElementById("interestCount").textContent = currentInterestCount + 1;
+}
+}).catch(function (error) {
+console.error("Error:", error);
+});
+});
+		</script>
+
+
+		{% if isCapacityGreaterThanZero %}
+			{% if not isEventPassed and not isEventHappeningNow %}
+				<a href="{{ path('app_eventreservation_new', {'idevent': evenement.idevent}) }}" class="btn btn-primary">Make Reservation</a>
+			{% else %}
+				<button class="btn btn-primary" disabled>Make Reservation</button>
+			{% endif %}
+		{% else %}
+			<button class="btn btn-primary" disabled>Make Reservation</button>
+		{% endif %}
+
+
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-8 p-0 m-auto">
+					<div class="blog-details-text">
+						<div class="blog-details-title">
+							<p>{{ evenement.descrptionev }}</p>
+						</div>
+						<!-- Add more content sections here as needed -->
+						<div class="blog-details-tag-share">
+							<div class="tags">
+								<a href="">{{evenement.typeev}}</a>
+								<a href="">{{evenement.genreevenement}}</a>
+							</div>
+							<div class="share">
+								<div class="social-share-container" style="text-align: center; margin-top: 20px;">
+									<div class="fb-share-button" style="font-size: 24px; padding: 10px;" data-href="{{ path('app_evenement_show', {'idevent': evenement.idevent}) }}" data-layout="button" style="width: 69px;
+											    height: 70px; vertical-align: middle;" ></div>
+										
+									
+									<a  href="https://twitter.com/intent/tweet?text=Check%20out%20this%20event&url={{ path('app_evenement_show', {'idevent': evenement.idevent}) }}" data-size="large" style="margin: 0 10px;">
+										<img src="https://uxwing.com/wp-content/themes/uxwing/download/brands-and-social-media/x-share-button-icon.png" alt="x" style="width: 69px;
+											    height: 70px; vertical-align: middle;">
+
+
+
+
+
+									<a href="whatsapp://send?text=YourTextHere" style="margin: 0 10px;">
+										<img src="https://cdn.iconscout.com/icon/free/png-256/whatsapp-share-button-3289864-2758562.png" alt="WhatsApp" style="width: 69px;
+											    height: 70px; vertical-align: middle;">
+										<a href="https://www.linkedin.com/shareArticle?mini=true&url=YourURLHere" style="margin: 0 10px;">
+											<img src="https://cdn.iconscout.com/icon/free/png-256/free-linkedin-share-button-3289858-2758556.png" alt="LinkedIn" style="width: 69px;
+											    height: 70px; vertical-align: middle;">
+										</a>
+										<a href="https://pinterest.com/pin/create/button/?url=YourURLHere&media=YourImageHere&description=YourDescriptionHere" style="margin: 0 10px;">
+											<img src="https://cdn.iconscout.com/icon/free/png-256/free-pinterest-share-button-3289856-2758554.png" alt="Pinterest" style="width: 69px;
+											    height: 70px; vertical-align: middle;">
+										</a>
+									</div>
+
+									<script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v10.0" nonce="12"></script>
+									<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- Event Location Map Section Begin -->
+				<section class="event-location-map-section">
+					<div class="container">
+						<h2>Event Location Map</h2>
+						<div id="map" style="height: 300px;"></div>
+					</div>
+				</section>
+				{# Display weather information #}
+				{% if temperature is defined and weatherCondition is defined %}
+					<div class="weather-widget">
+						<h2>Weather Information</h2>
+						<p class="temperature">Temperature:
+							{{ temperature }}°C</p>
+						<p class="weather-condition">Weather:
+							{{ weatherCondition }}</p>
+
+						{# Add more weather information as needed #}
+					</div>
+				{% endif %}
+				<!-- Get In Touch Section End -->
+
+				<!-- Event Location Map Section End -->
+
+				<script>
+					// Initialize the map with the event location
+initMap({{ evenement.lat }}, {{ evenement.lon }});
+
+// Function to initialize the map
+function initMap(latitude, longitude) {
+var map = L.map('map').setView([
+latitude, longitude
+], 13);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+L.marker([latitude, longitude]).addTo(map);
+}
+				</script>
+			</section>
+			<!-- Blog Details Section End -->
+
+			<!-- Get In Touch Section Begin -->
+			<div class="gettouch-section">
+				<div class="container">
+					<div class="row">
+						<div class="col-lg-6">
+							<div class="gt-text">
+								<i class="fa fa-envelope"></i>
+								<p>Email:
+									{{ evenement.email }}</p>
+							</div>
+						</div>
+						<div class="col-lg-6">
+							<div class="gt-text">
+								<i class="fa fa-instagram"></i>
+								<p>Instagram:
+									<a href="{{ evenement.igLink }}">{{ evenement.igLink }}</a>
+								</p>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-lg-6">
+							<div class="gt-text">
+								<i class="fa fa-facebook"></i>
+								<p>Facebook:
+									<a href="{{ evenement.fbLink }}">{{ evenement.fbLink }}</a>
+								</p>
+							</div>
+						</div>
+						<div class="col-lg-6">
+							<div class="gt-text">
+								<i class="fa fa-phone"></i>
+								<p>Phone:
+									{{ evenement.tele }}</p>
+							</div>
+						</div>
+						<!-- Add more contact information or social media links as needed -->
+					</div>
+				</div>
+			</div>
+
+
+			<script>
+				// JavaScript/jQuery code for countdown logic
+$(document).ready(function () { // Get the event start time and end time from the template
+var eventStartTime = new Date('{{ evenement.datedDebutEV|date('Y-m-d') }}');
+var eventEndTime = new Date('{{ evenement.datedFinEV|date('Y-m-d') }}');
+
+// Function to update the countdown display
+function updateCountdown() {
+var currentTime = new Date();
+var timeRemaining;
+
+// Check if the event has started or ended
+if (currentTime < eventStartTime) {
+timeRemaining = eventStartTime - currentTime;
+} else if (currentTime > eventEndTime) {
+$('#countdown').text('Event has ended.');
+return;
+} else {
+$('#countdown').text('Event is happening now.');
+return;
+}
+
+// Calculate the remaining time
+var days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
+var hours = Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+var minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
+var seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
+
+// Update the countdown display
+$('#countdown').text('Time left: ' + days + ' days ' + hours + ' hours ' + minutes + ' minutes ' + seconds + ' seconds');
+}
+
+// Update the countdown initially
+updateCountdown();
+
+// Update the countdown every second
+setInterval(updateCountdown, 1000);
+});
+			</script>
+
+			<style>
+				/* Style for the countdown timer */
+				#countdown {
+					font-size: 20px;
+					color: #333;
+					margin-top: 20px;
+					text-align: center;
+				}
+			</style>
+
+		{% endblock %}

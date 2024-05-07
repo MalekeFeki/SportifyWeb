@@ -1,0 +1,96 @@
+{{ form_start(form, {'attr': {'style': 'background-color: black;'}}) }}
+
+<div class="mb-3">
+    <label for="adhesion_username" class="form-label"style="color: white;">Username</label>
+    {{ form_widget(form.username, {'attr': {'class': 'form-control', 'readonly': true, 'style': 'width: 150px;' }}) }}
+</div>
+
+<div class="mb-3">
+    <label for="remaining_time" id='5' class="form-label" style="color: white;">Remaining Time</label>
+    <div id="remaining-time" class="form-control" style="width: 400px;"></div>
+</div>
+
+<div class="mb-3">
+    <label for="adhesion_gymname" class="form-label"style="color: white;">Gym Name</label>
+    {{ form_widget(form.gymname, {'attr': {'class': 'form-control', 'readonly': true, 'style': 'width: 150px;' }}) }}
+</div>
+
+<div class="mb-3">
+    <label for="adhesion_typea" class="form-label"style="color: white;">Membership Type</label>
+    {{ form_widget(form.typea, {'attr': {'class': 'form-select membership-type-select', 'readonly': true, 'style': 'width: 100px;' }}) }}
+</div>
+
+<div class="mb-3">
+    <label for="adhesion_price" class="form-label"style="color: white;">Price</label>
+    {{ form_widget(form.price, {'attr': {'class': 'form-control', 'readonly': true, 'style': 'width: 100px;' }}) }}
+</div>
+
+<div class="mb-3">
+    <label for="adhesion_debuta" class="form-label"style="color: white;">Start Date</label>
+    {{ form_widget(form.debuta, {'attr': {'class': 'form-control start-date-picker', 'readonly': true, 'style': 'width: 200px;' }}) }}
+</div>
+
+<div class="mb-3">
+    <label for="adhesion_fina" class="form-label"style="color: white;">End Date</label>
+    {{ form_widget(form.fina, {'attr': {'class': 'form-control end-date-picker', 'readonly': true, 'style': 'width: 200px;' }}) }}
+</div>
+
+<button class="btn btn-primary" style="background-color: #F36100; color: white;">{{ button_label|default('Submit') }}</button>
+
+{{ form_end(form) }}
+
+<script>
+    // Map membership type options to their corresponding durations in months
+    var membershipTypeDurations = {
+        "Gold": 1,       // Assuming Gold membership lasts 1 month
+        "Platinum": 3,   // Assuming Platinum membership lasts 3 months
+        "Diamond": 6     // Assuming Diamond membership lasts 6 months
+    };
+
+    document.addEventListener('DOMContentLoaded', function() {
+    // Function to update remaining time
+    function updateRemainingTime() {
+        // Get the selected membership type
+        var selectedOption = document.querySelector('.form-select.membership-type-select').value;
+
+        // Get the duration in months based on the selected membership type
+        var duration = membershipTypeDurations[selectedOption];
+
+        // Convert duration to milliseconds
+        var durationMs = duration * 30 * 24 * 60 * 60 * 1000; // Assuming 30 days per month
+
+        // Get the current date
+        var currentDate = new Date();
+
+        // Calculate the end date by adding duration to the current date
+        var endDate = new Date(currentDate.getTime() + durationMs);
+        console.log("End Date:", endDate);
+ 
+        // Calculate remaining time
+        var remainingTimeMs = endDate - currentDate;
+        console.log("Remaining Time:", remainingTimeMs);
+
+        var days = Math.floor(remainingTimeMs / (1000 * 60 * 60 * 24));
+        var hours = Math.floor((remainingTimeMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        var minutes = Math.floor((remainingTimeMs % (1000 * 60 * 60)) / (1000 * 60));
+        var seconds = Math.floor((remainingTimeMs % (1000 * 60)) / 1000);
+
+
+        // Update the remaining time field
+        document.getElementById('remaining-time').innerText = days + ":"+ hours +":"+minutes+":"+seconds;
+    }
+
+    // Call the function initially to set the remaining time
+    updateRemainingTime();
+
+
+    // Call the function every second to update the remaining time in real-time
+    setInterval(updateRemainingTime, 1000);
+
+    // Add event listener to the document to handle 'touchstart' event
+    document.addEventListener('touchstart', function() {
+        // Empty function to satisfy the event listener requirement
+    }, { passive: true });
+});
+
+</script>

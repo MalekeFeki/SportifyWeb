@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier l'Abonnement{% endblock %}
+
+{% block body %}
+    <h1>Modifier l'Abonnement</h1>
+
+    {{ form_start(form) }}
+        {{ form_row(form.plan) }}
+        {{ form_row(form.duree) }}
+        {{ form_row(form.description) }}
+        {{ form_row(form.prix) }}
+
+        <button type="submit">Modifier</button>
+    {{ form_end(form) }}
+
+    <a href="{{ path('abonnement_index') }}">Retour à la liste</a>
+{% endblock %}

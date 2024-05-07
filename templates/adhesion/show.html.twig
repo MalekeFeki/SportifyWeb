@@ -1,0 +1,66 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Adhesion{% endblock %}
+
+{% block stylesheets %}
+    <style>
+        /* Style for the table */
+        .table {
+            background-color: black; /* Set the background color to black */
+            color: white; /* Set the text color to white */
+        }
+
+        /* Style for the table header */
+        .table  th {
+            background-color: black; /* Set the background color of header cells to black */
+            color: white; /* Set the text color of header cells to white */
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+   <h1 style="color: white; background-color: black;">Adhesion</h1>
+
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Ida</th>
+                <td style="color: white;">{{ adhesion.ida }}</td>
+
+            </tr>
+            <tr>
+                <th>Username</th>
+                <td style="color: white;">{{ adhesion.username }}</td>
+            </tr>
+            <tr>
+                <th>Gymname</th>
+                <td style="color: white;">{{ adhesion.gymname }}</td>
+            </tr>
+            <tr>
+                <th>Typea</th>
+                <td style="color: white;">{{ adhesion.typea }}</td>
+            </tr>
+            <tr>
+                <th>Price</th>
+                <td style="color: white;">{{ adhesion.price }}</td>
+            </tr>
+            <tr>
+                <th>Debuta</th>
+                <td style="color: white;">{{ adhesion.debuta ? adhesion.debuta|date('Y-m-d') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Fina</th>
+                <td style="color: white;">{{ adhesion.fina ? adhesion.fina|date('Y-m-d') : '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+<div style="background-color: black; height: 20px;"></div>
+   <div style="background-color: black;">
+    <a href="{{ path('app_adhesion_index') }}" class="btn" style="background-color: #F36100; color: white;">Back to List</a>
+</div>
+
+
+ {{ include('adhesion/_delete_form.html.twig') }}
+{% endblock %}

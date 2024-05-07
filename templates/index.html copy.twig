@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<link rel="stylesheet" href="{{ asset('bundles/mercuryseriesflashy/css/flashy.css') }}">
+		<title>CodePen - Flyer Design - 06</title>
+		<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+<!-- Flashy depends on jQuery -->
+    <!-- Include jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Load Flashy default JavaScript -->
+    <script src="{{ asset('bundles/mercuryseriesflashy/js/flashy.js') }}"></script>
+		<style>:root
+		{
+			box-sizing: border-box;
+			--gray-100: hsl(204, 45%, 98%);
+			--gray-200: hsl(210, 38%, 95%);
+			--gray-300: hsl(214, 32%, 91%);
+			--gray-400: hsl(211, 25%, 84%);
+			--gray-500: hsl(214, 20%, 69%);
+			--gray-600: hsl(216, 15%, 52%);
+			--gray-700: hsl(218, 17%, 35%);
+			--gray-800: hsl(218, 23%, 23%);
+			--gray-900: hsl(220, 26%, 14%);
+			--blue: hsl(222, 51%, 16%);
+			--aqua: hsl(205, 100%, 50%);
+			--aqua-100: hsl(205, 72%, 60%);
+			--aqua-200: hsl(205, 81%, 80%);
+		}
+
+		*,
+		::before,
+		::after {
+			box-sizing: inherit;
+			text-decoration: none;
+			list-style-type: none;
+			margin: 0;
+			padding: 0;
+			outline: none;
+		}
+
+		body {
+			font-size: 100%;
+			font-family: "Barlow", sans-serif;
+			background-color: var(--aqua-100);
+		}
+
+		.inspiration {
+			position: absolute;
+			bottom: 6.2em;
+			left: 1.5em;
+			transition: all 300ms ease-in;
+			font-size: 0.85em;
+			-ms-writing-mode: tb-rl;
+			writing-mode: vertical-rl;
+			transform: rotate(180deg);
+			text-transform: uppercase;
+		}
+
+		.inspiration:hover {
+			color: var(--aqua);
+		}
+
+		.main {
+			width: 640px;
+			height: 840px;
+			position: relative;
+			overflow: hidden;
+			margin: 2em auto;
+			background-color: #fff;
+		}
+
+		.bg-blue {
+			position: relative;
+			height: 69%;
+			border-radius: 115px 0 115px 0;
+			background-color: var(--blue);
+		}
+
+		.logo {
+			position: absolute;
+			top: 7%;
+			left: 8%;
+			height: 35px;
+			width: 148px;
+			display: flex;
+			align-items: center;
+			color: #fff;
+		}
+
+		.logo svg {
+			fill: #fff;
+		}
+
+		.logo p {
+			font-weight: 600;
+			font-size: 1.5em;
+			white-space: nowrap;
+			transform: translateY(-1px);
+			letter-spacing: 0.01em;
+		}
+
+		svg {
+			width: 100%;
+			height: 100%;
+		}
+
+		.circle--border-one,
+		.circle--border-one--wrap {
+			fill: none;
+			stroke: url('#img');
+			stroke-width: 50;
+			stroke-dasharray: 1182 75;
+			stroke-linecap: round;
+			stroke-dashoffset: 630;
+		}
+
+		.circle--border-one--wrap {
+			stroke-opacity: 0.25;
+			stroke: var(--aqua);
+		}
+
+		.circle--border-two,
+		.circle--border-two--wrap {
+			fill: none;
+			stroke: url('#img');
+			stroke-width: 50;
+			stroke-dasharray: 1644 120;
+			stroke-linecap: round;
+			stroke-dashoffset: 830;
+		}
+
+		.circle--border-two--wrap {
+			stroke-opacity: 0.5;
+			stroke: var(--aqua);
+		}
+
+		.circles--top {
+			position: absolute;
+			left: 0;
+			top: 12%;
+			height: 419px;
+			width: 191px;
+			z-index: 100;
+		}
+
+		.circles {
+			position: absolute;
+			right: 0;
+			bottom: 12%;
+			height: 52%;
+			width: 32%;
+			z-index: 102;
+		}
+
+		#circle-template {
+			fill: none;
+			stroke-width: 1px;
+			stroke: var(--gray-600);
+			shape-rendering: geometricPrecision;
+		}
+
+		.strategy {
+			color: #fff;
+			position: absolute;
+			bottom: 0;
+			padding-bottom: 0.85em;
+		}
+
+		.strategy h1 {
+			padding: 0 0.4em 0.17em 1.3em;
+			font-size: 2.75em;
+			line-height: 0.88;
+			/* Lea Verou - CSS Secrets
+  https://dabblet.com/gist/58f3d67d5bb0f8338776
+  *** make sure text-shadow color matched bg color! ***/
+			background: linear-gradient(gray, gray) no-repeat;
+			background-size: 100% 0.03em;
+			background-position: 0 2.1em;
+			text-shadow: 0.05em 0 var(--blue), -0.05em 0 var(--blue);
+		}
+
+		.strategy h1 span:first-of-type {
+			display: block;
+			padding-left: 2px;
+		}
+
+		.strategy h1 span:last-of-type {
+			font-size: 1.3em;
+			color: var(--aqua-100);
+		}
+
+		.strategy h3 {
+			font-weight: 300;
+			padding: 0.3em 0 0 3.1em;
+		}
+
+		.bottom {
+			height: 31%;
+			width: 100%;
+			background-color: #fff;
+			position: relative;
+			z-index: 100;
+			margin-left: 3.7em;
+			margin-top: 1.25em;
+		}
+
+		.bottom p {
+			width: 45%;
+			font-size: 0.9em;
+			line-height: 1.3;
+		}
+
+		.summary {
+			margin-top: 1.25em;
+			width: 51%;
+			display: flex;
+			flex-direction: column;
+			flex-wrap: wrap;
+			height: 60%;
+			color: #fff;
+		}
+
+		.summary > * {
+			width: 44%;
+		}
+
+		.summary svg {
+			width: 21px;
+			height: 21px;
+			fill: #fff;
+		}
+
+		.item {
+			display: flex;
+			align-items: center;
+			background-color: var(--aqua-100);
+			padding: 0.5em 0.7em;
+			margin: 0.3em 0.3em 0.3em 0;
+			border-radius: 10px 0 10px 0;
+		}
+
+		.summary p {
+			margin-left: 0.5em;
+			font-weight: 600;
+			font-size: 0.95em;
+			white-space: nowrap;
+		}
+
+		.item--five {
+			height: 83px;
+			padding: 0;
+		}
+
+		.item--five svg {
+			height: 100%;
+			width: 100%;
+		}
+
+		.item--five circle {
+			fill: none;
+			stroke: #222;
+			stroke-width: 4px;
+		}
+
+		.item--five circle.dup--first {
+			stroke: var(--aqua-200);
+			stroke-dasharray: 38px 112px;
+			stroke-dashoffset: 38px;
+		}
+
+		.item--five circle.dup--second {
+			stroke: var(--aqua-200);
+			stroke-dasharray: 75px 75px;
+			stroke-dashoffset: 38px;
+		}
+
+		.item--five text {
+			font-size: 15px;
+			font-weight: 500;
+			text-anchor: middle;
+		}
+
+		.footer {
+			position: absolute;
+			bottom: 0;
+			right: 0;
+			background-color: var(--blue);
+			width: 40%;
+			height: 23.5%;
+			border-radius: 155px 0 0 0;
+			z-index: 101;
+			text-align: right;
+		}
+
+		.contact {
+			position: absolute;
+			right: 0;
+			bottom: 0;
+			z-index: 20000;
+			color: #fff;
+			padding-right: 2.25em;
+			text-align: right;
+			padding-bottom: 2em;
+		}
+
+		.contact h4 {
+			margin-bottom: 0.5em;
+		}
+
+		.list {
+			display: flex;
+			justify-content: flex-end;
+			align-items: center;
+			margin-bottom: 0.5em;
+		}
+
+		.circle-wrap {
+			width: 19px;
+			height: 19px;
+			background-color: #fff;
+			border-radius: 50%;
+		}
+
+		.contact svg {
+			fill: gray;
+		}
+
+		.contact p {
+			margin-right: 0.75em;
+			font-size: 0.83em;
+			transform: translateY(-1px);
+		}
+	</style>
+</head>
+<body>
+	<!-- partial:index.partial.html -->
+	<div class="main">
+
+		<div class="bg-blue">
+
+			<div class="logo">
+				<svg xmlns="http://www.w3.org/2000/svg">
+					<circle r="13" cx="18" cy="18" stroke="#fff" stroke-width="3" fill="none"/>
+					<circle r="8.5" cx="18" cy="18" fill="#fff"/>
+				</svg>
+				<p>Your Logo</p>
+			</div>
+
+			<div class="circles--top">
+				<svg>
+					<defs>
+						<circle id="circle-template" r="153"/>
+					</defs>
+					<g class="group--thin-circles--top" transform="translate(-75,195)">
+						<use xlink:href="#circle-template"/>
+						<use xlink:href="#circle-template" transform="scale(1.09)"/>
+						<use xlink:href="#circle-template" transform="scale(1.18)"/>
+						<use xlink:href="#circle-template" transform="scale(1.27)"/>
+						<use xlink:href="#circle-template" transform="scale(1.36)"/>
+					</g>
+				</svg>
+			</div>
+
+			<svg xmlns="http://www.w3.org/2000/svg">
+				<defs>
+					<pattern id="img" width="100%" height="100%" patternunits="userSpaceOnUse" viewbox="-45 20 640 853">
+						<image width="640" height="853" xlink:href="{{event_photo}}" class="pic" aria-label="woman in purple business suit"/>
+					</pattern>
+				</defs>
+
+				<g class="group--circle" transform="translate(30, -19) scale(1.1)">
+					<circle class="circle--border-two" r="264" cx="430" cy="220"/>
+					<circle class="circle--border-two--wrap" r="264" cx="430" cy="220"/>
+					<circle class="circle--border-one" r="200" cx="430" cy="220"/>
+					<circle class="circle--border-one--wrap" r="200" cx="430" cy="220"/>
+					<circle class="circle--main" r="160" cx="430" cy="220" fill="url(#img)"/>
+				</g>
+			</svg>
+
+			<div class="strategy">
+				<h1>
+					<span>Business</span>
+					<span>Strategy</span>
+				</h1>
+				<h3>Lorem Ipsum Dolor Sit</h3>
+			</div>
+		</div>
+
+		<div class="circles">
+			<svg height="100%" width="100%">
+				<g class="group--thin-circles" transform="translate(227.5,220)">
+					<use xlink:href="#circle-template"/>
+					<use xlink:href="#circle-template" transform="scale(1.09)"/>
+					<use xlink:href="#circle-template" transform="scale(1.18)"/>
+					<use xlink:href="#circle-template" transform="scale(1.27)"/>
+					<use xlink:href="#circle-template" transform="scale(1.36)"/>
+				</g>
+			</svg>
+		</div>
+
+		<div class="bottom">
+			<p>Lorem ipsum dolor sit amet, consect elit. Placeat ut commodi quidem delectus voluptat libero odit adipisci ah bota sunt distinct atque.</p>
+			<div class="summary">
+				<div class="item item--one">
+					<svg class="icon-sphere" viewbox="0 0 32 32" width="21" height="21">
+						<path d="M15 2c-8.284 0-15 6.716-15 15s6.716 15 15 15c8.284 0 15-6.716 15-15s-6.716-15-15-15zM23.487 22c0.268-1.264 0.437-2.606 0.492-4h3.983c-0.104 1.381-0.426 2.722-0.959 4h-3.516zM6.513 12c-0.268 1.264-0.437 2.606-0.492 4h-3.983c0.104-1.381 0.426-2.722 0.959-4h3.516zM21.439 12c0.3 1.28 0.481 2.62 0.54 4h-5.979v-4h5.439zM16 10v-5.854c0.456 0.133 0.908 0.355 1.351 0.668 0.831 0.586 1.625 1.488 2.298 2.609 0.465 0.775 0.867 1.638 1.203 2.578h-4.852zM10.351 7.422c0.673-1.121 1.467-2.023 2.298-2.609 0.443-0.313 0.895-0.535 1.351-0.668v5.854h-4.852c0.336-0.94 0.738-1.803 1.203-2.578zM14 12v4h-5.979c0.059-1.38 0.24-2.72 0.54-4h5.439zM2.997 22c-0.533-1.278-0.854-2.619-0.959-4h3.983c0.055 1.394 0.224 2.736 0.492 4h-3.516zM8.021 18h5.979v4h-5.439c-0.3-1.28-0.481-2.62-0.54-4zM14 24v5.854c-0.456-0.133-0.908-0.355-1.351-0.668-0.831-0.586-1.625-1.488-2.298-2.609-0.465-0.775-0.867-1.638-1.203-2.578h4.852zM19.649 26.578c-0.673 1.121-1.467 2.023-2.298 2.609-0.443 0.312-0.895 0.535-1.351 0.668v-5.854h4.852c-0.336 0.94-0.738 1.802-1.203 2.578zM16 22v-4h5.979c-0.059 1.38-0.24 2.72-0.54 4h-5.439zM23.98 16c-0.055-1.394-0.224-2.736-0.492-4h3.516c0.533 1.278 0.855 2.619 0.959 4h-3.983zM25.958 10h-2.997c-0.582-1.836-1.387-3.447-2.354-4.732 1.329 0.636 2.533 1.488 3.585 2.54 0.671 0.671 1.261 1.404 1.766 2.192zM5.808 7.808c1.052-1.052 2.256-1.904 3.585-2.54-0.967 1.285-1.771 2.896-2.354 4.732h-2.997c0.504-0.788 1.094-1.521 1.766-2.192zM4.042 24h2.997c0.583 1.836 1.387 3.447 2.354 4.732-1.329-0.636-2.533-1.488-3.585-2.54-0.671-0.671-1.261-1.404-1.766-2.192zM24.192 26.192c-1.052 1.052-2.256 1.904-3.585 2.54 0.967-1.285 1.771-2.896 2.354-4.732h2.997c-0.504 0.788-1.094 1.521-1.766 2.192z"></path>
+					</svg>
+					<p>Lorem Ipsum</p>
+				</div>
+				<div class="item item--two">
+					<svg class="icon-user" viewbox="0 0 32 32" width="21" height="21">
+						<path d="M18 22.082v-1.649c2.203-1.241 4-4.337 4-7.432 0-4.971 0-9-6-9s-6 4.029-6 9c0 3.096 1.797 6.191 4 7.432v1.649c-6.784 0.555-12 3.888-12 7.918h28c0-4.030-5.216-7.364-12-7.918z"></path>
+					</svg>
+					<p>Lorem Ipsum</p>
+				</div>
+				<div class="item item--three">
+					<svg class="icon-stats-dots" viewbox="0 0 35 35" width="21" height="21">
+						<path d="M4 28h28v4h-32v-32h4zM9 26c-1.657 0-3-1.343-3-3s1.343-3 3-3c0.088 0 0.176 0.005 0.262 0.012l3.225-5.375c-0.307-0.471-0.487-1.033-0.487-1.638 0-1.657 1.343-3 3-3s3 1.343 3 3c0 0.604-0.179 1.167-0.487 1.638l3.225 5.375c0.086-0.007 0.174-0.012 0.262-0.012 0.067 0 0.133 0.003 0.198 0.007l5.324-9.316c-0.329-0.482-0.522-1.064-0.522-1.691 0-1.657 1.343-3 3-3s3 1.343 3 3c0 1.657-1.343 3-3 3-0.067 0-0.133-0.003-0.198-0.007l-5.324 9.316c0.329 0.481 0.522 1.064 0.522 1.691 0 1.657-1.343 3-3 3s-3-1.343-3-3c0-0.604 0.179-1.167 0.487-1.638l-3.225-5.375c-0.086 0.007-0.174 0.012-0.262 0.012s-0.176-0.005-0.262-0.012l-3.225 5.375c0.307 0.471 0.487 1.033 0.487 1.637 0 1.657-1.343 3-3 3z"></path>
+					</svg>
+					<p>Lorem Ipsum</p>
+				</div>
+				<div class="item item--four">
+					<svg class="icon-cog1" viewbox="0 -2 34 34" width="21" height="21">
+						<path d="M29.181 19.070c-1.679-2.908-0.669-6.634 2.255-8.328l-3.145-5.447c-0.898 0.527-1.943 0.829-3.058 0.829-3.361 0-6.085-2.742-6.085-6.125h-6.289c0.008 1.044-0.252 2.103-0.811 3.070-1.679 2.908-5.411 3.897-8.339 2.211l-3.144 5.447c0.905 0.515 1.689 1.268 2.246 2.234 1.676 2.903 0.672 6.623-2.241 8.319l3.145 5.447c0.895-0.522 1.935-0.82 3.044-0.82 3.35 0 6.067 2.725 6.084 6.092h6.289c-0.003-1.034 0.259-2.080 0.811-3.038 1.676-2.903 5.399-3.894 8.325-2.219l3.145-5.447c-0.899-0.515-1.678-1.266-2.232-2.226zM16 22.479c-3.578 0-6.479-2.901-6.479-6.479s2.901-6.479 6.479-6.479c3.578 0 6.479 2.901 6.479 6.479s-2.901 6.479-6.479 6.479z"></path>
+					</svg>
+					<p>Lorem Ipsum</p>
+				</div>
+				<div class="item item--five">
+					<svg>
+						<g transform="translate(3)">
+							<circle r="24" cx="36" cy="42"/>
+							<circle class="dup--first" r="24" cx="36" cy="42"/>
+							<circle r="24" cx="100" cy="42"/>
+							<circle class="dup--second" r="24" cx="100" cy="42"/>
+							<text x="36" y="46">25%</text>
+							<text x="100" y="46">50%</text>
+						</g>
+					</svg>
+
+				</div>
+			</div>
+		</div>
+
+		<div class="footer"></div>
+
+		<div class="contact">
+			<h4>Contact Us</h4>
+			<div class="list">
+				<p>+05 380 650 200</p>
+				<div class="circle-wrap">
+					<svg class="icon-phone" viewbox="-7 -4 44 44" width="19" height="19">
+						<path d="M22 20c-2 2-2 4-4 4s-4-2-6-4-4-4-4-6 2-2 4-4-4-8-6-8-6 6-6 6c0 4 4.109 12.109 8 16s12 8 16 8c0 0 6-4 6-6s-6-8-8-6z"></path>
+					</svg>
+				</div>
+			</div>
+			<div class="list">
+				<p>email@company.com</p>
+				<div class="circle-wrap">
+					<svg class="icon-envelop" viewbox="-7 -6 46 46" width="19" height="19">
+						<path d="M29 4h-26c-1.65 0-3 1.35-3 3v20c0 1.65 1.35 3 3 3h26c1.65 0 3-1.35 3-3v-20c0-1.65-1.35-3-3-3zM12.461 17.199l-8.461 6.59v-15.676l8.461 9.086zM5.512 8h20.976l-10.488 7.875-10.488-7.875zM12.79 17.553l3.21 3.447 3.21-3.447 6.58 8.447h-19.579l6.58-8.447zM19.539 17.199l8.461-9.086v15.676l-8.461-6.59z"></path>
+					</svg>
+				</div>
+			</div>
+			<div class="list">
+				<p>jasonduquain.me</p>
+				<div class="circle-wrap">
+					<svg class="icon-cog1" viewbox="-7 -7 46 46" width="19" height="19">
+						<path d="M29.181 19.070c-1.679-2.908-0.669-6.634 2.255-8.328l-3.145-5.447c-0.898 0.527-1.943 0.829-3.058 0.829-3.361 0-6.085-2.742-6.085-6.125h-6.289c0.008 1.044-0.252 2.103-0.811 3.070-1.679 2.908-5.411 3.897-8.339 2.211l-3.144 5.447c0.905 0.515 1.689 1.268 2.246 2.234 1.676 2.903 0.672 6.623-2.241 8.319l3.145 5.447c0.895-0.522 1.935-0.82 3.044-0.82 3.35 0 6.067 2.725 6.084 6.092h6.289c-0.003-1.034 0.259-2.080 0.811-3.038 1.676-2.903 5.399-3.894 8.325-2.219l3.145-5.447c-0.899-0.515-1.678-1.266-2.232-2.226zM16 22.479c-3.578 0-6.479-2.901-6.479-6.479s2.901-6.479 6.479-6.479c3.578 0 6.479 2.901 6.479 6.479s-2.901 6.479-6.479 6.479z"></path>
+					</svg>
+				</div>
+			</div>
+			<div class="list">
+				<p>@jasonduquain</p>
+				<div class="circle-wrap">
+					<svg class="icon-facebook" viewbox="-7 -7 46 46" width="19" height="19">
+						<path d="M19 6h5v-6h-5c-3.86 0-7 3.14-7 7v3h-4v6h4v16h6v-16h5l1-6h-6v-3c0-0.542 0.458-1 1-1z"></path>
+					</svg>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- partial -->
+
+</body></html>

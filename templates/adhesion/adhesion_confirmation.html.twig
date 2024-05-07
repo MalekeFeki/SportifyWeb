@@ -1,0 +1,32 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adhesion Confirmation</title>
+</head>
+<body>
+    <h1>Your Adhesion Confirmation</h1>
+    
+    <p>
+        Hello {{ adhesion.getUsername() }},
+    </p>
+    
+    <p>
+        Your adhesion has been submitted successfully. Here are the details:
+    </p>
+    
+    <ul>
+        <li><strong>Membership Type:</strong> {{ adhesion.getTypea() }}</li>
+        <li><strong>Price:</strong> {{ adhesion.getPrice() }}</li>
+        <li><strong>Start Date:</strong> {{ adhesion.getDebuta()|date('Y-m-d') }}</li>
+        <li><strong>End Date:</strong> {{ adhesion.getFina()|date('Y-m-d') }}</li>
+    </ul>
+    
+    <p>
+        Thank you for choosing our service.
+    </p>
+</body>
+</html>

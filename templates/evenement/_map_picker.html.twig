@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpenStreetMap</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"/>
+</head>
+<body>
+    <div id="map" style="height: 200px;"></div>
+    <label for="manualLocation">Enter Location:</label>
+    <input type="text" id="manualLocation" placeholder="Type location here">
+<button type="button" onclick="updateMapToManualLocation()">Update Map</button>
+
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+   <script>
+    var selectedLatitude;
+    var selectedLongitude;
+    var selectedLocationName;
+
+    function updateFormLocation() {
+        var lieuField = document.getElementById('evenement_lieu'); // Assuming 'evenement_lieu' is the ID of the 'lieu' field in your form
+        lieuField.value = selectedLocationName; // Update the value of the 'lieu' field with the selected location name
+
+        var latField = document.getElementById('evenement_lat'); // Assuming 'evenement_lat' is the ID of the hidden 'lat' field in your form
+        latField.value = selectedLatitude; // Update the value of the hidden 'lat' field with the selected latitude
+
+        var lonField = document.getElementById('evenement_lon'); // Assuming 'evenement_lon' is the ID of the hidden 'lon' field in your form
+        lonField.value = selectedLongitude; // Update the value of the hidden 'lon' field with the selected longitude
+    }
+
+    var map = L.map('map').setView([0, 0], 2);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+    var marker = L.marker([0, 0], { draggable: true }).addTo(map);
+
+    function updateMapToManualLocation() {
+        var manualLocation = document.getElementById('manualLocation').value;
+
+        // Use Nominatim for geocoding
+        fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(manualLocation)}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.length > 0) {
+                    var latitude = parseFloat(data[0].lat);
+                    var longitude = parseFloat(data[0].lon);
+                    fetchLocationName(latitude, longitude)
+                    updateLocation(latitude, longitude, selectedLocationName);
+                    map.setView([latitude, longitude], 15);
+                    updateFormLocation(); // Update the form location and hidden fields
+                } else {
+                    console.error('Geocoding failed:', data);
+                    alert('Geocoding failed. Please enter a valid location name.');
+                }
+            })
+            .catch(error => {
+                console.error('Geocoding error:', error);
+                alert('Geocoding failed. Please try again.');
+            });
+    }
+
+    function updateLocation(lat, lon, name) {
+        marker.setLatLng([lat, lon]);
+        selectedLatitude = lat;
+        selectedLongitude = lon;
+        selectedLocationName = name; // Update the location name
+        updateFormLocation(); // Update the form location and hidden fields
+    }
+
+    function fetchLocationName(lat, lon) {
+        var apiUrl = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`;
+        fetch(apiUrl)
+            .then(response => response.json())
+            .then(data => {
+                selectedLocationName = data.display_name; // Directly assign the value
+                updateLocation(lat, lon, selectedLocationName);
+            })
+            .catch(error => {
+                console.error('Error fetching location name:', error);
+                selectedLocationName = 'Unknown Location';
+            });
+
+    }
+
+    function onMapClick(e) {
+        updateLocation(e.latlng.lat, e.latlng.lng);
+        fetchLocationName(e.latlng.lat, e.latlng.lng); // Fetch the location name when clicking on the map
+    }
+
+    marker.on('dragend', function (e) {
+        var latlng = e.target.getLatLng();
+        updateLocation(latlng.lat, latlng.lng);
+        fetchLocationName(latlng.lat, latlng.lng); // Fetch the location name when dragging the marker
+    });
+
+    map.on('click', onMapClick);
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Seance{% endblock %}
+
+{% block body %}
+    <h1>Seance {{seance.nomseance}}</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Idseance</th>
+                <td>{{ seance.idseance }}</td>
+            </tr>
+            <tr>
+                <th>Nomseance</th>
+                <td>{{ seance.nomseance }}</td>
+            </tr>
+            <tr>
+                <th>Debut</th>
+                <td>{{ seance.debut ? seance.debut|date('H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Fin</th>
+                <td>{{ seance.fin ? seance.fin|date('H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Dates</th>
+                <td>{{ seance.dates ? seance.dates|date('Y-m-d') : '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_seance_index') }}">back to list</a>
+
+    <a href="{{ path('app_seance_edit', {'idseance': seance.idseance}) }}">edit</a>
+
+    {{ include('seance/_delete_form.html.twig') }}
+{% endblock %}

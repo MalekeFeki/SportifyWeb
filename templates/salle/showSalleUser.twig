@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Salle{% endblock %}
+
+{% block body %}
+
+    <h1>Salle {{salle.nom}}</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Nom</th>
+                <td>{{ salle.nom }}</td>
+            </tr>
+            <tr>
+                <th>Adresse</th>
+                <td>{{ salle.adresse }}</td>
+            </tr>
+            <tr>
+                <th>Region</th>
+                <td>{{ salle.region }}</td>
+            </tr>
+            <tr>
+    <th>Options</th>
+    <td>
+        <ul>
+            {% for option in salle.options %}
+                <li>{{ option }}</li>
+            {% endfor %}
+        </ul>
+    </td>
+</tr>
+
+            <tr>
+                <th>Logo</th>
+                <td><img src="/uploads/images{{asset(salle.imageSalle)}}" alt="Salle Image"></td>
+
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('index_salle') }}">back to list</a>
+
+
+
+
+    
+{% endblock %}

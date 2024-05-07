@@ -1,0 +1,37 @@
+{% extends 'base-backend.html.twig' %}
+
+{% block title %}Reservations for Event: {{ evenement.nomev }}{% endblock %}
+
+{% block body %}
+    <h1>Reservations for Event: {{ evenement.nomev }}</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Reservation ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for reservation in reservations %}
+                <tr>
+                    <td>{{ reservation.reservationid }}</td>
+                    <td>{{ reservation.nom }} {{ reservation.prenom }}</td>
+                    <td>{{ reservation.email }}</td>
+                    <td>{{ reservation.numTele }}</td>
+                    <td>
+                        {# <a href="{{ path('app_eventreservation_edit', {'reservationid': reservation.reservationid}) }}" class="btn btn-primary">Edit</a> #}
+<form method="post" action="{{ path('app_eventreservation_delete', {'reservationid': reservation.reservationid}) }}" onsubmit="return confirm('Are you sure you want to delete this item?');">
+    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ reservation.reservationid) }}">
+    <button class="btn">Delete</button>
+</form>                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_evenement_index') }}" class="btn btn-secondary">Back to Events</a>
+{% endblock %}

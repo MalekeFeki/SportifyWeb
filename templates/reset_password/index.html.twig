@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Demande de réinitialisation envoyée{% endblock %}
+
+{% block body %}
+   {# forgot_password.html.twig #}
+<form method="post">
+    <label for="inputEmail">Email</label>  
+    <input type="email" name="email" id="inputEmail" required>
+    <button type="submit">Submit</button>
+</form>
+{% endblock %}

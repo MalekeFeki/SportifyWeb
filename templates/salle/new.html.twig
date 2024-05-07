@@ -1,0 +1,22 @@
+{# {% extends 'base.html.twig' %} #}
+ <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="{{ asset('js/bootstrap.min.js') }}"></script>
+
+
+
+    <!-- Leaflet CSS -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+
+<!-- Leaflet JavaScript -->
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+{% block title %}New Salle{% endblock %}
+
+{% block body %}
+    <h1>Ajouter votre Salle</h1>
+
+
+
+    {{ include('salle/_form.html.twig') }}
+    
+    <a href="{{ path('index_salle') }}">back to list</a>
+{% endblock %}

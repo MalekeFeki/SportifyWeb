@@ -1,0 +1,208 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des Salles
+{% endblock %}
+
+{% block body %}
+	<style>
+		.salle-card {
+			border: 0 solid #ccc;
+			border-radius: 5px;
+			padding: 10px;
+			margin-bottom: 10px;
+			background-color: #000000;
+		}
+		.salle-name {
+			font-size: 20px;
+			font-weight: bold;
+			margin-bottom: 5px;
+		}
+		.salle-address {
+			color: #666;
+			margin-bottom: 5px;
+		}
+		.salle-region {
+			color: #888;
+		}
+		.orange-link {
+			color: #FE6100; /* Orange color */
+			text-decoration: none; /* Remove underline */
+		}
+		.orange-pagination {
+			color: #FE6100; /* Orange color */
+		}
+	</style>
+
+	<h1>Liste des Salles</h1>
+	
+
+
+	<script>
+		// Function to handle dynamic searching
+function handleSearch() { // Get the search input value
+var searchTerm = document.getElementById('search').value;
+
+// Send an AJAX request to the backend to fetch search results
+// Update the user list with the search results
+// Example using jQuery AJAX:
+$.ajax({
+url: '{{ path('index') }}',
+type: 'GET',
+data: {
+search: searchTerm
+},
+success: function (response) { // Update the user list with the response data
+$('#user-list').html(response);
+}
+});
+}
+
+// Event listener for the search input field
+document.getElementById('search').addEventListener('input', function () {
+handleSearch();
+});
+	</script>
+
+	<script>
+		document.getElementById('searchInput').addEventListener('input', function () {
+var searchValue = this.value.trim();
+
+// Send AJAX request to Symfony controller
+fetch('{{ path('search_salle') }}', { // Assuming you have a route named 'search_salle'
+method: 'POST',
+headers: {
+'Content-Type': 'application/json',
+'Accept': 'application/json'
+},
+body: JSON.stringify(
+{nom: searchValue}
+)
+}).then(response => response.json()).then(data => { // Update search results on the page
+var searchResults = document.getElementById('searchResults');
+searchResults.innerHTML = '';
+
+data.forEach(function (salle) {
+var div = document.createElement('div');
+div.textContent = salle.nom;
+searchResults.appendChild(div);
+});
+}).catch(error => console.error('Error:', error));
+});
+	</script>
+
+	<form class="d-none d-md-flex ms-4" action="" method="GET">
+		<label for="role">Filtrer par région :</label>
+		<select name="region" id="region">
+			<option value="">Tous les régions</option>
+			<option value="Ariana">Ariana</option>
+			<option value="Béja">Béja</option>
+			<option value="Ben Arous">Ben Arous</option>
+			<option value="Bizerte">Bizerte</option>
+			<option value="Gabès">Gabès</option>
+			<option value="Gafsa">Gafsa</option>
+			<option value="Jendouba">Jendouba</option>
+			<option value="Kairouan">Kairouan</option>
+			<option value="Kasserine">Kasserine</option>
+			<option value="Kébili">Kébili</option>
+			<option value="Kef">Kef</option>
+			<option value="Mahdia">Mahdia</option>
+			<option value="Manouba">Manouba</option>
+			<option value="Médenine">Médenine</option>
+			<option value="Monastir">Monastir</option>
+			<option value="Nabeul">Nabeul</option>
+			<option value="Sfax">Sfax</option>
+			<option value="Sidi Bouzid">Sidi Bouzid</option>
+			<option value="Siliana">Siliana</option>
+			<option value="Sousse">Sousse</option>
+			<option value="Tataouine">Tataouine</option>
+			<option value="Tozeur">Tozeur</option>
+			<option value="Tunis">Tunis</option>
+			<option value="Zaghouan">Zaghouan</option>
+
+		</select>
+		<button type="submit">Filtrer</button>
+		<input class="form-control" id="search" type="search" name="search" placeholder="Rechercher par nom">
+		<button type="submit">Rechercher</button>
+	</form>
+
+	<div class="pagination orange-pagination"></div>
+	<a href="{{ path('app_salle_new') }}" class="white-text">Ajouter une salle</a>
+
+	{% for salle in pagination %}
+		<div class="salle-card">
+			<div class="salle-name">
+				<a href="{{ path('app_salle_show', {'idS': salle.idS}) }}" class="orange-link"><img src="/uploads/images{{asset(salle.imageSalle)}}" alt="Salle Image" width="100" height="100">{{ salle.nom }}</a>
+				<a href="{{ path('app_salle_edit', {'idS': salle.idS}) }}" class="white-text">Modifier</a>
+			</div>
+			<div class="salle-address">{{ salle.adresse }}</div>
+			<div class="salle-region">{{ salle.region }}</div>
+		</div>
+	{% endfor %}
+
+
+	{% set controllerName = app.request.attributes.get('_controller') %}
+
+	{% if controllerName == 'App\\Controller\\SalleController::index' %}
+		{% set routeName = 'index' %}
+		{% set routeParams = {} %}
+
+	{% endif %}
+
+	<div class="blog-pagination" id="pagination">
+		{% set pagesToShow = 4 %}
+		{% set startPage = (currentPage > pagesToShow) ? (currentPage - pagesToShow) : 1 %}
+		{% set endPage = (currentPage + pagesToShow < totalPages) ? (currentPage + pagesToShow) : totalPages %}
+
+		{% if currentPage > 1 %}
+			<a href="{{ path(routeName, routeParams|merge({'page': currentPage - 1})) }}">Previous</a>
+		{% endif %}
+
+		{% for page in startPage..endPage %}
+			{% if currentPage == page %}
+				<a class="active-page" style="background-color: #f36100;
+																																					                                            color: white;
+																																					                                            font-size: 18px;
+																																					                                            padding: 10px 20px;
+																																					                                            border-radius: 5px;
+																																					                                            margin: 0 5px;
+																																					                                            font-family: 'oswald', sans-serif;
+																																					                                            font-weight: 500;
+																																					                                            margin-right: 15px;
+																																                                            text-transform: uppercase;">{{ page }}</a>
+			{% else %}
+				<a href="{{ path(routeName, routeParams|merge({'page': page})) }}">{{ page }}</a>
+			{% endif %}
+		{% endfor %}
+
+		{% if currentPage < totalPages %}
+			<a href="{{ path(routeName, routeParams|merge({'page': currentPage + 1})) }}">Next</a>
+		{% endif %}
+	</div>
+    <script type="text/javascript">
+$(document).ready(function () {
+var currentPage = {{ currentPage }};
+var totalPages = {{ totalPages }};
+var typingTimer; // Timer identifier
+var doneTypingInterval = 2000;
+// Time in milliseconds (0.5 seconds)
+
+// Function to update pagination links
+function updatePagination() {
+$(".page-link").removeClass("current-page");
+$(".page-link[data-page='" + currentPage + "']").addClass("current-page");
+}
+
+// Event listener for pagination links
+$(".page-link").on("click", function (e) {
+e.preventDefault();
+currentPage = parseInt($(this).attr("data-page"));
+handleSearch();
+updatePagination();
+});
+
+    });
+</script>
+
+{% endblock %}
+
+

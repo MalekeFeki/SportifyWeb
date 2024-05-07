@@ -1,0 +1,110 @@
+<head>
+<!-- Google Font -->
+   
+    <link href="{{asset('https://fonts.googleapis.com/css?family=Muli:300,400,500,600,700,800,900&display=swap')}}" rel="stylesheet">
+    <link href="{{asset('https://fonts.googleapis.com/css?family=Oswald:300,400,500,600,700&display=swap')}}" rel="stylesheet">
+
+ <!-- Css Styles -->
+    <link rel="stylesheet" href="{{asset('css/bootstrap.min.css')}}" type="text/css">
+    <link rel="stylesheet" href="{{asset('css/font-awesome.min.css')}}" type="text/css">
+    <link rel="stylesheet" href="{{asset('css/flaticon.css')}}" type="text/css">
+    <link rel="stylesheet" href="{{asset('css/owl.carousel.min.css')}}" type="text/css">
+    <link rel="stylesheet" href="{{asset('css/barfiller.css')}}" type="text/css">
+    <link rel="stylesheet" href="{{asset('css/magnific-popup.css')}}" type="text/css">
+    <link rel="stylesheet" href="{{asset('css/slicknav.min.css')}}" type="text/css">
+    <link rel="stylesheet" href="{{asset('css/style.css')}}" type="text/css">
+    
+    <!-- Template Stylesheet 
+    <link href="{{asset('css/style-profil.css')}}" rel="stylesheet">-->
+       <style>
+        .btn-primary {
+            background-color: #FFA500; /* Orange background */
+            border-color: #FFA500; /* Orange border */
+        }
+
+        .btn-primary:hover {
+            background-color: #FFA500; /* Darker orange background on hover */
+            border-color: #FFA500; /* Darker orange border on hover */
+        }
+
+        .btn-primary:focus {
+            box-shadow: none; /* Remove box-shadow on focus */
+        }
+    </style>
+</head>
+{% block body %}
+<div class="container-xl px-4 mt-4">
+    <hr class="mt-0 mb-4">
+    <div class="row">
+        <div class="col-xl-4">
+            <!-- Profile picture card -->
+            <div class="card mb-4 mb-xl-0">
+                {% if app.user %}
+                <div class="mb-3 text-center" >
+                    Welcome to your profile {{ app.user.nom }}
+                </div>
+                {% endif %}
+                <div class="card-body text-center">
+                    <!-- Profile picture image -->
+                    <img class="img-account-profile rounded-circle mb-2" src="{{asset('img/profil-vide.png')}}" alt="">
+                    <!-- Profile picture help block -->
+                    <div class="small font-italic text-muted mb-4">JPG or PNG no larger than 5 MB</div>
+                    <!-- Profile picture upload button -->
+                    <form method="post" action="{{path('app_profile_edit', {'id': app.user.id })}}" enctype="multipart/form-data">
+                    <!-- Hidden field for user ID -->
+                    <input type="hidden" id="user_id" name="user_id" value="{{ app.user.id }}">
+                     <div class="mb-3">
+        <label class="form-label" for="inputProfilePicture">Upload Profile Picture</label>
+        <input class="form-control" id="inputProfilePicture" type="file" name="profile_picture" value="{{ app.user.image }}">
+    </div>
+                    <button class="btn btn-primary" type="submit">Upload new image</button>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-8">
+            <!-- Account details card -->
+            <div class="card mb-4">
+                <div class="card-header">Account Details</div>
+                <div class="card-body">
+                    <form method="post" action="{{ path('app_profile_edit', {'id': app.user.id }) }}" enctype="multipart/form-data">
+                        <!-- Form Group (username) -->
+                        <div class="mb-3">
+                            <label class="small mb-1" for="inputUsername">Email</label>
+                            <input class="form-control" id="inputUsername" type="text" name="email" value="{{ app.user.username }}" >
+                        </div>
+                        <!-- Form Row -->
+                        <div class="row gx-3 mb-3">
+                            <!-- Form Group (first name) -->
+                            <div class="col-md-6">
+                                <label class="small mb-1" for="inputFirstName">Nom</label>
+                                <input class="form-control" id="inputFirstName" type="text" name="nom" value="{{ app.user.nom }}" >
+                            </div>
+                            <!-- Form Group (last name) -->
+                            <div class="col-md-6">
+                                <label class="small mb-1" for="inputLastName">Prenom</label>
+                                <input class="form-control" id="inputLastName" type="text" name="prenom" value="{{ app.user.prenom }}" >
+                            </div>
+                        </div>
+                      
+                        <!-- Form Row -->
+                        <div class="row gx-3 mb-3">
+                            <!-- Form Group (phone number) -->
+                            <div class="col-md-6">
+                                <label class="small mb-1" for="inputPhone">Phone number</label>
+                                <input class="form-control" id="inputPhone" type="tel" name="num_tel" value="{{ app.user.numTel }}" >
+                            </div>
+                            <div class="col-md-6">
+                                <label class="small mb-1" for="inputPhone">CIN</label>
+                                <input class="form-control" id="cin" type="cin" name="cin"value="{{ app.user.cin }}" >
+                            </div>
+                        </div>
+                        <!-- Save changes button -->
+                        <button class="btn btn-primary" type="submit">Save changes</button>
+                         <a href="{{ path('frontend') }}" class="btn btn-primary">Return</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

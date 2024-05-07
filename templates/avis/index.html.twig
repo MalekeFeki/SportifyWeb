@@ -1,0 +1,160 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Avis index{% endblock %}
+
+{% block stylesheets %}
+    <!-- Include necessary CSS files -->
+    <link href="{{ asset('css/bootstrap-back.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/style_back.css') }}" rel="stylesheet">
+    <style>
+        /* Custom styles for the chart canvas within .indexAvis */
+        .indexAvis #avisChart {
+            max-width: 300px;
+            width: 100%;
+            margin: 20px auto; /* Center the pie chart */
+        }
+
+        /* Style for the "Create new" button within .indexAvis */
+        .indexAvis .create-new {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 8px 16px;
+            background-color: #28a745;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            font-size: 14px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+            width: fit-content; /* Set width to fit content */
+        }
+
+        .indexAvis .create-new:hover {
+            background-color: #218838;
+        }
+
+        /* Style for the "Export to CSV" button within .indexAvis */
+        .indexAvis .export-csv {
+            display: block;
+            margin: 0 auto; /* Center the button */
+            margin-top: 20px; /* Add margin-top to separate from the chart */
+            padding: 8px 16px;
+            background-color: #28a745;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            font-size: 14px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+            width: fit-content; /* Set width to fit content */
+        }
+
+        .indexAvis .export-csv:hover {
+            background-color: #218838;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <!-- Body content -->
+    <h1>Avis index</h1>
+
+    <div class="indexAvis">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Ida</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for avi in avis %}
+                    <tr>
+                        <td>{{ avi.ida }}</td>
+                        <td>{{ avi.type }}</td>
+                        <td>{{ avi.description }}</td>
+                        <td>
+                            <a href="{{ path('app_avis_show', {'ida': avi.ida}) }}">show</a>
+                            <a href="{{ path('app_avis_edit', {'ida': avi.ida}) }}">edit</a>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="4" class="no-records">No records found</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <a href="{{ path('app_avis_new') }}" class="create-new">Create new</a>
+    </div>
+
+    <!-- Canvas for Chart -->
+    <canvas id="avisChart" width="200" height="200"></canvas>
+
+    <!-- "Export to CSV" button -->
+    <a href="{{ path('export_avis_to_csv') }}" class="btn btn-primary export-csv">Export to CSV</a>
+
+    <!-- Include Chart.js library -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- JavaScript for Chart -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Get Avis data for chart
+            var avisData = [
+                {% for avi in avis %}
+                    "{{ avi.type }}",
+                {% endfor %}
+            ];
+
+            // Get unique types and count occurrences
+            var typesCount = {};
+            avisData.forEach(function(type) {
+                typesCount[type] = (typesCount[type] || 0) + 1;
+            });
+
+            // Prepare data for chart
+            var labels = Object.keys(typesCount);
+            var data = Object.values(typesCount);
+
+            // Create pie chart
+            var ctx = document.getElementById('avisChart').getContext('2d');
+            var myPieChart = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Avis by Type',
+                        data: data,
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.5)',
+                            'rgba(54, 162, 235, 0.5)',
+                            'rgba(255, 206, 86, 0.5)',
+                            'rgba(75, 192, 192, 0.5)',
+                            'rgba(153, 102, 255, 0.5)',
+                            'rgba(255, 159, 64, 0.5)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(153, 102, 255, 1)',
+                            'rgba(255, 159, 64, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false
+                }
+            });
+        });
+    </script>
+{% endblock %}

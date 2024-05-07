@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Détails de l'Abonnement{% endblock %}
+
+{% block body %}
+    <h1>Détails de l'Abonnement</h1>
+
+    <dl>
+        <dt>Plan</dt>
+        <dd>{{ abonnement.plan }}</dd>
+        <dt>Durée</dt>
+        <dd>{{ abonnement.duree }}</dd>
+        <dt>Description</dt>
+        <dd>{{ abonnement.description }}</dd>
+        <dt>Prix</dt>
+        <dd>{{ abonnement.prix }}</dd>
+    </dl>
+
+    <a href="{{ path('abonnement_index') }}">Retour à la liste</a>
+{% endblock %}

@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Avis{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/custom.css') }}">
+{% endblock %}
+
+{% block body %}
+<div class="newAvis">
+    <div class="container mt-5">
+        <div class="card">
+            <div class="card-header">
+                <h1 class="card-title">Create a New Avis</h1>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {{ include('avis/_form.html.twig', {'form': form}) }}
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

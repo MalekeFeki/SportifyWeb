@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1 style="background-color: black; color: white;">Apply your Membership</h1>
+
+    {{ include('adhesion/_form.html.twig') }}
+
+
+<div style="background-color: black; height: 20px;"></div>
+   <div style="background-color: black;">
+    <a href="{{ path('app_adhesion_index') }}" class="btn" style="background-color: #F36100; color: white;">Back to List</a>
+</div>
+
+<div style="background-color: black; height: 20px;"></div>
+   <div style="background-color: black;">
+    <a href="{{ path('app_adhesion_submissions') }}" class="btn" style="background-color: #F36100; color: white;">Edit</a>
+</div>
+
+
+{% endblock %}

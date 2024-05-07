@@ -1,0 +1,167 @@
+{{ form_start(form, {'attr': {'id': '1','style': 'background-color: black;', 'novalidate': 'novalidate'}}) }}
+
+
+<div class="mb-3">
+    <label for="paiement_username" class="form-label" style="color: white;">Username</label>
+    {{ form_widget(form.username, {'attr': {'class': 'form-control', 'readonly': true, 'style': 'width: 300px;' }}) }}
+</div>
+
+<div class="mb-3">
+    <label for="paiement_email" class="form-label" style="color: white;">Email</label>
+    {{ form_widget(form.email, {'attr': {'class': 'form-control', 'readonly': true, 'style': 'width: 300px;' }}) }}
+    {{ form_errors(form.email) }} 
+</div>
+
+<div class="mb-3">
+    <label for="paiement_country" class="form-label" style="color: white;">Country</label>
+    {{ form_widget(form.country, {'attr': {'class': 'form-select', 'style': 'width: 300px;' }}) }}
+</div>
+
+<div class="mb-3">
+    <label for="paiement_ncb" class="form-label" style="color: white;">NCB</label>
+    {{ form_widget(form.ncb, {'attr': {'class': 'form-control',  'style': 'width: 300px;' }}) }}
+    {{ form_errors(form.ncb) }} 
+</div>
+
+<div class="mb-3">
+    <label for="paiement_cvc" class="form-label" style="color: white;">CVC</label>
+    {{ form_widget(form.cvc, {'attr': {'class': 'form-control', 'style': 'width: 300px;' }}) }}
+    {{ form_errors(form.cvc) }} 
+</div>
+
+<div class="mb-3">
+    <label for="paiement_expdate" class="form-label" style="color: white;">Expire Date</label>
+    {{ form_widget(form.expdate, {'attr': {'class': 'form-control',  'style': 'width: 300px;' }}) }}
+</div>
+
+<div class="mb-3">
+    <label for="paiement_postalcode" class="form-label" style="color: white;">Postal Code</label>
+    {{ form_widget(form.postalcode, {'attr': {'class': 'form-control',  'style': 'width: 300px;' }}) }}
+    {{ form_errors(form.postalcode) }} 
+</div>
+
+<div class="mb-3">
+    <label for="paiement_promocode" class="form-label" style="color: white;">Promo Code</label>
+    {{ form_widget(form.promocode, {'attr': {'class': 'form-control', 'style': 'width: 300px;' }}) }}
+    {{ form_errors(form.promocode) }} 
+</div>
+
+<div class="mb-3">
+    <label for="paiement_price" class="form-label" style="color: white;">Price</label>
+    {{ form_widget(form.price, {'attr': {'class': 'form-control', 'readonly': true, 'style': 'width: 300px;' }}) }}
+</div>
+
+<div class="mb-3">
+    <label for="paiement_newprice" class="form-label" style="color: white; display: none;">New Price:</label>
+    <input type="text" id="paiement_newprice" class="form-control" readonly style="width: 300px; display: none;">
+</div>
+
+<button class="btn" style="color: white; background-color: #F36100;">{{ button_label|default('Save') }}</button>
+
+{{ form_end(form) }}
+
+<script>
+  // JavaScript for handling promo code functionality
+document.addEventListener('DOMContentLoaded', function() {
+    // Define valid promo codes and their associated reductions
+    var promoCodes = {
+
+        "PulseCODEA": 0.1,
+        "PulseGREAT": 0.15,
+        "PulseGGWPC": 0.2, // 20% reduction
+        "PulseWAWWD": 0.25,
+        "PulseHAHAE": 0.3,  // 30% reduction
+        "PulseFIREF": 0.4,
+        "PulseEZWPG": 0.5,  // 50% reduction
+        "PulseFTWWH": 0.6,
+        "PulseREDMI": 0.7,
+        "PulseBALEA": 0.8   // 80% reduction
+    };
+
+    // Get the original price from the form field
+    var originalPriceInput = document.getElementById('paiement_price');
+    var originalPrice = parseFloat(originalPriceInput.value);
+
+    // Function to update price based on promo code
+    function updatePrice(promoCode) {
+        var currentPrice = originalPrice; // Set current price to original price
+
+        // Check if promo code is valid
+        if (promoCodes.hasOwnProperty(promoCode)) {
+            var reduction = promoCodes[promoCode];
+
+            // Apply reduction based on the type
+            if (reduction < 0) {
+                // Reduction is a fixed amount
+                currentPrice += reduction;
+            } else {
+                // Reduction is a percentage
+                currentPrice *= (1 - reduction);
+            }
+
+            // Display the new price in the new price field
+            var newPriceField = document.getElementById('paiement_newprice');
+            newPriceField.value = '$' + currentPrice.toFixed(2);
+            newPriceField.style.display = 'block'; // Show the new price field
+        } else {
+            // Hide the new price field if promo code is not valid
+            var newPriceField = document.getElementById('paiement_newprice');
+            newPriceField.value = ''; // Clear the value
+            newPriceField.style.display = 'none'; // Hide the new price field
+        }
+    }
+
+    // Event listener for changes in the promo code input field
+    var promoCodeInput = document.getElementById('paiement_promocode');
+    promoCodeInput.addEventListener('input', function() {
+        updatePrice(this.value);
+    });
+});
+</script>
+{# <script src="https://js.stripe.com/v3/"></script>
+
+<script>
+  var stripe = Stripe('{{ constant('STRIPE_KEY') }}');
+  var elements = stripe.elements();
+
+  // Instead of creating a new card element, we'll use the existing field
+  var card = elements.create('card');
+  card.mount('#paiement_ncb'); // Use the existing card field
+
+  card.addEventListener('change', function(event) {
+    var displayError = document.getElementById('card-errors');
+    if (event.error) {
+      displayError.textContent = event.error.message;
+    } else {
+      displayError.textContent = '';
+    }
+  });
+
+  var form = document.getElementById('payment-form');
+  form.addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    stripe.createToken(card).then(function(result) {
+      if (result.error) {
+        var errorElement = document.getElementById('card-errors');
+        errorElement.textContent = result.error.message;
+      } else {
+        // Token created. Send token to your server to process payment.
+        stripeTokenHandler(result.token);
+      }
+    });
+  });
+
+  function stripeTokenHandler(token) {
+    // Insert the token ID into the form so it gets submitted to the server
+    var form = document.getElementById('payment-form');
+    var hiddenInput = document.createElement('input');
+    hiddenInput.setAttribute('type', 'hidden');
+    hiddenInput.setAttribute('name', 'stripeToken');
+    hiddenInput.setAttribute('value', token.id);
+    form.appendChild(hiddenInput);
+
+    // Submit the form
+    form.submit();
+  }
+</script> #}

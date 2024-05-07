@@ -1,0 +1,77 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Avis{% endblock %}
+
+{% block stylesheets %}
+    <!-- Include necessary CSS files -->
+    <link href="{{ asset('css/bootstrap-back.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/style_back.css') }}" rel="stylesheet">
+    <style>
+        /* Additional Custom Styles */
+        body {
+            background-color: black;
+            color: white;
+            font-family: 'Open Sans', sans-serif;
+        }
+
+        h1 {
+            font-family: 'Roboto', sans-serif;
+            font-weight: 700;
+            color: white;
+        }
+
+        .form-wrapper {
+            margin-bottom: 20px;
+        }
+
+        .back-link {
+            display: block;
+            margin: 20px auto; /* Center the link horizontally */
+            color: white;
+            text-align: center; /* Center the link text */
+        }
+
+        /* Additional styles for newAvis class */
+        .newAvis {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        /* Styling for delete button */
+        .delete-btn {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .delete-btn:hover {
+            background-color: #c82333;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <!-- Body content -->
+    <div class="newAvis">
+        <h1>Edit Avis </h1>
+
+        <div class="form-wrapper">
+            {{ include('avis/_form.html.twig', {'button_label': 'Update'}) }}
+        </div>
+
+        {# Stylish delete button #}
+        <form action="{{ path('app_avis_delete', {'ida': avi.ida}) }}" method="post" onsubmit="return confirm('Are you sure you want to delete this item?');">
+            <input type="hidden" name="_method" value="DELETE">
+            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ avi.ida) }}">
+            <button type="submit" class="delete-btn" name="delete">{{ button_label|default('Delete') }}</button>
+        </form>
+    </div>
+{% endblock %}
